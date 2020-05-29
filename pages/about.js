@@ -47,8 +47,7 @@ export default function About({ props }) {
   }, [])
 
   return (
-    <div style={ {display: 'flex', flexDirection: 'row'} }>
-      { console.log('[state]', state)}
+    <div className="chat-admin">      
       <div
         style={ {flex:1} }
         ref={list}

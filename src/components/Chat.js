@@ -6,7 +6,10 @@ const initialState = {messages: []};
 function reducer(state, action) {
     switch (action.type) {
       case 'addMessage':
-        return {messages: [...state.messages, action.messages]}
+        return {
+          messages: [...state.messages, action.messages],
+          userid: action.userid,
+        }
       case 'clearMessage':
         return {messages: []}
       default:
@@ -15,37 +18,47 @@ function reducer(state, action) {
 }
 
 const Chat = (props) => {
-  const [state, dispatch] = React.useReducer(reducer, initialState);
   const key = props.keycode;
   const userid = props.userid;
   const database = props.database;
   const databaseRef = props.databaseRef + '/' + userid;
+  const [state, dispatch] = React.useReducer(reducer, initialState);
+  let input
 
   React.useEffect(() => {
-    dispatch({ type: 'clearMessage' })
+    dispatch({ type: 'clearMessage' });
 
     const chat = database.ref(databaseRef).orderByChild('timestamp');
+
     // 구독
     chat.on('child_added', function(snapshot) {
-      dispatch({ type: 'addMessage', messages: snapshot.val() })
+      dispatch({
+        type: 'addMessage',
+        messages: snapshot.val(),
+        userid: userid
+      })
     })
-    // 구독해제
-    return () => chat.off();
-  }, [userid])
 
-  let input
+    // 구독해제
+    return () => {
+      chat.off();
+    }
+  }, [userid])
 
   return (
     <>
       <div>
-        { state.messages.map((m, i) => (
-          <Message
-            opponent={userid}
-            key={m.id}
-            prev={state.messages[i - 1]}
-            {...m}
-            />
-        )) }
+        <div className="messages">
+          { (state.userid === userid) &&  // 중복호출 예외처리
+            (state.messages.map((m, i) => (
+            <Message
+              opponent={userid}
+              key={m.id}
+              prev={state.messages[i - 1]}
+              {...m}
+              />
+          ))) }
+        </div>
       </div>
 
       <form onSubmit={e => {
