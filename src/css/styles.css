@@ -118,3 +118,14 @@
   /* border: 1px solid #ddd; */
   border: none;
 }
+
+
+.chat-info > div {
+  display: flex;
+  flex-direction: column;
+}
+.chat-info .chat-info-item {
+  display: flex;
+  flex-direction: column;
+  padding: 5px;
+}

@@ -6,6 +6,7 @@ import "firebase/database";
 
 import User from '../src/components/User'
 import Chat from '../src/components/Chat'
+import Info from '../src/components/Info'
 
 const initialState = {users: []};
 
@@ -28,26 +29,42 @@ export default function About({ props }) {
   if (!firebase.apps.length) {
     firebase.initializeApp(FirebaseConfig);
   }
+
   const key = 'c1cd7759-9784-4fac-a667-3685d6b2e4a0';
   const database = firebase.database();
   const databaseRef = '/' + key + '/messages';
-  const chat = database.ref(databaseRef).orderByChild('timestamp');
 
   React.useEffect(() => {
-    dispatch({ type: 'clearUser' })
-    chat.on('child_added', function(snapshot) {
-      dispatch({
-        type: 'addUser',
-        users: {
-          key: snapshot.key,
-          value: snapshot.val(),
-        }
+    // firebase auth
+    getFirebaseToken(key)
+      .then(data => {
+        firebase.auth().signInWithCustomToken(data.token)
+          .then(success => {
+            console.log('[Firebase Auth Valid]', success);
+            dispatch({ type: 'clearUser' })
+
+            const chat = database.ref(databaseRef).orderByChild('timestamp');
+            chat.on('child_added', function(snapshot) {
+              dispatch({
+                type: 'addUser',
+                users: {
+                  key: snapshot.key,
+                  value: snapshot.val(),
+                }
+              })
+            });
+          })
+          .catch(error => {
+            console.log('[Firebase Auth Invalid]', error);
+          });
       })
-    });
+      .catch(error => {
+        console.log('[Firebase Auth] error', error);
+      })
   }, [])
 
   return (
-    <div className="chat-admin">      
+    <div className="chat-admin">
       <div
         style={ {flex:1} }
         ref={list}
@@ -73,6 +90,26 @@ export default function About({ props }) {
             databaseRef={databaseRef}/>
         )}
       </div>
+      <div
+        className="chat-info">
+        <Info
+          keycode={key}
+          userid={selectedUser}
+          database={database}/>
+      </div>
     </div>
   )
+}
+
+async function getFirebaseToken(uuid) {
+  const postResponse = await fetch('//localhost:3000/api/auth?uuid=' + uuid, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+    });
+
+  const postData = await postResponse.json();
+  return postData;
 }
