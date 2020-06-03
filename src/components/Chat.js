@@ -32,6 +32,9 @@ const Chat = (props) => {
 
     // 구독
     chat.on('child_added', function(snapshot) {
+      if (snapshot.key === 'userinfo'
+       || snapshot.key === 'timestamp') return; // ignore userinfo, timestamp
+
       dispatch({
         type: 'addMessage',
         messages: snapshot.val(),

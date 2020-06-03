@@ -41,17 +41,25 @@ export default function About({ props }) {
         firebase.auth().signInWithCustomToken(data.token)
           .then(success => {
             console.log('[Firebase Auth Valid]', success);
-            dispatch({ type: 'clearUser' })
 
             const chat = database.ref(databaseRef).orderByChild('timestamp');
-            chat.on('child_added', function(snapshot) {
-              dispatch({
-                type: 'addUser',
-                users: {
-                  key: snapshot.key,
-                  value: snapshot.val(),
-                }
-              })
+            chat.on('value', function(snapshot) {
+              dispatch({ type: 'clearUser' })
+
+              let items = [];
+              snapshot.forEach(function (childSnapshot) {
+                items.push(childSnapshot);
+              });
+
+              items.reverse().forEach(function (childSnapshot) { // order by desc
+                dispatch({
+                  type: 'addUser',
+                  users: {
+                    key: childSnapshot.key,
+                    value: childSnapshot.val(),
+                  }
+                })
+              });
             });
           })
           .catch(error => {
