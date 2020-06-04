@@ -11,8 +11,8 @@ export const config = {
 export default async (req, res) => {
   return new Promise((resolve, reject) => {
     const s3 = new aws.S3({
-      accessKeyId: 'AKIAIJRK3QM7RS66QL7Q',
-      secretAccessKey: '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',
+      accessKeyId: 'AKIAVM6JWVW7XSTMBH3K',
+      secretAccessKey: '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',
       region: 'ap-northeast-2',
     })
 
@@ -21,19 +21,20 @@ export default async (req, res) => {
       console.log('files', files)
       console.log('fields', fields)
       var params = {
-        Bucket: 'quvchat',
+        Bucket: 'chatter-box-bucket',
         Key: 'chatterbox/' + fields.key + '/' + files.file.name,
         ACL: 'public-read',
         Body: require('fs').createReadStream(files.file.path)
       }
 
-      s3.upload(params, function(err, data){
+      s3.upload(params, function(err, data) {
+      // s3.putObject(params, function(err, data) {
         res.setHeader("Access-Control-Allow-Origin", "*");
         res.setHeader("Access-Control-Allow-Headers", "Content-Type");
         res.statusCode = 200;
         res.json({ result: 'success', file: { name: files.file.name, size: files.file.size, location: data.Location } })
         // res.json({ result: 'success', file: data })
-        // console.log('data', data)
+        console.log('data', data)
 
         resolve();
       });

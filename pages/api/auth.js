@@ -2,7 +2,7 @@
 import admin from '../../lib/firebase';
 
 export default (req, res) => {
-  const { uuid } = req.query;
+  const uuid = req.body.uuid;
 
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
@@ -17,7 +17,7 @@ export default (req, res) => {
         res.json({ result: 'failure', error: error });
       });
   }
-  else {
+  else {    
     res.json({ result: 'failure', error: uuid, message: 'invalid uuid' });
   }
 }
