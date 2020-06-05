@@ -30,3 +30,4 @@ yarn-error.log*
 .env.production.local
 
 chatterbox-3e40b-firebase-adminsdk-7mvji-7f9ebb9f28.json
+aws.config.js
