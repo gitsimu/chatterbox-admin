@@ -31,3 +31,5 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 
 ## deploy
 https://eomtttttt-develop.tistory.com/207
+## pm2 guide
+https://massivcode.com/5
