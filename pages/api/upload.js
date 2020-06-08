@@ -1,6 +1,7 @@
 // https://opentutorials.org/course/2717/11797
 import aws from 'aws-sdk';
 import * as formidable from 'formidable';
+import AwsConfig from '../../aws.config';
 
 export const config = {
   api: {
@@ -11,8 +12,8 @@ export const config = {
 export default async (req, res) => {
   return new Promise((resolve, reject) => {
     const s3 = new aws.S3({
-      accessKeyId: 'AKIAVM6JWVW7XSTMBH3K',
-      secretAccessKey: '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',
+      accessKeyId: AwsConfig.accessKeyId,
+      secretAccessKey: AwsConfig.secretAccessKey,
       region: 'ap-northeast-2',
     })
 
@@ -20,6 +21,7 @@ export default async (req, res) => {
     form.parse(req, function(err, fields, files) {
       console.log('files', files)
       console.log('fields', fields)
+
       var params = {
         Bucket: 'chatter-box-bucket',
         Key: 'chatterbox/' + fields.key + '/' + files.file.name,
@@ -33,7 +35,6 @@ export default async (req, res) => {
         res.setHeader("Access-Control-Allow-Headers", "Content-Type");
         res.statusCode = 200;
         res.json({ result: 'success', file: { name: files.file.name, size: files.file.size, location: data.Location } })
-        // res.json({ result: 'success', file: data })
         console.log('data', data)
 
         resolve();
