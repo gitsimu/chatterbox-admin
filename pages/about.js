@@ -110,8 +110,9 @@ export default function About({ props }) {
 }
 
 async function getFirebaseToken(uuid) {
-  const postResponse = await fetch('//localhost:3000/api/auth?uuid=' + uuid, {
+  const postResponse = await fetch('//localhost:3000/api/auth', {
       method: 'POST',
+      body: '&uuid=' + uuid,
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/x-www-form-urlencoded'
