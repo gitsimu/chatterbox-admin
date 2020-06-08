@@ -17,7 +17,7 @@ export default (req, res) => {
         res.json({ result: 'failure', error: error });
       });
   }
-  else {    
+  else {
     res.json({ result: 'failure', error: uuid, message: 'invalid uuid' });
   }
 }

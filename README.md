@@ -35,6 +35,7 @@ https://eomtttttt-develop.tistory.com/207
 https://massivcode.com/5
 ## pm2 command
 PORT=80 pm2 start npm --name "next" -- start
+pm2 start node --name "next" -- server.js
 
 #express connect
 http://tlog.tammolo.com/blog/NEXT-JS-ff8f85e8-918a-4770-9b6b-7e37c5229178/
