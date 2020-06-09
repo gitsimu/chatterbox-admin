@@ -1,5 +1,6 @@
 const express = require('express')
 const next = require('next')
+const cors = require('cors')
 
 const dev = process.env.NODE_ENV !== 'production'
 const app = next({ dev })
@@ -9,7 +10,7 @@ app
   .prepare()
   .then(() => {
     const server = express()
-
+    server.use(cors());
     server.use(express.static('public'));
 
     server.get('/p/:id', (req, res) => {
@@ -19,12 +20,13 @@ app
     })
 
     server.get('*', (req, res) => {
+      console.log('req------------------------------------------------------------');
       return handle(req, res)
     })
 
-    server.listen(80, err => {
+    server.listen(3000, err => {
       if (err) throw err
-      console.log('> Ready on http://localhost:80')
+      console.log('> Ready on http://localhost:3000')
     })
   })
   .catch(ex => {

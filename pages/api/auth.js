@@ -2,7 +2,7 @@
 import admin from '../../lib/firebase';
 
 export default (req, res) => {
-  const uuid = req.body.uuid;
+  const uuid = req.body.uuid;  
 
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");

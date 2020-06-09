@@ -1,8 +1,14 @@
+div, textarea, input {
+    box-sizing: border-box;
+}
+
 .messages {
   height: 500px;
   overflow: auto;
   border: 1px solid #eee;
   margin-bottom: 5px;
+  border-radius: 5px;
+  overflow: auto;
 }
 .message {
   display: flex;
@@ -12,7 +18,7 @@
   display: inline-block;
   padding: 8px 12px;
   border-radius: 10px;
-  font-size: 14px;
+  font-size: 13px;
 
   text-align: left !important;
   white-space: pre-line !important;
@@ -75,7 +81,84 @@
 .margin-top-15 {
   margin-top: 10px;
 }
+.message-date {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  margin: 25px 0 15px;
+  color: #b1b1b1;
+  background: #fff;
+}
+.message-date:after {
+  content: '';
+  border-bottom: 1px solid #f1f2f3;
+  width: 92%;
+  position: absolute;
+  z-index: 1;
+  bottom: 8px;
+}
+.message-date > span {
+  background: #fff;
+  padding: 0 12px;
+  letter-spacing: 0.5px;
+  z-index: 2;
+}
 
+
+.message-file {
+  position: relative;
+  display: inline-block;
+  background: #ffffff;
+  color: #333;
+  text-align: left;
+  font-size: 12px;
+  white-space: normal;
+  width: 250px;
+  margin: 0;
+  border-radius: 4px;
+  border: 1px solid #eee;
+  line-height: 1.4;
+  padding: 3px 0;
+}
+.message-file .message-file-name {
+  font-weight: 600;
+  padding: 8px 12px 4px;
+}
+.message-file .message-file-size,
+.message-file .message-file-expire {
+  color: #999;
+  padding: 0 12px;
+  font-weight: 300;
+}
+.message-file .message-file-save {
+  padding-top: 5px;
+  margin-top: 10px;
+  color: #00aaff;
+  cursor: pointer;
+  text-align: center;
+  border-top: 1px solid #eee;
+  user-select: none;
+}
+.message-file .message-file-save:hover {
+  text-decoration: underline;
+}
+.message-thumbnail {
+  max-width: 250px;
+  border-radius: 8px;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 3px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #eee;
+}
+.message-thumbnail img {
+  max-width: 250px;
+}
 
 .chat-admin {
   display: flex;
@@ -84,26 +167,95 @@
   margin: 0 auto;
 }
 .chat-list {
-  margin-right: 50px;
-}
-.chat-user {
-  padding: 10px;
+  width: 300px;
+  height: 550px;
+  margin-right: 5px;
   border: 1px solid #eee;
-  margin-bottom: 2px;
+  border-radius: 5px;
+  overflow: hidden;
+  background: #f9f9f9;
+}
+.chat-list-tab {
+  display: flex;
+  border-bottom: 1px solid #eee;
+}
+.chat-list-tab > div {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  font-size: 12px;
+  cursor: pointer;
+  border-top: 3px solid transparent;
+  background: #fff;
+  color: #222;
+}
+.chat-list-tab > div.active {
+  border-top: 3px solid #2196F3;
+  color: #2196F3;
+}
+.chat-list-tab span {
+  font-size: 11px;
+  margin-left: 2px;
+}
+
+.chat-user {
+  display: flex;
+  padding: 10px;
+  border-bottom: 1px solid #f1f1f1;
   font-size: 13px;
   cursor: pointer;
   transition: 0.2s ease all;
+  background: #fff;
 }
 .chat-user.active {
-  background: rgba(0,0,0,0.1);
-  border: 1px solid #ccc;
+  background: #e1ffe6;
+}
+.chat-user-icon {
+  width: 50px;
+}
+.chat-user-icon > div {
+  width: 30px;
+  height: 30px;
+  margin-left: 5px;
+  border-radius: 50%;
+  background: #00aaff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 15px;
+}
+.chat-user-info {
+  flex: 1;
+}
+.chat-user-name {
+  font-size: 12px;
+  font-weight: bold;
+  margin-bottom: 4px;
+  color: #494949;
+}
+.chat-user-detail {
+  display: flex;
+}
+.chat-user-message,
+.chat-user-datetime {
+  color: #999;
+  font-size: 12px;
+  max-width: 170px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .chat-body form {
   display: flex;
-  height: 40px;
+  height: 42px;
   margin: 0;
-  border: 1px solid #ddd;
+  border: 1px solid #eee;
+  border-radius: 5px;
+  overflow: hidden;
 }
 .chat-body .message-input {
   padding: 10px;
@@ -113,9 +265,9 @@
   font-size: 14px;
 }
 .chat-body .message-button-send {
-  width: 70px;
-  background: #eee;
-  /* border: 1px solid #ddd; */
+  width: 100px;
+  background: #f9f9f9;
+  color: #444c5d;
   border: none;
 }
 
@@ -128,4 +280,108 @@
   display: flex;
   flex-direction: column;
   padding: 5px;
+}
+
+.chat-options {
+  width: 250px;
+  /* border: 1px solid #eee; */
+  /* border-radius: 5px; */
+  margin-left: 5px;
+}
+.chat-memo {
+  border: 1px solid #eee;
+  border-radius: 5px;
+}
+.chat-memo-header {
+  font-size: 12px;
+  font-weight: bold;
+  padding: 12px 15px;
+  background: #fef9e1;
+}
+.chat-memo-body {
+  background: #fbfbfb;
+  border-top: 1px solid #eee;
+}
+.chat-memo-body > textarea {
+  resize: none;
+  width: 100%;
+  height: 170px;
+  outline: 0 !important;
+  border: none !important;
+  padding: 10px 20px;
+  margin: 0;
+  font-size: 13px;
+  background: #fbfbfb;
+}
+.chat-memo-footer {
+  display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 30px;
+    text-align: center;
+    color: #00aaff;
+    font-size: 13px;
+    cursor: pointer;
+    border-top: 1px solid #eee;
+}
+.chat-memo-footer:hover {
+  text-decoration: underline;
+}
+
+.chat-history {
+  margin-top: 5px;
+  border: 1px solid #eee;
+  border-radius: 5px;
+}
+.chat-history-header {
+  font-size: 12px;
+  font-weight: bold;
+  padding: 12px 15px;
+  background: #fee5e1;
+}
+.chat-history-body {
+  height: 205px;
+}
+
+.chat-complete {
+  margin-top: 5px;
+  border-radius: 5px;
+  background: #60baff;
+  color: #fff;
+  padding: 10px 0;
+  text-align: center;
+  font-size: 13px;
+  font-weight: bold;
+  cursor: pointer;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.chat-complete:hover {
+  background: #31a5ff;
+}
+
+.addOns {
+  width: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  font-size: 16px;
+  background: #f9f9f9;
+}
+.addOns label {
+  display: flex;
+}
+.addOns i {
+  color: #444c5d;
+  padding: 7px;
+  cursor: pointer;
+}
+.addOns i:hover {
+  color: #00aaff;
+}
+.addOns input[type="file"] {
+  display: none;
 }

@@ -4,7 +4,8 @@ import * as firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/database";
 
-import User from '../src/components/User'
+import UserList from '../src/components/UserList'
+import Options from '../src/components/Options'
 import Chat from '../src/components/Chat'
 import Info from '../src/components/Info'
 
@@ -22,7 +23,6 @@ function reducer(state, action) {
 }
 
 export default function About({ props }) {
-  const list = React.useRef(null)
   const [state, dispatch] = React.useReducer(reducer, initialState);
   const [selectedUser, setSelectedUser] = React.useState('');
 
@@ -35,6 +35,13 @@ export default function About({ props }) {
   const databaseRef = '/' + key + '/messages';
 
   React.useEffect(() => {
+    // simpleline icons
+    let simmplelineLink = document.createElement("link");
+    simmplelineLink.href = "https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.4.1/css/simple-line-icons.min.css";
+    simmplelineLink.rel = "stylesheet";
+    simmplelineLink.type = "text/css";
+    document.querySelector('body').appendChild(simmplelineLink);
+
     // firebase auth
     getFirebaseToken(key)
       .then(data => {
@@ -72,20 +79,13 @@ export default function About({ props }) {
   }, [])
 
   return (
+    <>
     <div className="chat-admin">
-      <div
-        style={ {flex:1} }
-        ref={list}
-        className="chat-list"
-        key="chat-list">
-        { state.users.map((m, i) => (
-          <User
-            key={m.key}
-            data={m}
-            active={m.key === selectedUser}
-            clickEvent={setSelectedUser}/>
-        )) }
-        </div>
+      <UserList
+        users={state.users}
+        selectUser={selectedUser}
+        setSelectedUser={setSelectedUser}/>
+
       <div
         style={ {flex: 2,} }
         className="chat-body"
@@ -98,14 +98,23 @@ export default function About({ props }) {
             databaseRef={databaseRef}/>
         )}
       </div>
-      <div
-        className="chat-info">
-        <Info
-          keycode={key}
-          userid={selectedUser}
-          database={database}/>
-      </div>
+
+      <Options
+        users={state.users}
+        keycode={key}
+        userid={selectedUser}
+        database={database}
+        databaseRef={databaseRef} />
     </div>
+    <div
+      style={{ width: 400 }}
+      className="chat-info">
+      <Info
+        keycode={key}
+        userid={selectedUser}
+        database={database}/>
+    </div>
+    </>
   )
 }
 
