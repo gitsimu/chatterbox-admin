@@ -4,7 +4,8 @@ import * as script from '../js/script.js';
 
 const UserList = (props) => {
   const users = props.users;
-  const [tabState, setTabState] = React.useState(0);
+  const tabState = props.tabState;
+  const setTabState = props.setTabState;
 
   console.log('userlist',users);
 
@@ -12,20 +13,19 @@ const UserList = (props) => {
   const [countProgress, setCountProgress] = React.useState(0);
   const [countComplete, setCountComplete] = React.useState(0);
 
-  let constComplete = 0;
   React.useEffect(() => {
     setCountWait(users.filter((f) => {
-      const userState = f.value.userinfo.state ? f.value.userinfo.state : 0;
+      const userState = f.value.state ? f.value.state : 0;
       return userState === 0
     }).length)
 
     setCountProgress(users.filter((f) => {
-      const userState = f.value.userinfo.state;
+      const userState = f.value.state;
       return userState === 1
     }).length)
 
     setCountComplete(users.filter((f) => {
-      const userState = f.value.userinfo.state;
+      const userState = f.value.state;
       return userState === 2
     }).length)
   }, [users])
@@ -49,14 +49,14 @@ const UserList = (props) => {
           className={tabState === 2 ? 'active' : ''}
           onClick={() => { setTabState(2) }}>
           종료
-          <span>({constComplete})</span>
+          <span>({countComplete})</span>
         </div>
       </div>
       <div
         style={ {flex:1} }
         key="chat-list">
         { users.filter((f) => {
-          const userState = f.value.userinfo.state ? f.value.userinfo.state : 0;
+          const userState = f.value.state ? f.value.state : 0;
           return userState === tabState
         }).map((m, i) => (
           <User

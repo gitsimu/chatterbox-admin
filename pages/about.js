@@ -25,6 +25,8 @@ function reducer(state, action) {
 export default function About({ props }) {
   const [state, dispatch] = React.useReducer(reducer, initialState);
   const [selectedUser, setSelectedUser] = React.useState('');
+  const [screenState, setScreenState] = React.useState(0);
+  const [tabState, setTabState] = React.useState(0);
 
   if (!firebase.apps.length) {
     firebase.initializeApp(FirebaseConfig);
@@ -32,8 +34,8 @@ export default function About({ props }) {
 
   const key = 'c1cd7759-9784-4fac-a667-3685d6b2e4a0';
   const database = firebase.database();
-  const databaseRef = '/' + key + '/messages';
-
+  const databaseUserRef = '/' + key + '/users';
+  const databaseMessageRef = '/' + key + '/messages';
   React.useEffect(() => {
     // simpleline icons
     let simmplelineLink = document.createElement("link");
@@ -49,7 +51,7 @@ export default function About({ props }) {
           .then(success => {
             console.log('[Firebase Auth Valid]', success);
 
-            const chat = database.ref(databaseRef).orderByChild('timestamp');
+            const chat = database.ref(databaseUserRef).orderByChild('timestamp');
             chat.on('value', function(snapshot) {
               dispatch({ type: 'clearUser' })
 
@@ -66,8 +68,8 @@ export default function About({ props }) {
                     value: childSnapshot.val(),
                   }
                 })
-              });
-            });
+              })
+            })
           })
           .catch(error => {
             console.log('[Firebase Auth Invalid]', error);
@@ -78,44 +80,66 @@ export default function About({ props }) {
       })
   }, [])
 
-  return (
-    <>
+  return (<>
     <div className="chat-admin">
-      <UserList
-        users={state.users}
-        selectUser={selectedUser}
-        setSelectedUser={setSelectedUser}/>
-
-      <div
-        style={ {flex: 2,} }
-        className="chat-body"
-        key="chat-body">
-        { (selectedUser && selectedUser != '') && (
-          <Chat
-            keycode={key}
-            userid={selectedUser}
-            database={database}
-            databaseRef={databaseRef}/>
-        )}
+      <div className="chat-lnb">
+        <div
+          className={screenState === 0 ? "chat-lnb-item active" : "chat-lnb-item"}
+          onClick={() => {
+            setScreenState(0);
+          }}>
+          <i className="icon-bubble"></i>
+        </div>
+        <div
+          className={screenState === 1 ? "chat-lnb-item active" : "chat-lnb-item"}
+          onClick={() => {
+            setScreenState(1);
+          }}>
+          <i className="icon-settings"></i>
+        </div>
       </div>
 
-      <Options
-        users={state.users}
-        keycode={key}
-        userid={selectedUser}
-        database={database}
-        databaseRef={databaseRef} />
+      <div
+        style={{ display: 'flex', width: '100%' }}
+        className={screenState === 0 ? "" : "hide"}>
+        <UserList
+          users={state.users}
+          tabState={tabState}
+          setTabState={setTabState}
+          selectUser={selectedUser}
+          setSelectedUser={setSelectedUser}/>
+        <div
+          style={ {flex: 2} }
+          className="chat-body"
+          key="chat-body">
+          {(selectedUser && selectedUser != '') && (
+            <Chat
+              keycode={key}
+              userid={selectedUser}
+              database={database}
+              databaseRef={databaseMessageRef}
+              setTabState={setTabState}/>
+          )}
+        </div>
+        <Options
+          users={state.users}
+          keycode={key}
+          userid={selectedUser}
+          database={database}
+          databaseRef={databaseMessageRef}
+          setTabState={setTabState}/>
+      </div>
+
+      <div
+        style={{ width: '100%' }}
+        className={screenState === 1 ? "chat-info" : "chat-info hide"}>
+        <Info
+          keycode={key}
+          userid={selectedUser}
+          database={database}/>
+      </div>
     </div>
-    <div
-      style={{ width: 400 }}
-      className="chat-info">
-      <Info
-        keycode={key}
-        userid={selectedUser}
-        database={database}/>
-    </div>
-    </>
-  )
+  </>)
 }
 
 async function getFirebaseToken(uuid) {

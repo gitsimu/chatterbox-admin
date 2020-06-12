@@ -3,9 +3,11 @@ import * as script from '../js/script.js';
 
 const User = (props) => {
   const className = props.active ? 'chat-user active' : 'chat-user';
-  const userInfo = props.data.value.userinfo;
+  const userInfo = props.data.value;
   const lastMessage = (userInfo && userInfo.lastMessage) ? userInfo.lastMessage : '';
   const dateTime = (userInfo && userInfo.timestamp) ? userInfo.timestamp : null;
+
+  console.log('user', props.data)
 
   return (
     <div

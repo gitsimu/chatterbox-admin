@@ -23,6 +23,7 @@ const Chat = (props) => {
   const userid = props.userid;
   const database = props.database;
   const databaseRef = props.databaseRef + '/' + userid;
+  const setTabState = props.setTabState;
   const [state, dispatch] = React.useReducer(reducer, initialState);
   const body = React.useRef(null)
   let input
@@ -56,8 +57,8 @@ const Chat = (props) => {
   }, [userid])
 
   const sendMessage = (key, id, message, type, database) => {
-    const messageId = Math.random().toString(36).substr(2, 9);
-    database.ref('/' + key + '/messages/' + id + '/userinfo').update({ state:1 })
+    const messageId = Math.random().toString(36).substr(2, 9)
+    database.ref('/' + key + '/users/' + id).update({ state:1 })
     database.ref('/' + key + '/messages/' + id + '/' + messageId).update({
       id: messageId,
       userId: key,
@@ -65,16 +66,7 @@ const Chat = (props) => {
       type: type,
       timestamp: new Date().getTime()
     })
-
-    // const messageId = Math.random().toString(36).substr(2, 9);
-    // database.ref(databaseRef + '/userinfo').update({ state:1 })
-    // database.ref(databaseRef + '/' + messageId).update({
-    //     id: messageId,
-    //     userId: 'c1cd7759-9784-4fac-a667-3685d6b2e4a0',
-    //     message: input.value,
-    //     type: 1,
-    //     timestamp: new Date().getTime()
-    // });
+    setTabState(1)
   }
 
   const handleFileInput = async (e) => {
@@ -102,6 +94,7 @@ const Chat = (props) => {
 
   return (
     <>
+      { console.log('state', state) }
       <div>
         <div className="messages" ref={body}>
           { (state.userid === userid) &&  // 중복호출 예외처리
