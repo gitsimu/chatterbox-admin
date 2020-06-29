@@ -12,7 +12,7 @@ export default function Home() {
 
       <div>
         <Header/>
-        <Link href="/about">
+        <Link href="/main">
           <a>About page</a>
         </Link>
       </div>
