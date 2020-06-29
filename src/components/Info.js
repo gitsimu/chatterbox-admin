@@ -1,96 +1,160 @@
-import React from 'react';
-import Mockup from './Mockup';
+import React from 'react'
+import { connect } from 'react-redux'
 
-let title = React.createRef();
-let subTitle = React.createRef();
-let mobile = React.createRef();
-let email = React.createRef();
-let nickname = React.createRef();
-let firstMessage = React.createRef();
-let expired = React.createRef();
+const Info = ({ users, settings, ...props }) => {
+  const key = settings.key
+  const database = props.database
 
-const Info = (props) => {
-  // let title = React.useRef(null)
-  // let subTitle = React.useRef(null)
-  // let mobile = React.useRef(null)
-  // let email = React.useRef(null)
-  // let nickname = React.useRef(null)
-  // let firstMessage = React.useRef(null)
+  const i = settings.selectedUser
+  const [info, setInfo] = React.useState(i)
 
-  const database = props.database;
-  const databaseRef = '/' + props.keycode + '/' + 'config';
-  const info = database.ref(databaseRef);
+  const initNickname = (i.value && i.value.nickname) ? i.value.nickname : ''
+  const initMobile = (i.value && i.value.mobile) ? i.value.mobile : ''
+  const initEmail = (i.value && i.value.email) ? i.value.email : ''
+
+  const [nickname, setNickname] = React.useState(initNickname)
+  const [mobile, setMobile] = React.useState(initMobile)
+  const [email, setEmail] = React.useState(initEmail)
 
   React.useEffect(() => {
-    info.once('value', function(snapshot) {
-      const data = snapshot.val();
-      console.log('[info]', data);
-      if (!data) return;
+    setInfo(i)
+  }, [props, i])
 
-      title.value = data.title;
-      subTitle.value = data.subTitle;
-      mobile.value = data.mobile;
-      email.value = data.email;
-      nickname.value = data.nickname;
-      firstMessage.value = data.firstMessage;
-    })
-  }, [])
+  React.useEffect(() => {
+    setNickname((i.value && i.value.nickname) ? i.value.nickname : '')
+    setMobile((i.value && i.value.mobile) ? i.value.mobile : '')
+    setEmail((i.value && i.value.email) ? i.value.email : '')
+  }, [i])
+
+  const saveInfo = (type) => {
+    let data
+
+    switch(type) {
+      case 'nickname':
+        if (nickname.trim().length === 0) { return }
+        else if (nickname.trim().length > 30) {
+          alert('닉네임의 허용 길이는 최대 30자 입니다.')
+          return
+        }
+
+        data = { nickname: nickname.trim() }
+        break
+
+      case 'mobile':
+        if (mobile.trim().length === 0) { return }
+        else if (mobile.trim().length > 30) {
+          alert('연락처의 허용 길이는 최대 30자 입니다.')
+          return
+        }
+
+        data = { mobile: mobile.trim() }
+        break
+
+      case 'email':
+        if (mobile.trim().length === 0) { return }
+        else if (mobile.trim().length > 50) {
+          alert('이메일의 허용 길이는 최대 50자 입니다.')
+          return
+        }
+
+        data = { email: email.trim() }
+        break
+
+      default:
+        data = null
+        break
+    }
+
+    if (data) {
+      database.ref(`/${key}/users/${settings.selectedUser.key}`).update(data)
+      alert('변경되었습니다.')
+    }
+  }
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'row' }}>
-      <div style={{ flex: 2, backgroundColor: '#f9f9f9', borderRadius: 5, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <Mockup
-          title={title.value}
-          subTitle={subTitle.value}
-          nickname={nickname.value}
-          firstMessage={firstMessage.value}/>
-      </div>
-      <div style={{ flex: 1, marginLeft: 20 }}>
-        <div className="chat-info-item">
-          <span>제목</span>
-          <input ref={node => title = node}/>
-        </div>
-        <div className="chat-info-item">
-          <span>설명</span>
-          <input ref={node => subTitle = node}/>
-        </div>
-        <div className="chat-info-item">
-          <span>연락처</span>
-          <input ref={node => mobile = node}/>
-        </div>
-        <div className="chat-info-item">
-          <span>이메일</span>
-          <input ref={node => email = node}/>
-        </div>
-        <div className="chat-info-item">
-          <span>프로필 이름</span>
-          <input ref={node => nickname = node}/>
-        </div>
-        <div className="chat-info-item">
-          <span>첫 응대 메세지</span>
-          <input ref={node => firstMessage = node}/>
-        </div>
-        <div style={{ padding: 5, marginTop: 10}}>
-          <div
-            style={{ backgroundColor: '#00aaff', textAlign: 'center', padding: 10, fontSize: 12, color: '#fff', borderRadius: 3 }}
-            onClick={() => {
-              info.set({
-                title: title.value,
-                subTitle: subTitle.value,
-                mobile: mobile.value,
-                email: email.value,
-                nickname: nickname.value,
-                firstMessage: firstMessage.value,
-              });
-              console.log(title.value, mobile.value, email.value, nickname.value, firstMessage.value)
-              alert('적용되었습니다.');
-            }}>
-            적용하기
+    <div className="chat-info card">
+      <div className="chat-info-header">사용자 정보</div>
+      <div className="chat-info-body">
+        {(settings.selectedUser && settings.selectedUser.key) && (
+          <>
+          <div className="chat-info-item">
+            <span>사용자 닉네임</span>
+            <div className="chat-info-item-input">
+              <input type="text" placeholder="데이터가 없습니다"
+                value={nickname}
+                onChange={(e) => { setNickname(e.target.value) }}
+                onKeyPress={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault()
+                    saveInfo('nickname')
+                  }
+                }}/>
+
+              {(nickname && nickname !== '') && (
+                <div className="chat-info-item-save"
+                  onClick={() => { saveInfo('nickname') }}>
+                  저장
+                </div>
+              )}
+            </div>
           </div>
-        </div>
+          <div className="chat-info-item">
+            <span>연락처</span>
+            <div className="chat-info-item-input">
+              <input type="text" placeholder="데이터가 없습니다"
+                value={mobile}
+                onChange={(e) => { setMobile(e.target.value) }}
+                onKeyPress={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault()
+                    saveInfo('mobile')
+                  }
+                }}/>
+
+              {(mobile && mobile !== '') && (
+                <div className="chat-info-item-save"
+                  onClick={() => { saveInfo('mobile') }}>
+                  저장
+                </div>
+              )}
+            </div>
+          </div>
+          <div className="chat-info-item">
+            <span>이메일</span>
+            <div className="chat-info-item-input">
+              <input type="text" placeholder="데이터가 없습니다"
+                value={email}
+                onChange={(e) => { setEmail(e.target.value) }}
+                onKeyPress={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault()
+                    saveInfo('email')
+                  }
+                }}/>
+
+              {(email && email !== '') && (
+                <div className="chat-info-item-save"
+                  onClick={() => { saveInfo('email') }}>
+                  저장
+                </div>
+              )}
+            </div>
+          </div>
+          <div className="chat-info-item">
+            <span>사용자 고유 ID</span>
+            <div className="chat-info-item-text">{info.key}</div>
+          </div>
+          </>
+        )}
       </div>
     </div>
   )
 }
 
-export default Info
+const mapStateToProps = state => ({
+  users: state.users,
+  settings: state.settings
+})
+
+// export default Info
+export default connect(mapStateToProps)(Info)

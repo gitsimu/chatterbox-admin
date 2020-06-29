@@ -1,37 +1,34 @@
-import React from 'react';
+import React from 'react'
 import User from './User'
-import * as script from '../js/script.js';
+import { connect } from 'react-redux'
 
-const UserList = (props) => {
-  const users = props.users;
-  const tabState = props.tabState;
-  const setTabState = props.setTabState;
+const UserList = ({ users, ...props }) => {
+  const tabState = props.tabState
+  const setTabState = props.setTabState
 
-  console.log('userlist',users);
-
-  const [countWait, setCountWait] = React.useState(0);
-  const [countProgress, setCountProgress] = React.useState(0);
-  const [countComplete, setCountComplete] = React.useState(0);
+  const [countWait, setCountWait] = React.useState(0)
+  const [countProgress, setCountProgress] = React.useState(0)
+  const [countComplete, setCountComplete] = React.useState(0)
 
   React.useEffect(() => {
     setCountWait(users.filter((f) => {
-      const userState = f.value.state ? f.value.state : 0;
-      return userState === 0
+      const userState = f.value.state || 0
+      return (userState === 0)
     }).length)
 
     setCountProgress(users.filter((f) => {
-      const userState = f.value.state;
-      return userState === 1
+      const userState = f.value.state
+      return (userState === 1)
     }).length)
 
     setCountComplete(users.filter((f) => {
-      const userState = f.value.state;
-      return userState === 2
+      const userState = f.value.state
+      return (userState === 2)
     }).length)
   }, [users])
 
   return (
-    <div className="chat-list">
+    <>
       <div className="chat-list-tab">
         <div
           className={tabState === 0 ? 'active' : ''}
@@ -53,21 +50,25 @@ const UserList = (props) => {
         </div>
       </div>
       <div
-        style={ {flex:1} }
+        className="chat-users"
         key="chat-list">
         { users.filter((f) => {
-          const userState = f.value.state ? f.value.state : 0;
-          return userState === tabState
+          const userState = f.value.state || 0
+          return (userState === tabState)
         }).map((m, i) => (
           <User
             key={m.key}
-            data={m}
-            active={m.key === props.selectUser}
-            clickEvent={props.setSelectedUser}/>
+            database={props.database}
+            data={m}/>
         ))}
       </div>
-    </div>
+    </>
   )
 }
 
-export default UserList
+const mapStateToProps = state => ({
+  users: state.users
+})
+
+// export default UserList
+export default connect(mapStateToProps)(UserList)

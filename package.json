@@ -10,6 +10,7 @@
   "dependencies": {
     "aws-sdk": "^2.688.0",
     "axios": "^0.19.2",
+    "babel-plugin-styled-components": "^1.10.7",
     "express": "^4.17.1",
     "firebase": "^7.14.5",
     "firebase-admin": "^8.12.1",
@@ -19,6 +20,7 @@
     "multer-s3": "^2.9.0",
     "next": "9.4.2",
     "react": "16.13.1",
+    "react-color": "^2.18.1",
     "react-dom": "16.13.1",
     "react-redux": "^7.2.0",
     "redux": "^4.0.5"
