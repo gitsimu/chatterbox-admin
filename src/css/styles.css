@@ -1,3 +1,6 @@
+body {
+  margin: 0;
+}
 div, input, textarea {
   box-sizing: border-box;
   font-family: "Avenir", "Noto Sans Japanese", "Hiragino Kaku Gothic ProN", "YuGothic", "Yu Gothic", "メイリオ", "Apple SD Gothic Neo", "Nanum Barun Gothic", "Helvetica", "Arial", "Malgun Gothic", "맑은 고딕", "돋움", "Dotum", "sans-serif";

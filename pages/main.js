@@ -87,7 +87,7 @@ function Main({ users, messages, settings, addUsers, clearUsers, selectedUser, s
   }, [addUsers, clearUsers, database, isLoading, selectedUser, settings.key])
 
   return (
-    <div className="App">
+    <div className="App chatterbox-theme-light">
       <div className="main">
         <div className="container-menu card">
           <div
@@ -165,6 +165,9 @@ function Main({ users, messages, settings, addUsers, clearUsers, selectedUser, s
             onClick={() => showImageViewer(null)}></div>
           <img src={imageViewer} alt="imageViewer"/>
         </div>
+      )}
+      { loading && (
+        <div id="loading"><div></div></div>
       )}
     </div>
   )

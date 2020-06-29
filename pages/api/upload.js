@@ -19,8 +19,8 @@ export default async (req, res) => {
 
     const form = new formidable.IncomingForm()
     form.parse(req, function(err, fields, files) {
-      console.log('files', files)
-      console.log('fields', fields)
+      // console.log('files', files)
+      // console.log('fields', fields)
 
       var params = {
         Bucket: 'smartlog',
@@ -31,6 +31,9 @@ export default async (req, res) => {
 
       s3.upload(params, function(err, data) {
       // s3.putObject(params, function(err, data) {
+        if (err) {
+          console.log('err', err)
+        }
         res.setHeader("Access-Control-Allow-Origin", "*")
         res.setHeader("Access-Control-Allow-Headers", "Content-Type")
         res.statusCode = 200

@@ -366,7 +366,8 @@ const Setting = ({ settings, ...props }) => {
                   <span>테마색상</span>
                   <input type="text"
                     value={themeColor}                    
-                    onChange={() => {
+                    onChange={() => {}}
+                    onClick={() => {
                       showThemeColorPicker(!themeColorPicker)
                     }}/>
                   <div className="setting-color-sample" style={{ backgroundColor: themeColor }}></div>
