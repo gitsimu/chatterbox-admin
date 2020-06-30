@@ -31,6 +31,10 @@
   opacity: 1;
   z-index: 99998;
 }
+#chatterbox-root .chat-icon img {
+  max-width: 65px;
+  max-height: 65px;
+}
 
 #chatterbox-root iframe.chatterbox-iframe {
   opacity: 0 !important;
