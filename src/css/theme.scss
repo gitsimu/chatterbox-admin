@@ -1,271 +1,276 @@
 /* Light theme */
 .chatterbox-theme-light {
-    ::-webkit-scrollbar-track {
-      background: rgba(0,0,0,0);
-    }
-    /* app */
-    .app {
-      background: #f5f7fb;
-    }
-    .app div.card {
-      background: #fff;
-      border: none;
-    }
-    .app-title {
-      border-bottom: 1px solid #eee;
-    }
-    .app-input-item input {
-      background: #fff;
-      border: 1px solid #eee;
-      color: #494949;
-    }
-    .app-input-item span {
-      color: #494949;
-      font-weight: bold;  
-    }
-    .app-container.card {
-      padding: 30px;
-      border: none;
-    }
-    .app-title {
-      color: #000;
-      font-size: 20px;
-      font-weight: 500;
-      border: none;
-    }
-    .app-input-item input:focus {
-      border-color: #0080F7;
-    }
-    .app-button-login:not(.active) {
-      pointer-events: none;
-    }  
-    .app-button-login div {
-      background: rgba(0, 128, 247, 0.5);
-      padding: 8px 12px;
-      font-size: 14px;    
-    }
-    .app-button-login.active div {
-      background: #0080F7;
-    }
-  
-    .app-copyright {
-      font-size: 11px;
-      padding: 12px 5px;
-    }
-  
-    /* main */
-    .main {
-      /* background: rgb(245,248,251); */
-      background: #f5f7fb;
-      padding: 0;
-    }
-    .main .container-screen-0 div.card,
-    .main .container-screen-2 div.card {
-      background: transparent;
-      border: 1px solid #f1f1f1;
-    }
-    .container-center {
-      margin: 0;
-    }
-    .container-menu.card {
-      border-radius: 0 !important;
-      border: none !important;
-    }
-    .container-screen-0 {
-      padding: 5px;
-    }
-    .container-screen-2 {
-      padding: 5px;
-    }
-    .chat-body:empty {
-      background: transparent;
-      border: none;
-    }
-    
-    .chat-list {
-      background: #fff !important;
-    }
-    .chat-list-tab {
-      /* border: none; */
-      border-bottom: 1px solid #f6f6f6;
-    }
-    .chat-list-tab > div.active {
-      border-top: 3px solid #0080F7;
-      color: #0080F7;
-    }
-    
-    .chat-body {
-      margin-right: 5px;
-    }
-    .chat-user {
-      background: transparent;
-    }
-    .chat-user:hover {
-      background: #f3f9ff;
-    }
-    .chat-user.active {
-      background: #eff7ff;
-    }
-    .chat-user-name {
-      color: #494949;
-    }
-    .chat-user-datetime {
-      color: rgb(126, 134, 152);
-    }
-    .chat-user-message {
-      color: #3eaae0;
-    }
-    
-    .messages {
-      border: none !important;
-    }
-    .message.opponent .message-inner {
-      background: #fff;
-      color: #494949;
-    }
-    .message.opponent .message-name {
-      color: #494949;
-    }
-    .message .message-time {
-      color: rgb(126, 134, 152);
-    }
-    .message-date > span {
-      background: rgb(245,248,251);
-      color: #7f7f7f;
-    }
-    .message-date:after {
-      border-color: #d0d5de;
-    }
-    .message-thumbnail {
-      border: none;
-    }
-    .message-file {
-      border: none;
-      background: #fff;
-    
-    }
-    .message-file .message-file-name,
-    .message-file .message-file-size, 
-    .message-file .message-file-expire {
-      color: #494949;
-    }
-    .message-file .message-file-save {
-      color: #0080F7;
-      border-top: 1px solid #f1f1f1;
-    }
-    
-    .message-form > form {
-      border: 1px solid #f1f1f1;
-    }
-    .message-addon,
-    .message-input,
-    .message-button-send,
-    .message-button-more {
-      background: #fff;
-    }
-    .message-addon i,
-    .message-button-send,
-    .message-button-more {
-      color: #494949;
-    }
-    .message-addon i:hover,
-    .message-button-send:hover,
-    .message-button-more:hover {  
-      background: #fff;
-      color: #0080F7;
-    }
-    .message-input {
-      color: #494949;
-    }
-    
-    .chat-memo-header,
-    .chat-info-header {
-      background: #fff;
-      border-bottom: 1px solid rgb(245,248,251);
-      color: rgb(126, 134, 152);
-    }
-    .chat-memo-body textarea,
-    .chat-memo-footer,
-    .chat-info-body {
-      background: #fff;
-      color: #494949;
-    }
-    .chat-memo-footer,
-    .chat-info-item > div.chat-info-item-text {
-      color: #0080F7;
-    }
-    .chat-memo-footer:hover {
-      text-decoration: none;
-      background: #EFF7FF;
-    }
-    
-    .chat-info-item input {
-      color: #494949;
-    }
-    .chat-info-item input:hover {
-      background: rgba(27, 29, 35, 0.05);
-    }
-    .chat-info-item input:focus {
-      background: rgba(27, 29, 35, 0.1);
-    }
-    
-    .dialog,
-    .message-option-dialog {
-      background: #fff;
-      color: #494949;
-    }
-    .message-option-dialog > div:hover {
-      background: rgba(0,0,0,0.05);
-      color: #494949;
-    }
-    .emoji-container {
-      background: rgba(0,0,0,0.7);
-    }
-    .emoji-container .emoji:hover {
-      background: rgba(0,0,0,0.5);
-    }
-    
-    .setting-list {
-      margin: 0;
-      background: #fff !important;
-    }
-    .setting-list-title {
-      color: #000000;
-      font-weight: bold;
-    }
-    .setting-list-tab {
-      color: #999;
-    }
-    .setting-list-tab:hover,
-    .setting-list-tab.active {  
-      background: #fff;
-      color: #0080F7;
-      font-weight: bold;
-    }
-    .setting-body {
-      border: none !important;
-    }
-    .setting-menu-header {
-      color: #333;
-      border-bottom: 1px solid #eee;
-    }
-    .setting-working-day,
-    .setting-checkbox-item-title,
-    .setting-input-item span {
-      color: #494949;
-      font-weight: bold;
-    }
-    .setting-working-day {
-      background: transparent;
-    }
-    .setting-checkbox-item-title select,
-    .setting-working-time select,
-    .setting-working-message textarea,
-    .setting-input-item input, 
-    .setting-input-item textarea,
-    .setting-profile-image-upload > div {
-      background: #fff;
-      color: #494949;
-      border: 1px solid #eee;
-    }
+  ::-webkit-scrollbar-track {
+    background: rgba(0,0,0,0);
   }
+  /* app */
+  .app {
+    background: #f5f7fb;
+  }
+  .app div.card {
+    background: #fff;
+    border: none;
+  }
+  .app-title {
+    border-bottom: 1px solid #eee;
+  }
+  .app-input-item input {
+    background: #fff;
+    border: 1px solid #eee;
+    color: #494949;
+  }
+  .app-input-item span {
+    color: #494949;
+    font-weight: bold;  
+  }
+  .app-container.card {
+    padding: 30px;
+    border: none;
+  }
+  .app-title {
+    color: #000;
+    font-size: 20px;
+    font-weight: 500;
+    border: none;
+  }
+  .app-input-item input:focus {
+    border-color: #0080F7;
+  }
+  .app-button-login:not(.active) {
+    pointer-events: none;
+  }  
+  .app-button-login div {
+    background: rgba(0, 128, 247, 0.5);
+    padding: 8px 12px;
+    font-size: 14px;    
+  }
+  .app-button-login.active div {
+    background: #0080F7;
+  }
+
+  .app-copyright {
+    font-size: 11px;
+    padding: 12px 5px;
+  }
+
+  /* main */
+  .main {
+    /* background: rgb(245,248,251); */
+    background: #f5f7fb;
+    padding: 0;
+  }
+  .main .container-screen-0 div.card,
+  .main .container-screen-2 div.card {
+    background: transparent;
+    border: 1px solid #f1f1f1;
+  }
+  .container-center {
+    margin: 0;
+  }
+  .container-menu.card {
+    border-radius: 0 !important;
+    border: none !important;
+  }
+  .container-screen-0 {
+    padding: 5px;
+  }
+  .container-screen-2 {
+    padding: 5px;
+  }
+  .chat-body:empty {
+    background: transparent;
+    border: none;
+  }
+  
+  .chat-list {
+    background: #fff !important;
+  }
+  .chat-list-tab {
+    /* border: none; */
+    border-bottom: 1px solid #f6f6f6;
+  }
+  .chat-list-tab > div.active {
+    border-top: 3px solid #0080F7;
+    color: #0080F7;
+  }
+  
+  .chat-body {
+    margin-right: 5px;
+  }
+  .chat-user {
+    background: transparent;
+  }
+  .chat-user:hover {
+    background: #f3f9ff;
+  }
+  .chat-user.active {
+    background: #eff7ff;
+  }
+  .chat-user-name {
+    color: #494949;
+  }
+  .chat-user-datetime {
+    color: rgb(126, 134, 152);
+  }
+  .chat-user-message {
+    color: #3eaae0;
+  }
+  
+  .messages {
+    border: none !important;
+  }
+  .message.opponent .message-inner {
+    background: #fff;
+    color: #494949;
+  }
+  .message.opponent .message-name {
+    color: #494949;
+  }
+  .message .message-time {
+    color: rgb(126, 134, 152);
+  }
+  .message-date > span {
+    background: rgb(245,248,251);
+    color: #7f7f7f;
+  }
+  .message-date:after {
+    border-color: #e4e8ef;
+  }
+  .message-thumbnail {
+    border: none;
+  }
+  .message-file {
+    border: none;
+    background: #fff;
+  }
+  .message-file .message-file-name,
+  .message-file .message-file-size, 
+  .message-file .message-file-expire {
+    color: #494949;
+  }
+  .message-file .message-file-save {
+    color: #0080F7;
+    border-top: 1px solid #f1f1f1;
+  }
+  
+  .message-form > form {
+    border: 1px solid #f1f1f1;
+  }
+  .message-addon,
+  .message-input,
+  .message-button-send,
+  .message-button-more {
+    background: #fff;
+  }
+  .message-addon i,
+  .message-button-send,
+  .message-button-more {
+    color: #494949;
+  }
+  .message-addon i:hover,
+  .message-button-send:hover,
+  .message-button-more:hover {  
+    background: #fff;
+    color: #0080F7;
+  }
+  .message-input {
+    color: #494949;
+  }
+  
+  .chat-memo-header,
+  .chat-info-header {
+    background: #fff;
+    border-bottom: 1px solid rgb(245,248,251);
+    color: rgb(126, 134, 152);
+  }
+  .chat-memo-body textarea,
+  .chat-memo-footer,
+  .chat-info-body {
+    background: #fff;
+    color: #494949;
+  }
+  .chat-memo-footer,
+  .chat-info-item > div.chat-info-item-text {
+    color: #0080F7;
+  }
+  .chat-memo-footer:hover {
+    text-decoration: none;
+    background: #EFF7FF;
+  }
+  
+  .chat-info-item input {
+    color: #494949;
+  }
+  .chat-info-item input:hover {
+    background: rgba(27, 29, 35, 0.05);
+  }
+  .chat-info-item input:focus {
+    background: rgba(27, 29, 35, 0.1);
+  }
+  
+  .dialog,
+  .message-option-dialog {
+    background: #fff;
+    color: #494949;
+  }
+  .message-option-dialog > div:hover {
+    background: rgba(0,0,0,0.05);
+    color: #494949;
+  }
+  .emoji-container {
+    background: rgba(0,0,0,0.7);
+  }
+  .emoji-container .emoji:hover {
+    background: rgba(0,0,0,0.5);
+  }
+  
+  .setting-list {
+    margin: 0;
+    background: #fff !important;
+  }
+  .setting-list-title {
+    color: #000000;
+    font-weight: bold;
+  }
+  .setting-list-tab {
+    color: #999;
+  }
+  .setting-list-tab:hover,
+  .setting-list-tab.active {  
+    background: #fff;
+    color: #0080F7;
+    font-weight: bold;
+  }
+  .setting-body {
+    border: none !important;
+  }
+  .setting-menu-header {
+    color: #333;
+    border-bottom: 1px solid #eee;
+  }
+  .setting-working-day,
+  .setting-checkbox-item-title,
+  .setting-input-item span {
+    color: #494949;
+    font-weight: bold;
+  }
+  .setting-working-day {
+    background: transparent;
+  }
+  .setting-checkbox-item-title select,
+  .setting-working-time select,
+  .setting-working-message textarea,
+  .setting-input-item input, 
+  .setting-input-item textarea,
+  .setting-profile-image-upload > div {
+    background: #fff;
+    color: #494949;
+    border: 1px solid #eee;
+  }
+  .setting-data-item {
+    color: #000;
+  }
+  .setting-data-item-description {
+    color: #555;
+  }
+}

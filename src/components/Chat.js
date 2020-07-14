@@ -11,7 +11,7 @@ const Chat = ({ users, messages, settings, addMessages, deleteMessages, clearMes
   const userid = settings.selectedUser.key
   const database = props.database
   const setTabState = props.setTabState
-  const target = settings.selectedUser
+  const target = settings.selectedUser  
 
   const [optionDialog, showOptionDialog] = React.useState(false)
   const [infoDialog, showInfoDialog] = React.useState(false)
@@ -24,6 +24,12 @@ const Chat = ({ users, messages, settings, addMessages, deleteMessages, clearMes
 
   let form, input
 
+  const scrollToBottom = () => {
+    if (body && body.current) {
+      body.current.scrollTop = body.current.scrollHeight
+    }
+  }
+  
   const firebaseConnect = React.useCallback((userid) => {
     if (userid && !messages[userid]) { // 최초 1회만 연결
       isLoading(true)
@@ -34,9 +40,7 @@ const Chat = ({ users, messages, settings, addMessages, deleteMessages, clearMes
         addMessages({ key: userid, value: value })
         doRefresh(refresh !== value.id ? value.id : null)
         setTimeout(() => {
-          if (body && body.current) {
-            body.current.scrollTop = body.current.scrollHeight
-          }
+          scrollToBottom()
           isLoading(false)
         }, 10)
       })
@@ -128,9 +132,7 @@ const Chat = ({ users, messages, settings, addMessages, deleteMessages, clearMes
     showOptionDialog(false)
 
     setTimeout(() => {
-      if (body && body.current) {
-        body.current.scrollTop = body.current.scrollHeight
-      }
+      scrollToBottom()
     }, 10)
   }, [userid, target, firebaseConnect])
 
@@ -207,20 +209,21 @@ const Chat = ({ users, messages, settings, addMessages, deleteMessages, clearMes
 
   return (
     <>
-      <div className='messages card' ref={body}>
-        { (messages[userid]) // 중복호출 예외처리
-          && (messages[userid].map((m, i) => (
-           <ChatMessage
-             opponent={userid}
-             target={target}
-             key={m.id}
-             prev={messages[userid][i - 1]}
-             {...m}
-             {...props}
-             />
-           )))
+      <div className='messages card' ref={body}>        
+        { messages[userid] // 중복호출 예외처리
+          && messages[userid].map((m, i) => {
+            scrollToBottom()
+            return <ChatMessage
+              opponent={userid}
+              target={target}
+              key={m.id}
+              prev={messages[userid][i - 1]}
+              next={messages[userid][i + 1]}
+              {...m}
+              {...props}/>
+            })
         }
-
+       
         <div id='file-drop-layer' className={ fileDropLayer ? 'file-drop-layer active' : 'file-drop-layer' }>
           <div>
             <i className='icon-cloud-upload'></i>

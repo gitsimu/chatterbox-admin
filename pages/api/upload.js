@@ -19,7 +19,7 @@ export default async (req, res) => {
 
     const form = new formidable.IncomingForm()
     form.parse(req, function(err, fields, files) {
-      // console.log('files', files)
+      console.log('files', files)
       // console.log('fields', fields)
 
       var params = {

@@ -1139,6 +1139,8 @@ div, input, textarea {
   align-items: center;
   justify-content: center;
   background: rgba(0,0,0,0.2);
+  border-radius: 5px;
+  z-index: 99;
 }
 #loading > div {
   display: inline-block;
