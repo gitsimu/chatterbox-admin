@@ -29,5 +29,6 @@ yarn-error.log*
 .env.test.local
 .env.production.local
 
+smartlog-a3eed-firebase-adminsdk-mekw7-a877ecf549.json
 chatterbox-3e40b-firebase-adminsdk-7mvji-7f9ebb9f28.json
 aws.config.js
