@@ -12,7 +12,7 @@
         document.head.appendChild(style);
 
         var script = document.createElement('script');
-        script.src = 'http://3.34.185.70/plugin/bundle.4e484d7af01d20baae00.js';
+        script.src = 'http://3.34.185.70/plugin/bundle.3624cd496987f26a3c2a.js';
         document.head.appendChild(script);
     }
 })();
