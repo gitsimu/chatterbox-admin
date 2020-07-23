@@ -44,13 +44,13 @@ const Setting = ({ settings, ...props }) => {
       const data = snapshot.val()
       if (!data) return
 
-      setTitle(data.title)
-      setSubTitle(data.subTitle)
-      setNickname(data.nickname)
-      setFirstMessage(data.firstMessage)
-      setThemeColor(data.themeColor)
-      setProfileImage(data.profileImage || null)
-      setWorkingDay(data.workingDay || initWorkingDay)      
+      data.title && setTitle(data.title)
+      data.subTitle && setSubTitle(data.subTitle)
+      data.nickname && setNickname(data.nickname)
+      data.firstMessage && setFirstMessage(data.firstMessage)
+      data.themeColor && setThemeColor(data.themeColor)
+      data.profileImage && setProfileImage(data.profileImage)
+      data.workingDay && setWorkingDay(data.workingDay)      
     })    
   }, [database, settings.key])
 
@@ -399,7 +399,7 @@ const Setting = ({ settings, ...props }) => {
             </div>
             <div style={{ flex: 1, marginLeft: 20, maxWidth: 400 }}>
               <div className="setting-input-item">
-                <span>제목</span>
+                <span>제목</span>                
                 <input value={title}
                   onBlur={() => updateUserInfo()}
                   onChange={(e) => { setTitle(e.target.value) }}/>
