@@ -637,7 +637,6 @@ div, input, textarea {
   z-index: 2;
 }
 
-
 .message-file {
   position: relative;
   display: inline-block;
@@ -699,12 +698,13 @@ div, input, textarea {
   position: absolute;
   width: 350px;
   height: 200px;
-  background: rgba(0,0,0,0.2);
+  background: #ffffff;
   bottom: 50px;
   /* border-bottom: 1px solid #eee; */
   border-radius: 10px;
   overflow: auto;
   padding: 10px;
+  padding-top: 0;
   box-sizing: border-box;
   transition: 0.2s ease all;
   transform: translateY(100px);
@@ -1115,7 +1115,7 @@ div, input, textarea {
     align-items: flex-end;
 }
 .setting .message.opponent .message-inner {
-    background-color: #f0f3f3;
+    background-color: #f0f3f3 !important;
     color: #222;
 }
 .setting .message .message-inner {
@@ -1222,7 +1222,6 @@ div:hover > .tooltip {
   transform: rotate(45deg);
 }
 
-
 .file-drop-layer {
   position: absolute;
   top: 0;
@@ -1254,9 +1253,6 @@ div:hover > .tooltip {
   font-size: 36px;
   margin-bottom: 15px;
 }
-
-
-
 
 .image-viewer {
   position: absolute;

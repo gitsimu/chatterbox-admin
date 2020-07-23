@@ -28,11 +28,11 @@ const Setting = ({ settings, ...props }) => {
   const [themeColor, setThemeColor] = React.useState('#444c5d')
   const [themeColorPicker, showThemeColorPicker] = React.useState(false)
 
-  const [pushAlram, allowPushAlram] = React.useState(true)
-  const [audioBeep, allowAudioBeep] = React.useState(true)
-  const [autoSignin, allowAutoSignin] = React.useState(true)
+  // const [pushAlram, allowPushAlram] = React.useState(true)
+  // const [audioBeep, allowAudioBeep] = React.useState(true)
+  // const [autoSignin, allowAutoSignin] = React.useState(true)
   
-
+  const [useChat, setUseChat] = React.useState(true)
   const [workingDay, setWorkingDay] = React.useState(initWorkingDay)
 
   const [settingMenuState, setSettingMenuState] = React.useState(0)
@@ -190,7 +190,20 @@ const Setting = ({ settings, ...props }) => {
           <div className="setting-menu-header">
             기본 설정
           </div>
-          <div className="setting-menu-body setting-basic">                                 
+          <div className="setting-menu-body setting-basic">     
+            <div className="setting-checkbox-item">
+              <div className="setting-checkbox-item-title">
+                <label>
+                  <input type="checkbox"
+                    checked={useChat}
+                    onChange={(e) => {
+                      // SET USE CHAT
+                      setUseChat(e.target.checked)
+                    }}/>
+                  <span>채팅기능 사용</span>
+                </label>
+              </div>
+            </div>      
             <div className="setting-checkbox-item">
               <div className="setting-checkbox-item-title">
                 <label>
