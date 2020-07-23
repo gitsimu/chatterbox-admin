@@ -36,8 +36,16 @@ function Main({ users, messages, settings, addUsers, clearUsers, selectedUser, s
     simplelineLink.type = "text/css"
     document.querySelector('body').appendChild(simplelineLink)
 
+    const params = getParams()
+    const key = params.key
+
+    if (!key || key === '') {
+      alert('Invalid chat key\nPlease try again')
+      return
+    }
+
     isLoading(true)
-    signIn({ key: 'c1cd7759-9784-4fac-a667-3685d6b2e4a0' })    
+    signIn({ key: key })
 
     // firebase
     getFirebaseAuthToken(settings.key)
@@ -110,9 +118,8 @@ function Main({ users, messages, settings, addUsers, clearUsers, selectedUser, s
             <i className="icon-settings"></i>
             <div className="tooltip">설정</div>
           </div>
-          <div className="chat-lnb-item sign-out"
+          {/* <div className="chat-lnb-item sign-out"
             onClick={() => {
-              /* local storage */
               storage.remove('userData', (err) => {
                 if (err) {
                   console.log('[ERROR] Local storage remove failure', err)
@@ -123,7 +130,7 @@ function Main({ users, messages, settings, addUsers, clearUsers, selectedUser, s
             }}>
             <i className="icon-power"></i>
             <div className="tooltip">로그아웃</div>
-          </div>
+          </div> */}
         </div>
         <div className={ screenState === 0 ? "container-screen-0" : "container-screen-0 hide" }>
           <div className="container-center">
@@ -171,6 +178,21 @@ function Main({ users, messages, settings, addUsers, clearUsers, selectedUser, s
       )}
     </div>
   )
+}
+
+const getParams = url => {
+  let qs = url ? url : window.document.location.search;
+  qs = qs.split('+').join(' ');
+
+  let params = {},
+      tokens,
+      re = /[?&]?([^=]+)=([^&]*)/g;
+
+  while (tokens = re.exec(qs)) {
+      params[decodeURIComponent(tokens[1])] = decodeURIComponent(tokens[2]);
+  }
+
+  return params;
 }
 
 const getFirebaseAuthToken = async (uuid) => {
