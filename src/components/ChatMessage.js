@@ -58,7 +58,7 @@ const ChatMessage = ({ settings, ...props }) => {
                      ? `https://${m.text}`
                      : m.text
                    event.preventDefault()
-                   shell.openExternal(url)
+                   window.open(url, '_blank');
                  }}>{m.text}</a>
             : m
         ))}
@@ -67,8 +67,8 @@ const ChatMessage = ({ settings, ...props }) => {
   }
   const getTextMessage = message => {
     return URL_PATTERN.test(message)
-      ? getSimpleTextMessage(message)
-      : getLinkMessage(message)
+      ? getLinkMessage(message)
+      : getSimpleTextMessage(message)
   }
   const getFileMessage = message => {
     const images = ['jpg', 'png', 'gif', 'jpeg', 'bmp']
