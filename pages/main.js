@@ -50,6 +50,7 @@ function Main({ users, messages, settings, initUsers, clearUsers, selectedUser, 
         isLoading(true) 
       })
       .then(() => {
+        //return 'rndsmlch1'
         return smlog.API({
           method: 'get_chat_id',
           svid: svid
@@ -77,10 +78,9 @@ function Main({ users, messages, settings, initUsers, clearUsers, selectedUser, 
           .catch(() => { throw new Error('인증에 실패하였습니다.') })
       })
       .then(() => {
+        if (!settings.key || settings.key === '') return
         chat = database.ref(`/${settings.key}/users`).orderByChild('timestamp')
         chat.on('value', (snapshot) => {
-          clearUsers()
-          
           let items = []
           snapshot.forEach((childSnapshot) => {
             items.push(childSnapshot)
@@ -101,13 +101,15 @@ function Main({ users, messages, settings, initUsers, clearUsers, selectedUser, 
             }
           })
 
+          console.log('users length', users.length, settings.key)
+
+          clearUsers()
           initUsers(users)
         })
       })
       .catch((error) => error && alert(error))
       .finally(() => isLoading(false))
-    // return () => { chat.off() }
-  }, [initUsers, clearUsers, database, isLoading, settings.key])
+  }, [settings.key])
 
   return (
     <div className="App chatterbox-theme-light">
