@@ -256,7 +256,7 @@ div, input, textarea {
 } */
 
 .chat-memo {
-  height: 230px;
+  height: 200px;
   padding: 0 !important;
   overflow: hidden;
 }
@@ -323,8 +323,10 @@ div, input, textarea {
   overflow: auto;
 }
 .chat-info-item {
+  display: flex;
+  align-items: center;
   padding: 2px 10px;
-  margin-bottom: 10px;
+  margin-bottom: 5px;
   font-size: 0;
 }
 .chat-info-item span {
@@ -332,6 +334,7 @@ div, input, textarea {
   /* color: rgba(117, 124, 140, 1); */
   color: rgb(141, 152, 177);
   user-select: none;
+  min-width: 100px;
 }
 .chat-info-item input {
   padding: 5px 7px;
@@ -360,6 +363,7 @@ div, input, textarea {
   position: relative;
   display: flex;
   align-items: center;
+  flex: 1;
 }
 .chat-info-item > div.chat-info-item-input div.chat-info-item-save {
   padding-left: 8px;
