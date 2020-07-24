@@ -2,7 +2,7 @@ export const API = async (req, isLoading) => {
   const server = 'https://smlog.co.kr/api/app_api.php'
   const sskey = getCookie('SMTGSS')
 
-  if (!sskey || !memberToken || !memberId) {
+  if (!sskey) {
     return false
   } else {
     isLoading && isLoading(true)
@@ -11,10 +11,7 @@ export const API = async (req, isLoading) => {
     Object.keys(req).forEach((o, i) => {
       body += `${o}=${Object.values(req)[i]}&`
     })
-
-    if (user) {
-      body += `sskey=${sskey}&`
-    }
+    body += `sskey=${sskey}&` 
 
     const postResponse = await fetch(server, {
       method: 'POST',

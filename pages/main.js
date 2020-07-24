@@ -61,7 +61,7 @@ function Main({ users, messages, settings, addUsers, clearUsers, selectedUser, s
               throw new Error('스마트로그 인증 중 오류가 발생했습니다.')
             }
           })
-          .catch(() => { throw new Error('정상적인 접근 방식이 아닙니다. 다시 시도해주세요.') })
+          .catch((err) => { throw new Error('정상적인 접근 방식이 아닙니다. 다시 시도해주세요.') })
       })
       .then(key => {
         signIn({ key: key })
@@ -77,23 +77,26 @@ function Main({ users, messages, settings, addUsers, clearUsers, selectedUser, s
           .catch(() => { throw new Error('인증에 실패하였습니다.') })
       })
       .then(() => {
-        let items = []
-        snapshot.forEach((childSnapshot) => {
-          items.push(childSnapshot)
-        })
+        chat = database.ref(`/${settings.key}/users`).orderByChild('timestamp')
+        chat.on('value', (snapshot) => {
+          let items = []
+          snapshot.forEach((childSnapshot) => {
+            items.push(childSnapshot)
+          })
 
-        items.reverse().forEach((childSnapshot) => { // order by desc
-          const k = childSnapshot.key
-          const v = childSnapshot.val()
-          const code = script.guestCodeGenerator(k)
-          const user = {
-            key: k,
-            value: v,
-            guestCode: (v && v.nickname) ? v.nickname : code.guestCode,
-            colorCode: code.colorCode,
-          }
+          items.reverse().forEach((childSnapshot) => { // order by desc
+            const k = childSnapshot.key
+            const v = childSnapshot.val()
+            const code = script.guestCodeGenerator(k)
+            const user = {
+              key: k,
+              value: v,
+              guestCode: (v && v.nickname) ? v.nickname : code.guestCode,
+              colorCode: code.colorCode,
+            }
 
-          addUsers(user)
+            addUsers(user)
+          })
         })
       })
       .catch((error) => error.messages && Alert(error.messages))
