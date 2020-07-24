@@ -106,8 +106,8 @@ function Main({ users, messages, settings, initUsers, clearUsers, selectedUser, 
       })
       .catch((error) => error && alert(error))
       .finally(() => isLoading(false))
-    return () => { chat.off() }
-  }, [initUsers, clearUsers, database, isLoading, selectedUser, settings.key])
+    // return () => { chat.off() }
+  }, [initUsers, clearUsers, database, isLoading, settings.key])
 
   return (
     <div className="App chatterbox-theme-light">
