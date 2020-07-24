@@ -1,4 +1,5 @@
 (function() {
+    console.log('smtgs_chat_data', smtgs_chat_data)
     if (!document.getElementById('chatterbox-root')) {
         var node = document.createElement('div');
         node.id = 'chatterbox-root';
