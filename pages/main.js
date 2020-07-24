@@ -6,7 +6,7 @@ import "firebase/database"
 import axios from 'axios'
 
 import { connect } from 'react-redux'
-import { addUsers, clearUsers, selectedUser, signIn, signOut } from '../src/actions'
+import { initUsers, clearUsers, selectedUser, signIn, signOut } from '../src/actions'
 
 import UserList from '../src/components/UserList'
 import Chat from '../src/components/Chat'
@@ -17,7 +17,7 @@ import Setting from '../src/components/Setting'
 import * as script from '../src/js/script.js'
 import * as smlog from '../src/js/smlog'
 
-function Main({ users, messages, settings, addUsers, clearUsers, selectedUser, signIn, signOut, ...props }) {
+function Main({ users, messages, settings, initUsers, clearUsers, selectedUser, signIn, signOut, ...props }) {
   const [screenState, setScreenState] = React.useState(0)
   const [tabState, setTabState] = React.useState(0)
   const [imageViewer, showImageViewer] = React.useState(null)
@@ -86,19 +86,22 @@ function Main({ users, messages, settings, addUsers, clearUsers, selectedUser, s
             items.push(childSnapshot)
           })
 
-          items.reverse().forEach((childSnapshot) => { // order by desc
+          const users = items.reverse().map((childSnapshot) => { // order by desc
             const k = childSnapshot.key
             const v = childSnapshot.val()
             const code = script.guestCodeGenerator(k)
-            const user = {
+
+            return {
               key: k,
               value: v,
-              guestCode: (v && v.nickname) ? v.nickname : code.guestCode,
-              colorCode: code.colorCode,
+              guestCode: (v && v.nickname)
+                ? v.nickname
+                : code.guestCode,
+              colorCode: code.colorCode
             }
-
-            addUsers(user)
           })
+
+          initUsers(users)
         })
       })
       .catch((error) => error && alert(error))
@@ -137,7 +140,7 @@ function Main({ users, messages, settings, addUsers, clearUsers, selectedUser, s
     //                 colorCode: code.colorCode,
     //               }
 
-    //               addUsers(user)
+    //               initUsers(user)
     //             })
     //           })
     //         })
@@ -153,7 +156,7 @@ function Main({ users, messages, settings, addUsers, clearUsers, selectedUser, s
     //   })
 
     // return () => { chat.off() }
-  }, [addUsers, clearUsers, database, isLoading, selectedUser, settings.key])
+  }, [initUsers, clearUsers, database, isLoading, selectedUser, settings.key])
 
   return (
     <div className="App chatterbox-theme-light">
@@ -270,7 +273,7 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  addUsers: u => dispatch(addUsers(u)),
+  initUsers: u => dispatch(initUsers(u)),
   clearUsers: () => dispatch(clearUsers()),
   selectedUser: u => dispatch(selectedUser(u)),
   signIn: s => dispatch(signIn(s)),

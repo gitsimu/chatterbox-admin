@@ -10,6 +10,11 @@ export const addMessage = message => ({
 
 
 /* users */
+export const initUsers = users => ({
+  type: 'INIT_USERS',
+  users
+})
+
 export const addUsers = users => ({
   type: 'ADD_USERS',
   users

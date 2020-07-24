@@ -1,6 +1,8 @@
 const users = (state = [], action) => {
     console.log('[action]', action)
     switch (action.type) {
+      case 'INIT_USERS':
+        return [...action.users]
       case 'ADD_USERS':
         return [
           ...state,
