@@ -99,7 +99,7 @@ function Main({ users, messages, settings, addUsers, clearUsers, selectedUser, s
           })
         })
       })
-      .catch((error) => error.messages && Alert(error.messages))
+      .catch((error) => error && alert(error))
       .finally(() => isLoading(false))
 
 
@@ -155,6 +155,7 @@ function Main({ users, messages, settings, addUsers, clearUsers, selectedUser, s
 
   return (
     <div className="App chatterbox-theme-light">
+      {settings.key && (
       <div className="main">
         <div className="container-menu card">
           <div
@@ -225,6 +226,7 @@ function Main({ users, messages, settings, addUsers, clearUsers, selectedUser, s
             isLoading={isLoading}/>
         </div>
       </div>
+      )}
       { imageViewer !== null && (
         <div className="image-viewer">
           <div className="image-viewer-close"

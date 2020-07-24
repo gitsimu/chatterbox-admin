@@ -75,7 +75,7 @@ div, input, textarea {
 .container-right {
   display: flex;
   flex-direction: column;
-  width: 250px;
+  width: 350px;
   max-height: calc(100vh - 10px);
 }
 
@@ -144,8 +144,20 @@ div, input, textarea {
 }
 
 .chat-users {
+  position: relative;
   flex: 1;
   overflow: auto;
+}
+.chat-users:empty:after {
+  content: '대화 상대가 없습니다';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: #ccc;
 }
 .chat-user {
   display: flex;
@@ -472,7 +484,7 @@ div, input, textarea {
   bottom: 55px;
   right: 5px;
   border-radius: 5px;
-  box-shadow: 0 0 15px 5px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 15px 5px rgba(0, 0, 0, 0.05);
   padding: 8px 0;
   width: 200px;
   user-select: none;
