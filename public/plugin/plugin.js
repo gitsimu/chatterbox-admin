@@ -5,6 +5,7 @@
         node.setAttribute('key', smtgs_chat_data.key);
         node.setAttribute('ck', smtgs_chat_data.ck);
         node.setAttribute('muid', smtgs_chat_data.muid);
+        node.setAttribute('ip', smtgs_chat_data.ip);
         document.body.appendChild(node);
 
         var style = document.createElement('link');
