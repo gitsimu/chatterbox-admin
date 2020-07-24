@@ -15,6 +15,7 @@ import Info from '../src/components/Info'
 import Setting from '../src/components/Setting'
 
 import * as script from '../src/js/script.js'
+import * as smlog from '../src/js/smlog'
 
 function Main({ users, messages, settings, addUsers, clearUsers, selectedUser, signIn, signOut, ...props }) {
   const [screenState, setScreenState] = React.useState(0)
@@ -37,59 +38,114 @@ function Main({ users, messages, settings, addUsers, clearUsers, selectedUser, s
     document.querySelector('body').appendChild(simplelineLink)
 
     const params = getParams()
-    const key = params.key
+    const svid = params.svid
 
-    if (!key || key === '') {
-      alert('Invalid chat key\nPlease try again')
+    if (!svid || svid === '') {
+      alert('Invalid SVID\nPlease try again')
       return
     }
 
-    isLoading(true)
-    signIn({ key: key })
-
-    // firebase
-    getFirebaseAuthToken(settings.key)
-      .then(res => {
-        const data = res.data
-        if (data.result === 'success') {
-          firebase.auth().signInWithCustomToken(data.token)
-            .then(success => {
-              isLoading(false)
-
-              chat = database.ref(`/${settings.key}/users`).orderByChild('timestamp')
-              chat.on('value', (snapshot) => {
-                clearUsers()
-
-                let items = []
-                snapshot.forEach((childSnapshot) => {
-                  items.push(childSnapshot)
-                })
-
-                items.reverse().forEach((childSnapshot) => { // order by desc
-                  const k = childSnapshot.key
-                  const v = childSnapshot.val()
-                  const code = script.guestCodeGenerator(k)
-                  const user = {
-                    key: k,
-                    value: v,
-                    guestCode: (v && v.nickname) ? v.nickname : code.guestCode,
-                    colorCode: code.colorCode,
-                  }
-
-                  addUsers(user)
-                })
-              })
-            })
-            .catch(error => {
-              isLoading(false)
-              alert('인증에 실패하였습니다.')
-            })
-        }
+    Promise.resolve()
+      .then(() => {
+        isLoading(true) 
       })
-      .catch(error => {
-        isLoading(false)
-        alert('인증 서버에서 연결을 거부하였습니다.')
+      .then(() => {
+        return smlog.API({
+          method: 'get_chat_id',
+          svid: svid
+        })
+          .then(data => {
+            if (data && data.code === '1') {
+              return data.chat_id
+            } else {
+              throw new Error('스마트로그 인증 중 오류가 발생했습니다.')
+            }
+          })
+          .catch(() => { throw new Error('정상적인 접근 방식이 아닙니다. 다시 시도해주세요.') })
       })
+      .then(key => {
+        signIn({ key: key })
+        return getFirebaseAuthToken(key)
+          .then(({data}) => {
+            if (data.result !== 'success') throw new Error()
+            return data
+          })
+          .catch(() => { throw new Error('인증 서버에서 연결을 거부하였습니다.') })
+      })
+      .then(data => {
+        return firebase.auth().signInWithCustomToken(data.token)
+          .catch(() => { throw new Error('인증에 실패하였습니다.') })
+      })
+      .then(() => {
+        let items = []
+        snapshot.forEach((childSnapshot) => {
+          items.push(childSnapshot)
+        })
+
+        items.reverse().forEach((childSnapshot) => { // order by desc
+          const k = childSnapshot.key
+          const v = childSnapshot.val()
+          const code = script.guestCodeGenerator(k)
+          const user = {
+            key: k,
+            value: v,
+            guestCode: (v && v.nickname) ? v.nickname : code.guestCode,
+            colorCode: code.colorCode,
+          }
+
+          addUsers(user)
+        })
+      })
+      .catch((error) => error.messages && Alert(error.messages))
+      .finally(() => isLoading(false))
+
+
+    // isLoading(true)
+    // signIn({ key: key })
+
+    // // firebase
+    // getFirebaseAuthToken(settings.key)
+    //   .then(res => {
+    //     const data = res.data
+    //     if (data.result === 'success') {
+    //       firebase.auth().signInWithCustomToken(data.token)
+    //         .then(success => {
+    //           isLoading(false)
+
+    //           chat = database.ref(`/${settings.key}/users`).orderByChild('timestamp')
+    //           chat.on('value', (snapshot) => {
+    //             clearUsers()
+
+    //             let items = []
+    //             snapshot.forEach((childSnapshot) => {
+    //               items.push(childSnapshot)
+    //             })
+
+    //             items.reverse().forEach((childSnapshot) => { // order by desc
+    //               const k = childSnapshot.key
+    //               const v = childSnapshot.val()
+    //               const code = script.guestCodeGenerator(k)
+    //               const user = {
+    //                 key: k,
+    //                 value: v,
+    //                 guestCode: (v && v.nickname) ? v.nickname : code.guestCode,
+    //                 colorCode: code.colorCode,
+    //               }
+
+    //               addUsers(user)
+    //             })
+    //           })
+    //         })
+    //         .catch(error => {
+    //           isLoading(false)
+    //           alert('인증에 실패하였습니다.')
+    //         })
+    //     }
+    //   })
+    //   .catch(error => {
+    //     isLoading(false)
+    //     alert('인증 서버에서 연결을 거부하였습니다.')
+    //   })
 
     // return () => { chat.off() }
   }, [addUsers, clearUsers, database, isLoading, selectedUser, settings.key])

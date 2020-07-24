@@ -9,8 +9,8 @@ var _SMARTLOG_CHAT = _SMARTLOG_CHAT || (function() {
                 var node = document.createElement('div');
                 node.id = 'chatterbox-root';
                 node.setAttribute('key', _smartlog_chat_args.key);
-                node.setAttribute('ck', _smartlog_chat_args.key);
-                node.setAttribute('muid', _smartlog_chat_args.key);
+                node.setAttribute('ck', _smartlog_chat_args.ck);
+                node.setAttribute('muid', _smartlog_chat_args.muid);
                 document.body.appendChild(node);
         
                 var style = document.createElement('link');
