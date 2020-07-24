@@ -79,6 +79,8 @@ function Main({ users, messages, settings, addUsers, clearUsers, selectedUser, s
       .then(() => {
         chat = database.ref(`/${settings.key}/users`).orderByChild('timestamp')
         chat.on('value', (snapshot) => {
+          clearUsers()
+          
           let items = []
           snapshot.forEach((childSnapshot) => {
             items.push(childSnapshot)
