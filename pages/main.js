@@ -106,56 +106,7 @@ function Main({ users, messages, settings, initUsers, clearUsers, selectedUser, 
       })
       .catch((error) => error && alert(error))
       .finally(() => isLoading(false))
-
-
-    // isLoading(true)
-    // signIn({ key: key })
-
-    // // firebase
-    // getFirebaseAuthToken(settings.key)
-    //   .then(res => {
-    //     const data = res.data
-    //     if (data.result === 'success') {
-    //       firebase.auth().signInWithCustomToken(data.token)
-    //         .then(success => {
-    //           isLoading(false)
-
-    //           chat = database.ref(`/${settings.key}/users`).orderByChild('timestamp')
-    //           chat.on('value', (snapshot) => {
-    //             clearUsers()
-
-    //             let items = []
-    //             snapshot.forEach((childSnapshot) => {
-    //               items.push(childSnapshot)
-    //             })
-
-    //             items.reverse().forEach((childSnapshot) => { // order by desc
-    //               const k = childSnapshot.key
-    //               const v = childSnapshot.val()
-    //               const code = script.guestCodeGenerator(k)
-    //               const user = {
-    //                 key: k,
-    //                 value: v,
-    //                 guestCode: (v && v.nickname) ? v.nickname : code.guestCode,
-    //                 colorCode: code.colorCode,
-    //               }
-
-    //               initUsers(user)
-    //             })
-    //           })
-    //         })
-    //         .catch(error => {
-    //           isLoading(false)
-    //           alert('인증에 실패하였습니다.')
-    //         })
-    //     }
-    //   })
-    //   .catch(error => {
-    //     isLoading(false)
-    //     alert('인증 서버에서 연결을 거부하였습니다.')
-    //   })
-
-    // return () => { chat.off() }
+    return () => { chat.off() }
   }, [initUsers, clearUsers, database, isLoading, selectedUser, settings.key])
 
   return (
