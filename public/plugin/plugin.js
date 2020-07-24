@@ -10,7 +10,7 @@
         var style = document.createElement('link');
         style.rel  = 'stylesheet';
         style.type = 'text/css';
-        style.href = 'http://chat.smlog.co.kr/plugin/chatterbox.css';
+        style.href = 'https://chat.smlog.co.kr/plugin/chatterbox.css';
         style.media = 'all';
         document.head.appendChild(style);
 
