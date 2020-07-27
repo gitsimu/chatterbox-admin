@@ -1,5 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import * as smlog from '../js/smlog'
+import * as script from '../js/script'
+
 
 const Info = ({ users, settings, ...props }) => {
   const key = settings.key
@@ -16,14 +19,41 @@ const Info = ({ users, settings, ...props }) => {
   const [mobile, setMobile] = React.useState(initMobile)
   const [email, setEmail] = React.useState(initEmail)
 
+  const [smlogData, setSmlogData] = React.useState(null)
+
   React.useEffect(() => {
     setInfo(i)
   }, [props, i])
 
   React.useEffect(() => {
-    setNickname((i.value && i.value.nickname) ? i.value.nickname : '')
-    setMobile((i.value && i.value.mobile) ? i.value.mobile : '')
-    setEmail((i.value && i.value.email) ? i.value.email : '')
+    if (i.value) {
+      setNickname(i.value.nickname || '')
+      setMobile(i.value.mobile || '')
+      setEmail(i.value.email || '')
+
+      const ip = i.value.ip
+      const svid = i.value.svid
+      console.log('smlog info', ip, svid)
+      
+      if (ip && svid) {
+        const req = {
+          method: 'ip_info_chat',
+          ip: ip,
+          svid: svid
+        }
+        smlog.API(req)
+          .then((data) => {
+            if (data.code === "1") {
+              console.log('smlog data', data)
+              setSmlogData(data)
+            }
+          })
+          .catch(err => console.log('err', err))
+      }
+      else {
+        setSmlogData(null)
+      }
+    }
   }, [i])
 
   const saveInfo = (type) => {
@@ -69,6 +99,25 @@ const Info = ({ users, settings, ...props }) => {
       database.ref(`/${key}/users/${settings.selectedUser.key}`).update(data)
       alert('변경되었습니다.')
     }
+  }
+
+  const getLogoUrl = (itype) => {
+    let logo = 'https://smlog.co.kr/img/logo/'
+    switch(itype) {
+      case 'naver':
+        logo += 'nv.png'
+        break
+      case 'google':
+        logo += 'gg.png'
+        break
+      case 'daum':
+        logo += 'dm.png'
+        break
+      case 'nate':
+        logo += 'nt.png'
+        break
+    }
+    return logo
   }
 
   return (
@@ -140,10 +189,66 @@ const Info = ({ users, settings, ...props }) => {
               )}
             </div>
           </div>
-          <div className="chat-info-item">
+          {/* <div className="chat-info-item">
             <span>사용자 고유 ID</span>
             <div className="chat-info-item-text">{info.key}</div>
-          </div>
+          </div> */}
+
+          {/* smlog data */}
+          {smlogData && (
+            <>
+              <div className="chat-info-item">
+                <span>IP</span>
+                <div className="chat-info-item-smlog">
+                  <img src={`https://smlog.co.kr/img/flag/${smlogData.info.ip_country}`} title={smlogData.info.ip_city_isp}></img>
+                  {smlogData.info.ip}
+                </div>
+              </div>
+              <div className="chat-info-item">
+                <span>클릭수</span>
+                <div className="chat-info-item-smlog">{smlogData.info.ad_click} 회</div>
+              </div>
+              <div className="chat-info-item">
+                <span>체류</span>
+                <div className="chat-info-item-smlog">{smlogData.info.sum_vtime}간 체류</div>
+              </div>
+              {smlogData.ad_history.length > 0 && (
+                <div className="ad-click-history">
+                  <div className="ad-click-history-title1">광고 클릭 내역</div>
+                  <div className="ad-click-history-title2">최근 90일, 유효 클릭만 표시</div>
+                  {smlogData.ad_history.map((item, index) => {
+                    return (
+                    <div className="ad-click-history-list" key={index}>
+                      <div className="ad-click-history-date">
+                        <div>{script.formatDate(item.art_date)}</div>
+                        {item.art_m_pl === '' ? (
+                          <div className="ad-click-history-badge ad-click-history-type-pc">PC</div>
+                        ) : (
+                          <div className="ad-click-history-badge ad-click-history-type-mobile">Mobile</div>
+                        )}
+                      </div>
+                      <div className="ad-click-history-item">
+                        <span>광고종류</span>
+                        <div>
+                          <img src={getLogoUrl(item.itype_img)} style={{height: 10, marginRight: 5}}></img>
+                          {item.itype}
+                        </div>
+                      </div>
+                      <div className="ad-click-history-item">
+                        <span>체류시간</span>
+                        <div>{item.vtime}간 체류</div>
+                      </div>
+                      <div className="ad-click-history-item">
+                        <span>키워드</span>
+                        <div>{item.keyword}</div>
+                      </div>
+                    </div>
+                    )
+                  })}
+                </div>
+              )}
+            </>
+          )}
           </>
         )}
       </div>

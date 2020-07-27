@@ -218,3 +218,26 @@ export const setCookie = (cName, cValue, cDay) => {
     return obj;
   }
   
+  export const formatDate = date => {
+    let d = new Date(parseInt(date, 10) * 1000)
+    let month = '' + (d.getMonth() + 1)
+    let day = '' + d.getDate()
+    let hours = d.getHours()
+    let ampm = hours >= 12 ? '오후' : '오전'
+    let minutes = '' + d.getMinutes()
+    let seconds = '' + d.getSeconds()
+    return (
+      [
+        d.getFullYear(),
+        month.length < 2 ? '0' + month : month,
+        day.length < 2 ? '0' + day : day
+      ].join('-') +
+      `  ${ampm} ` +
+      [
+        // hours.length < 2 ? '0' + hours : hours,
+        hours % 12 ? hours % 12 : 12,
+        minutes.length < 2 ? '0' + minutes : minutes,
+        seconds.length < 2 ? '0' + seconds : seconds
+      ].join(':')
+    )
+  }

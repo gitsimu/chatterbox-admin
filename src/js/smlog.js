@@ -3,7 +3,8 @@
  */
 export const API = async (req, isLoading) => {
   const server = 'https://smlog.co.kr/api/app_api.php'
-  const sskey = getCookie('SMTGSS')
+  // const sskey = getCookie('SMTGSS')
+  const sskey = '5vu3s37757hgnp31c7uv6v8gb3'
 
   if (!sskey) {
     return false

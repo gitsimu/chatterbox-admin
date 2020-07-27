@@ -37,14 +37,6 @@ function Main({ users, messages, settings, initUsers, clearUsers, selectedUser, 
     simplelineLink.type = "text/css"
     document.querySelector('body').appendChild(simplelineLink)
 
-    const params = getParams()
-    const svid = params.svid
-
-    if (!svid || svid === '') {
-      alert('Invalid SVID\nPlease try again')
-      return
-    }
-
     Promise.resolve()
       .then(() => {
         isLoading(true) 
