@@ -438,21 +438,27 @@ div, input, textarea {
   margin-bottom: 5px;
 }
 .ad-click-history-badge {
-  position: absolute;
-  right: 10px;
   font-size: 12px;
   font-weight: bold;
-  padding: 2px 7px;
+  padding: 2px 7px;  
   border-radius: 3px;
   color: #fff;
 }
 .ad-click-history-type-pc {
+  position: absolute;
+  right: 10px;
   background-color: rgb(86, 125, 247);
 }
 .ad-click-history-type-mobile {
+  position: absolute;
+  right: 10px;
   background-color: rgb(95, 194, 249);
 }
-
+.ad-click-history-state {
+  display: inline-block;
+  margin-right: 3px;
+  margin-bottom: 3px;
+}
 .messages {
   flex: 1;
   overflow: auto;

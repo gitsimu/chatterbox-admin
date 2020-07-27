@@ -186,6 +186,7 @@ const Info = ({ users, settings, ...props }) => {
           {/* smlog data */}
           {smlogData && (
             <>
+              {/* IP */}
               <div className="chat-info-item">
                 <span>IP</span>
                 <div className="chat-info-item-smlog">
@@ -193,14 +194,34 @@ const Info = ({ users, settings, ...props }) => {
                   {smlogData.info.ip}
                 </div>
               </div>
+              {/* 총 클릭수 */}
               <div className="chat-info-item">
                 <span>클릭수</span>
                 <div className="chat-info-item-smlog">{smlogData.info.ad_click} 회</div>
               </div>
+              {/* 총 체류시간 */}
               <div className="chat-info-item">
                 <span>체류</span>
                 <div className="chat-info-item-smlog">{smlogData.info.sum_vtime}간 체류</div>
               </div>
+              {/* 상태 */}
+              {(smlogData.info.state !== '' || smlogData.info.state_naver_ban_ip === '1') && (
+                <div className="chat-info-item">
+                  <span>상태</span>
+                  <div className="chat-info-item-smlog" style={{display: 'block'}}>
+                  {smlogData.info.state === 'blocked_ip_1' && (
+                    <div className="ad-click-history-badge ad-click-history-state" style={{backgroundColor: '#ff2a27'}}>차단 IP</div>
+                  )}
+                  {smlogData.info.state === 'blocked_ip_2' && (
+                    <div className="ad-click-history-badge ad-click-history-state" style={{backgroundColor: '#333'}}>블랙리스트</div>
+                  )}
+                  {smlogData.info.state_naver_ban_ip === '1' && (
+                    <div className="ad-click-history-badge ad-click-history-state" style={{backgroundColor: '#19ce60'}}>네이버 노출제한</div>
+                  )}
+                  </div>
+                </div>
+              )}             
+              {/* 광고 클릭 내역 */}
               {smlogData.ad_history.length > 0 && (
                 <div className="ad-click-history">
                   <div className="ad-click-history-title1">광고 클릭 내역</div>
@@ -229,7 +250,7 @@ const Info = ({ users, settings, ...props }) => {
                       </div>
                       <div className="ad-click-history-item">
                         <span>키워드</span>
-                        <div>{item.keyword}</div>
+                        <div>{item.keyword || '-'}</div>
                       </div>
                     </div>
                     )

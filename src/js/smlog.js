@@ -1,5 +1,5 @@
 /* 
- * 테스트 시 sskye, svid를 고정 값으로 넣도록 함
+ * 테스트 시 sskey를 고정 값으로 넣거나 쿠키값(SMTGSS)을 수동으로 지정
  */
 export const API = async (req, isLoading) => {
   const server = 'https://smlog.co.kr/api/app_api.php'
