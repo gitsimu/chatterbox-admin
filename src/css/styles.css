@@ -365,6 +365,26 @@ div, input, textarea {
   align-items: center;
   flex: 1;
 }
+.chat-info-item > div.chat-info-item-input div.chat-info-item-save {
+  padding-left: 8px;
+  color: rgba(117, 124, 140, 1);
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  transition: 0.3s ease all;
+  font-size: 12px;
+  white-space: pre;
+  position: absolute;
+  top: -16px;
+  right: 3px;
+}
+.chat-info-item > div.chat-info-item-input div.chat-info-item-save:hover {
+  text-decoration: underline;
+}
+.chat-info-item input:focus ~ div.chat-info-item-save {
+  opacity: 1;
+  visibility: visible;
+}
 .chat-info-item > div.chat-info-item-smlog {
   display: flex;
   align-items: center;
@@ -391,7 +411,7 @@ div, input, textarea {
 }
 .ad-click-history-list {
   border-top: 1px solid #eee;
-  padding: 10px 5px;
+  padding: 15px 5px;
 }
 .ad-click-history-item {
   font-size: 12px;
@@ -431,27 +451,6 @@ div, input, textarea {
 }
 .ad-click-history-type-mobile {
   background-color: rgb(95, 194, 249);
-}
-
-.chat-info-item > div.chat-info-item-input div.chat-info-item-save {
-  padding-left: 8px;
-  color: rgba(117, 124, 140, 1);
-  cursor: pointer;
-  opacity: 0;
-  visibility: hidden;
-  transition: 0.3s ease all;
-  font-size: 12px;
-  white-space: pre;
-  position: absolute;
-  top: -16px;
-  right: 3px;
-}
-.chat-info-item > div.chat-info-item-input div.chat-info-item-save:hover {
-  text-decoration: underline;
-}
-.chat-info-item input:focus ~ div.chat-info-item-save {
-  opacity: 1;
-  visibility: visible;
 }
 
 .messages {

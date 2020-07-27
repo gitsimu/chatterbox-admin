@@ -7,23 +7,11 @@ import * as script from '../js/script'
 const Info = ({ users, settings, ...props }) => {
   const key = settings.key
   const database = props.database
-
   const i = settings.selectedUser
-  const [info, setInfo] = React.useState(i)
-
-  const initNickname = (i.value && i.value.nickname) ? i.value.nickname : ''
-  const initMobile = (i.value && i.value.mobile) ? i.value.mobile : ''
-  const initEmail = (i.value && i.value.email) ? i.value.email : ''
-
-  const [nickname, setNickname] = React.useState(initNickname)
-  const [mobile, setMobile] = React.useState(initMobile)
-  const [email, setEmail] = React.useState(initEmail)
-
+  const [nickname, setNickname] = React.useState('')
+  const [mobile, setMobile] = React.useState('')
+  const [email, setEmail] = React.useState('')
   const [smlogData, setSmlogData] = React.useState(null)
-
-  React.useEffect(() => {
-    setInfo(i)
-  }, [props, i])
 
   React.useEffect(() => {
     if (i.value) {
@@ -34,7 +22,7 @@ const Info = ({ users, settings, ...props }) => {
       const ip = i.value.ip
       const svid = i.value.svid
       console.log('smlog info', ip, svid)
-      
+
       if (ip && svid) {
         const req = {
           method: 'ip_info_chat',
@@ -104,9 +92,6 @@ const Info = ({ users, settings, ...props }) => {
   const getLogoUrl = (itype) => {
     let logo = 'https://smlog.co.kr/img/logo/'
     switch(itype) {
-      case 'naver':
-        logo += 'nv.png'
-        break
       case 'google':
         logo += 'gg.png'
         break
@@ -115,6 +100,10 @@ const Info = ({ users, settings, ...props }) => {
         break
       case 'nate':
         logo += 'nt.png'
+        break
+      case 'naver':
+      default:
+        logo += 'nv.png'
         break
     }
     return logo
@@ -230,7 +219,7 @@ const Info = ({ users, settings, ...props }) => {
                       <div className="ad-click-history-item">
                         <span>광고종류</span>
                         <div>
-                          <img src={getLogoUrl(item.itype_img)} style={{height: 10, marginRight: 5}}></img>
+                          <img src={getLogoUrl(item.itype_img)} style={{height: 10, marginRight: 5}} alt=""></img>
                           {item.itype}
                         </div>
                       </div>
