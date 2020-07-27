@@ -6,6 +6,7 @@
         node.setAttribute('ck', smtgs_chat_data.ck);
         node.setAttribute('muid', smtgs_chat_data.muid);
         node.setAttribute('ip', smtgs_chat_data.ip);
+        node.setAttribute('svid', smtgs_chat_data.svid);
         document.body.appendChild(node);
 
         var style = document.createElement('link');
