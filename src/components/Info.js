@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 import * as smlog from '../js/smlog'
 import * as script from '../js/script'
 
-
 const Info = ({ users, settings, ...props }) => {
   const key = settings.key
   const database = props.database
@@ -186,14 +185,26 @@ const Info = ({ users, settings, ...props }) => {
           {/* smlog data */}
           {smlogData && (
             <>
-              {/* IP */}
-              <div className="chat-info-item">
-                <span>IP</span>
-                <div className="chat-info-item-smlog">
-                  <img src={`https://smlog.co.kr/img/flag/${smlogData.info.ip_country}`} title={smlogData.info.ip_city_isp}></img>
-                  {smlogData.info.ip}
+              {/* IP / Device */}
+              {i.value.muid === '' ? (  
+                <div className="chat-info-item">
+                  <span>IP</span>
+                  <div className="chat-info-item-smlog">
+                    <img 
+                      src={`https://smlog.co.kr/img/flag/${smlogData.info.ip_country}`}
+                      title={smlogData.info.ip_city_isp} alt=""
+                    />
+                    {smlogData.info.ip}
+                  </div>
                 </div>
-              </div>
+              ) : (
+                <div className="chat-info-item">
+                  <span>단말기 세션</span>
+                  <div className="chat-info-item-smlog">
+                    {i.value.muid}
+                  </div>
+                </div>
+              )}
               {/* 총 클릭수 */}
               <div className="chat-info-item">
                 <span>클릭수</span>

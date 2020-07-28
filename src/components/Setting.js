@@ -16,6 +16,12 @@ const initWorkingDay = {
   endBreak: '0000',
   message: '',
 }
+const initConfig = {
+  title: '채팅 상담',
+  subTitle: '보통 몇 분 내에 응답합니다',
+  nickname: 'Manager',
+  firstMessage: '방문해주셔서 감사합니다.\n궁금한 내용을 편하게 남겨주세요.'
+}  
 
 const Setting = ({ settings, ...props }) => {
   const database = props.database
@@ -42,15 +48,20 @@ const Setting = ({ settings, ...props }) => {
   React.useEffect(() => {
     database.ref(`/${settings.key}/config`).once('value', function(snapshot) {
       const data = snapshot.val()
-      if (!data) return
-
-      data.title && setTitle(data.title)
-      data.subTitle && setSubTitle(data.subTitle)
-      data.nickname && setNickname(data.nickname)
-      data.firstMessage && setFirstMessage(data.firstMessage)
-      data.themeColor && setThemeColor(data.themeColor)
-      data.profileImage && setProfileImage(data.profileImage)
-      data.workingDay && setWorkingDay(data.workingDay)      
+      if (data) {
+        setTitle(data.title)
+        setSubTitle(data.subTitle)
+        setNickname(data.nickname)
+        setFirstMessage(data.firstMessage)
+        setThemeColor(data.themeColor)
+        setProfileImage(data.profileImage || null)
+        setWorkingDay(data.workingDay || initWorkingDay)  
+      } else {
+        setTitle(initConfig.title)
+        setSubTitle(initConfig.subTitle)
+        setNickname(initConfig.nickname)
+        setFirstMessage(initConfig.firstMessage)
+      }   
     })    
   }, [database, settings.key])
 
