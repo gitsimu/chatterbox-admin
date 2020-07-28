@@ -42,19 +42,19 @@ function Main({ users, messages, settings, initUsers, clearUsers, selectedUser, 
         isLoading(true) 
       })
       .then(() => {
-        return 'rndsmlch1'
-        // return smlog.API({
-        //   method: 'get_chat_id',
-        //   svid: svid
-        // })
-        //   .then(data => {
-        //     if (data && data.code === '1') {
-        //       return data.chat_id
-        //     } else {
-        //       throw new Error('스마트로그 인증 중 오류가 발생했습니다.')
-        //     }
-        //   })
-        //   .catch((err) => { throw new Error('정상적인 접근 방식이 아닙니다. 다시 시도해주세요.') })
+        // return 'rndsmlch1'
+        return smlog.API({
+          method: 'get_chat_id',
+          svid: svid
+        })
+          .then(data => {
+            if (data && data.code === '1') {
+              return data.chat_id
+            } else {
+              throw new Error('스마트로그 인증 중 오류가 발생했습니다.')
+            }
+          })
+          .catch((err) => { throw new Error('정상적인 접근 방식이 아닙니다. 다시 시도해주세요.') })
       })
       .then(key => {
         signIn({ key: key })
