@@ -38,7 +38,7 @@ export default async (req, res) => {
         res.setHeader("Access-Control-Allow-Origin", "*")
         res.setHeader("Access-Control-Allow-Headers", "Content-Type")
         res.statusCode = 200
-        res.json({ result: 'success', file: { name: filename, size: files.file.size, location: data.Location } })
+        res.json({ result: 'success', file: { name: files.file.name, size: files.file.size, location: data.Location } })
         console.log('data', data)
 
         resolve()
@@ -70,7 +70,7 @@ const newFileName = (filename) => {
   const charactersLength = characters.length
   let result = ''
 
-  for ( var i = 0; i < length; i++ ) {
+  for ( var i = 0; i < 12; i++ ) {
      result += characters.charAt(Math.floor(Math.random() * charactersLength))
   }
   return `${result}.${extension}`
