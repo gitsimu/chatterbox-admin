@@ -51,15 +51,16 @@ const Chat = ({ users, messages, settings, addMessages, deleteMessages, clearMes
   }, [messages, refresh, props.database, settings.key, addMessages])
 
   const chromeNotification = (value) => {
-    // const notification = new Notification('새 메세지가 도착했습니다.', {
-    //   icon: 'https://chat.smlog.co.kr/resources/icon01_256.png',
-    //   body: value.type === 2 ? '[파일첨부]' : value.message,
-    //   silent: false
-    // });
-    // notification.onclick = function () {
-    //   window.focus()
-    //   this.close()
-    // }
+    console.log('chrome noti', value)
+    const notification = new Notification('새 메세지가 도착했습니다.', {
+      icon: 'https://chat.smlog.co.kr/resources/icon01_256.png',
+      body: value.type === 2 ? '[파일첨부]' : value.message,
+      silent: false
+    });
+    notification.onclick = function () {
+      window.focus()
+      this.close()
+    }
   }
 
   const sendMessage = React.useCallback((key, id, message, type, database) => {

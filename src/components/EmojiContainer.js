@@ -14,7 +14,7 @@ const EmojiContainer = (props) => {
 
   return (
     <div className={(props.getState === true) ? 'emoji-container active' : 'emoji-container'}>
-      <div className="emoji-title">Smileys</div>
+      {/* <div className="emoji-title">Smileys</div> */}
       { emojiSmileys && emojiSmileys.split(',').map((m, i) => (
         <div
           key={i}
@@ -26,7 +26,7 @@ const EmojiContainer = (props) => {
           {m}
         </div>
       )) }
-      <div className="emoji-title">Gestures and Body Parts</div>
+      {/* <div className="emoji-title">Gestures and Body Parts</div> */}
       { emojiGestures && emojiGestures.split(',').map((m, i) => (
         <div
           key={i}
