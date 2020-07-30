@@ -101,8 +101,7 @@ function Main({ users, messages, settings, initUsers, clearUsers, selectedUser, 
             }
           })
 
-          console.log('users length', users.length, settings.key)
-
+          // console.log('users length', users.length, settings.key)
           clearUsers()
           initUsers(users)
         })
@@ -115,6 +114,11 @@ function Main({ users, messages, settings, initUsers, clearUsers, selectedUser, 
           recent.on('value', (snapshot) => {
             const recentsData = snapshot.val()
             if (recentsData) {
+              const timestamp = recentsData.timestamp
+              const timelimit = new Date().getTime() - (60 * 1000)
+
+              if (!timestamp || timelimit > timestamp ) return
+
               const message = recentsData.type === 2
               ? JSON.parse(recentsData.message).name
               : recentsData.message
