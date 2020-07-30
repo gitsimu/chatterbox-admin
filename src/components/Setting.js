@@ -404,7 +404,10 @@ const Setting = ({ settings, ...props }) => {
                   <div className={themeColorPicker ? "setting-color-picker active" : "setting-color-picker"}>
                     <ChromePicker
                       color={themeColor}
-                      onChange={(color) => { setThemeColor(color.hex) }}/>
+                      onChange={(color) => { 
+                        const _color = color.rgb.a === 1 ? color.hex : `rgba(${color.rgb.r}, ${color.rgb.g}, ${color.rgb.b}, ${color.rgb.a})`
+                        setThemeColor(_color) 
+                      }}/>
                     <div className="empty-background"
                       onClick={() => {
                         updateUserInfo()

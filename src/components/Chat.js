@@ -216,7 +216,6 @@ const Chat = ({ users, messages, settings, addMessages, deleteMessages, clearMes
       <div className='messages card' ref={body}>        
         { messages[userid] // 중복호출 예외처리
           && messages[userid].map((m, i) => {
-            scrollToBottom()
             return <ChatMessage
               opponent={userid}
               target={target}
@@ -227,7 +226,7 @@ const Chat = ({ users, messages, settings, addMessages, deleteMessages, clearMes
               {...props}/>
             })
         }
-       
+        { scrollToBottom() }
         <div id='file-drop-layer' className={ fileDropLayer ? 'file-drop-layer active' : 'file-drop-layer' }>
           <div>
             <i className='icon-cloud-upload'></i>

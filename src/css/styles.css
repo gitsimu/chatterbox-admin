@@ -1086,6 +1086,7 @@ div, input, textarea {
 }
 .setting-color-picker input {
   background: transparent;
+  padding: 0;
 }
 .empty-background {
   position: fixed;
