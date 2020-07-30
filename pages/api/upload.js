@@ -20,11 +20,12 @@ export default async (req, res) => {
     const form = new formidable.IncomingForm()
     form.parse(req, function(err, fields, files) {
       console.log('files', files)
-      // console.log('fields', fields)
+
+      const filename = newFileName(files.file.name)
 
       var params = {
         Bucket: 'smartlog',
-        Key: 'chat/' + fields.key + '/' + files.file.name,
+        Key: 'chat/' + fields.key + '/' + filename,
         ACL: 'public-read',
         Body: require('fs').createReadStream(files.file.path)
       }
@@ -37,7 +38,7 @@ export default async (req, res) => {
         res.setHeader("Access-Control-Allow-Origin", "*")
         res.setHeader("Access-Control-Allow-Headers", "Content-Type")
         res.statusCode = 200
-        res.json({ result: 'success', file: { name: files.file.name, size: files.file.size, location: data.Location } })
+        res.json({ result: 'success', file: { name: filename, size: files.file.size, location: data.Location } })
         console.log('data', data)
 
         resolve()
@@ -61,4 +62,16 @@ export default async (req, res) => {
   //     // obj: Object.keys(req)
   //   })
   // })
+}
+
+const newFileName = (filename) => {
+  const extension = filename.split('.').pop()
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+  const charactersLength = characters.length
+  let result = ''
+
+  for ( var i = 0; i < length; i++ ) {
+     result += characters.charAt(Math.floor(Math.random() * charactersLength))
+  }
+  return `${result}.${extension}`
 }
