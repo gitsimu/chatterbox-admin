@@ -107,9 +107,6 @@ function Main({ users, messages, settings, initUsers, clearUsers, selectedUser, 
         })
       })
       .then(() => {
-          // Chrome notification
-          // notificationPermission()
-
           const recent = database.ref(`/${settings.key}/recents`)
           recent.on('value', (snapshot) => {
             const recentsData = snapshot.val()
@@ -222,17 +219,6 @@ function Main({ users, messages, settings, initUsers, clearUsers, selectedUser, 
     </div>
   )
 }
-
-// const notificationPermission = () => {
-//   /* Chrome notification permission */
-//   if (Notification.permission !== "granted") {
-//     Notification.requestPermission(function (status) {
-//       if (Notification.permission !== status) {
-//         Notification.permission = status
-//       }
-//     })
-//   }
-// }
 
 const getParams = url => {
   let qs = url ? url : window.document.location.search;
