@@ -39,10 +39,10 @@ const Chat = ({ users, messages, settings, addMessages, deleteMessages, clearMes
         const value = snapshot.val()
         addMessages({ key: userid, value: value })
         doRefresh(refresh !== value.id ? value.id : null)
+        isLoading(false)
         setTimeout(() => {
           scrollToBottom()
-          isLoading(false)
-        }, 10)
+        }, 1000)
       })
 
       CONNECTIONS[userid] = chat
@@ -216,6 +216,7 @@ const Chat = ({ users, messages, settings, addMessages, deleteMessages, clearMes
       <div className='messages card' ref={body}>        
         { messages[userid] // 중복호출 예외처리
           && messages[userid].map((m, i) => {
+            scrollToBottom()
             return <ChatMessage
               opponent={userid}
               target={target}
@@ -226,7 +227,6 @@ const Chat = ({ users, messages, settings, addMessages, deleteMessages, clearMes
               {...props}/>
             })
         }
-        { scrollToBottom() }
         <div id='file-drop-layer' className={ fileDropLayer ? 'file-drop-layer active' : 'file-drop-layer' }>
           <div>
             <i className='icon-cloud-upload'></i>

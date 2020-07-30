@@ -22,6 +22,7 @@ function Main({ users, messages, settings, initUsers, clearUsers, selectedUser, 
   const [tabState, setTabState] = React.useState(0)
   const [imageViewer, showImageViewer] = React.useState(null)
   const [loading, isLoading] = React.useState(false)
+  const [svid, setSvid] = React.useState(null)
 
   if (!firebase.apps.length) {
     firebase.initializeApp(FirebaseConfig)
@@ -37,7 +38,7 @@ function Main({ users, messages, settings, initUsers, clearUsers, selectedUser, 
     simplelineLink.type = "text/css"
     document.querySelector('body').appendChild(simplelineLink)
 
-    const params = getParams()
+    const params = getParams()    
     const svid = params.svid
 
     if (!svid || svid === '') {
@@ -104,6 +105,7 @@ function Main({ users, messages, settings, initUsers, clearUsers, selectedUser, 
           // console.log('users length', users.length, settings.key)
           clearUsers()
           initUsers(users)
+          setSvid(params.svid)
         })
       })
       .then(() => {
@@ -200,9 +202,12 @@ function Main({ users, messages, settings, initUsers, clearUsers, selectedUser, 
           <div></div>
         </div>
         <div className={ screenState === 2 ? "container-screen-2" : "container-screen-2 hide" }>
-          <Setting
-            database={database}
-            isLoading={isLoading}/>
+          {svid && (
+            <Setting
+              database={database}
+              svid={svid}
+              isLoading={isLoading}/>
+          )}  
         </div>
       </div>
       )}

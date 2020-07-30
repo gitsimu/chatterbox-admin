@@ -19,7 +19,7 @@ const ChatMessage = ({ settings, ...props }) => {
     return (prevDate === curDate)
   }
   const skipTime = () => {
-    if (!props.next) {
+    if (!props.next || props.next.userId !== props.userId) {
       return false
     }
 

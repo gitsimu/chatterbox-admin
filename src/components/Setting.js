@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import axios from 'axios'
 import Mockup from './Mockup'
 import { ChromePicker } from 'react-color'
+import * as smlog from '../js/smlog'
 
 const initWorkingDay = {
   isInit: true,
@@ -33,10 +34,6 @@ const Setting = ({ settings, ...props }) => {
   const [profileImage, setProfileImage] = React.useState(null)
   const [themeColor, setThemeColor] = React.useState('#444c5d')
   const [themeColorPicker, showThemeColorPicker] = React.useState(false)
-
-  // const [pushAlram, allowPushAlram] = React.useState(true)
-  // const [audioBeep, allowAudioBeep] = React.useState(true)
-  // const [autoSignin, allowAutoSignin] = React.useState(true)
   
   const [useChat, setUseChat] = React.useState(true)
   const [workingDay, setWorkingDay] = React.useState(initWorkingDay)
@@ -44,8 +41,8 @@ const Setting = ({ settings, ...props }) => {
   const [settingMenuState, setSettingMenuState] = React.useState(0)
   const isLoading = props.isLoading
   
-  /* by firebase */
   React.useEffect(() => {
+    /* by firebase */
     database.ref(`/${settings.key}/config`).once('value', function(snapshot) {
       const data = snapshot.val()
       if (data) {
@@ -63,17 +60,39 @@ const Setting = ({ settings, ...props }) => {
         setNickname(initConfig.nickname)
         setFirstMessage(initConfig.firstMessage)
       }   
-    })    
+    })
+
+    /* use chat */
+    smlog.API({
+      method: 'get_chat_state',
+      svid: props.svid
+    }).then(({code, use_chat}) => {
+      code === "1" && setUseChat(use_chat === "1")
+    })
   }, [database, settings.key])
 
   /* file upload handler */
   const handleFileInput = (e) => {
-    const config = { headers: { 'content-type': 'multipart/form-data' } }
-    const formData = new FormData()
-    formData.append('file', e.target.files[0])
-    formData.append('key', settings.key)
+    const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
+    const ALLOW_FILE_EXTENSIONS = ['jpg', 'jpeg', 'gif', 'bmp', 'png']
+
+    const target = e.target.files[0]
+    const fileSize = target.size
+    const fileExtension = target.name.split('.').pop().toLowerCase()
+
+    if (MAX_FILE_SIZE < fileSize) {
+      alert('한 번에 업로드 할 수 있는 최대 파일 크기는 5MB 입니다.')
+      return
+    } else if (ALLOW_FILE_EXTENSIONS.indexOf(fileExtension) === -1) {
+      alert('지원하지 않는 파일 형식입니다.')
+      return
+    }
 
     isLoading(true)
+    const config = { headers: { 'content-type': 'multipart/form-data' } }
+    const formData = new FormData()
+    formData.append('file', target)
+    formData.append('key', settings.key)
 
     return axios.post('/api/upload', formData, config)
       .then(res => {
@@ -209,8 +228,15 @@ const Setting = ({ settings, ...props }) => {
                   <input type="checkbox"
                     checked={useChat}
                     onChange={(e) => {
+                      const use = e.target.checked
                       // SET USE CHAT
-                      setUseChat(e.target.checked)
+                      smlog.API({
+                        method: 'update_chat_state',
+                        svid: props.svid,
+                        is_use_chat: use ? 1 : 0
+                      }).then(({code}) => {
+                        code === "1" && setUseChat(use)
+                      })
                     }}/>
                   <span>채팅기능 사용</span>
                 </label>
