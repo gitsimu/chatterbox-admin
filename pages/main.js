@@ -114,17 +114,19 @@ function Main({ users, messages, settings, initUsers, clearUsers, selectedUser, 
           const recent = database.ref(`/${settings.key}/recents`)
           recent.on('value', (snapshot) => {
             const recentsData = snapshot.val()
-            const message = recentsData.type === 2
+            if (recentsData) {
+              const message = recentsData.type === 2
               ? JSON.parse(recentsData.message).name
               : recentsData.message
-            const notification = new Notification('새 메세지', {
-              icon: 'https://chat.smlog.co.kr/resources/icon01_256.png',
-              body: message,
-              silent: false
-            })
-            notification.onclick = function () {
-              window.focus()
-              this.close()
+              const notification = new Notification('새 메세지', {
+                icon: 'https://chat.smlog.co.kr/resources/icon01_256.png',
+                body: message,
+                silent: false
+              })
+              notification.onclick = function () {
+                window.focus()
+                this.close()
+              }
             }
           })
       })
