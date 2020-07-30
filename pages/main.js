@@ -28,6 +28,8 @@ function Main({ users, messages, settings, initUsers, clearUsers, selectedUser, 
   }
   const database = firebase.database()
 
+  // notificationPermission()
+
   React.useEffect(() => {
     let chat
     // simpleline icons
@@ -198,6 +200,17 @@ function Main({ users, messages, settings, initUsers, clearUsers, selectedUser, 
     </div>
   )
 }
+
+// const notificationPermission = () => {
+//   /* Chrome notification permission */
+//   if (Notification.permission !== "granted") {
+//     Notification.requestPermission(function (status) {
+//       if (Notification.permission !== status) {
+//         Notification.permission = status
+//       }
+//     })
+//   }
+// }
 
 const getParams = url => {
   let qs = url ? url : window.document.location.search;

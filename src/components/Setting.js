@@ -40,7 +40,7 @@ const Setting = ({ settings, ...props }) => {
   
   const [useChat, setUseChat] = React.useState(true)
   const [workingDay, setWorkingDay] = React.useState(initWorkingDay)
-
+  const [missedMessage, setMissedMessage] = React.useState('')
   const [settingMenuState, setSettingMenuState] = React.useState(0)
   const isLoading = props.isLoading
   
@@ -55,7 +55,8 @@ const Setting = ({ settings, ...props }) => {
         setFirstMessage(data.firstMessage)
         setThemeColor(data.themeColor)
         setProfileImage(data.profileImage || null)
-        setWorkingDay(data.workingDay || initWorkingDay)  
+        setWorkingDay(data.workingDay || initWorkingDay)
+        setMissedMessage(data.workingDay.message)
       } else {
         setTitle(initConfig.title)
         setSubTitle(initConfig.subTitle)
@@ -176,7 +177,7 @@ const Setting = ({ settings, ...props }) => {
           onClick={() => { setSettingMenuState(1) }}>
           <div>채팅 설정</div>
         </div>
-        <div className="setting-list-title">Etc</div>
+        {/* <div className="setting-list-title">Etc</div>
         <div className="setting-list-tab"
           onClick={() => {
             if (typeof(shell) === "object") {
@@ -193,7 +194,7 @@ const Setting = ({ settings, ...props }) => {
           className={ settingMenuState === 2 ? "setting-list-tab active" : "setting-list-tab"}
           onClick={() => { setSettingMenuState(2) }}>
           <div>버전 정보</div>
-        </div>
+        </div> */}
       </div>
 
       <div className="setting-body card">
@@ -364,7 +365,12 @@ const Setting = ({ settings, ...props }) => {
                   </div>
                   <div className="setting-working-message">
                     <div className="setting-working-message-title">부재중 메세지 (최대 200자)</div>
-                    <textarea ref={node => message = node} value={workingDay.message} onChange={() => {}} onBlur={(e) => {onChangeWorkingDay(e)}}></textarea>
+                    <textarea 
+                      ref={node => message = node}
+                      value={missedMessage}
+                      onChange={(e) => {setMissedMessage(e.target.value)}}
+                      onBlur={(e) => {onChangeWorkingDay(e)}}>
+                    </textarea>
                   </div>
                 </div>
               )}
