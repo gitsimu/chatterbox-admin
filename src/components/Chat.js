@@ -43,25 +43,11 @@ const Chat = ({ users, messages, settings, addMessages, deleteMessages, clearMes
           scrollToBottom()
           isLoading(false)
         }, 10)
-        chromeNotification(value)
       })
 
       CONNECTIONS[userid] = chat
     }
   }, [messages, refresh, props.database, settings.key, addMessages])
-
-  const chromeNotification = (value) => {
-    console.log('chrome noti', value)
-    const notification = new Notification('새 메세지가 도착했습니다.', {
-      icon: 'https://chat.smlog.co.kr/resources/icon01_256.png',
-      body: value.type === 2 ? '[파일첨부]' : value.message,
-      silent: false
-    });
-    notification.onclick = function () {
-      window.focus()
-      this.close()
-    }
-  }
 
   const sendMessage = React.useCallback((key, id, message, type, database) => {
     const messageId = Math.random().toString(36).substr(2, 9)
@@ -131,6 +117,10 @@ const Chat = ({ users, messages, settings, addMessages, deleteMessages, clearMes
         }
       })
   }, [database, key, sendMessage, userid])
+
+  const handleFileInputClear = (e) => {
+    e.target.value = ''
+  }
 
   React.useEffect(() => {
     console.log(selectedEmoji)
@@ -262,6 +252,7 @@ const Chat = ({ users, messages, settings, addMessages, deleteMessages, clearMes
             <label>
               <i className='icon-paper-clip'></i>
               <input type='file'
+                onClick={e => handleFileInputClear(e)}
                 onChange={e => handleFileInput(e)}/>
             </label>
             <label>
