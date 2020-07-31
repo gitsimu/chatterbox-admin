@@ -401,6 +401,22 @@ const Setting = ({ settings, ...props }) => {
                 </div>
               )}
             </div>
+            <div className="setting-checkbox-item setting-checkbox-item-guide">
+              <div>
+                <div style={{fontWeight: 'bold', marginBottom: 5, fontSize: 14}}>채팅 알람이 오지 않는다면?</div>
+                <div style={{color: 'rgba(117, 124, 140, 1)'}}>아래 링크를 참고해 브라우저별 채팅 알람 켜는 방법을 확인해보세요.</div>
+              </div>
+              <div style={{padding: 15}}>
+                <div style={{marginBottom: 10, display: 'flex', flexDirection: 'row'}}>
+                  <div style={{width: 150}}>* 크롬 브라우저(Chrome)</div>
+                  <a href="http://smlog.co.kr/faq_view.htm?no=475" target="_blank">http://smlog.co.kr/faq_view.htm?no=475</a>
+                </div>
+                <div style={{display: 'flex', flexDirection: 'row'}}>
+                  <div style={{width: 150}}>* 엣지 브라우저(Edge)</div>
+                  <a href="http://smlog.co.kr/faq_view.htm?no=476" target="_blank">http://smlog.co.kr/faq_view.htm?no=476</a>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
         <div className={ settingMenuState === 1 ? "setting-menu-1" : "setting-menu-1 hide" }>

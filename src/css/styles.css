@@ -1096,6 +1096,10 @@ div, input, textarea {
   z-index: -1;
 }
 
+.setting-checkbox-item-guide {
+  font-size: 13px;
+}
+
 /* MOCKUP MOCKUP MOCKUP MOCKUP MOCKUP */
 .setting .header {
   position: relative;
@@ -1226,7 +1230,6 @@ div, input, textarea {
   color: #98a7b3;
   white-space: nowrap;
 }
-
 
 
 #loading {
