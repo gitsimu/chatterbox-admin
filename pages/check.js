@@ -1,3 +1,3 @@
 export default function Check() {
-  return (<div>OK</div>)
+  return (<div>SMLOG_CHAT_SERVER_OK</div>)
 }
