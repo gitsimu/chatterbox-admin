@@ -514,7 +514,7 @@ div, input, textarea {
   display: none;
 }
 .message-input {
-  padding: 12px 15px;
+  padding: 12px 5px 12px 15px;
   width: 100%;
   outline: none;
   border: none;
