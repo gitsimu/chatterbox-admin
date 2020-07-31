@@ -106,13 +106,13 @@ const Chat = ({ users, messages, settings, addMessages, deleteMessages, clearMes
         isLoading(false)
         if (res.data.result === 'success') {
           sendMessage(key, userid, JSON.stringify(res.data.file), 2, database)
-          console.log('upload-success', res)
+          // console.log('upload-success', res)
         }
       })
       .catch(err => {
         isLoading(false)
         if (err) {
-          console.log('upload-failure', err)
+          // console.log('upload-failure', err)
           throw err
         }
       })
@@ -123,7 +123,7 @@ const Chat = ({ users, messages, settings, addMessages, deleteMessages, clearMes
   }
 
   React.useEffect(() => {
-    console.log(selectedEmoji)
+    // console.log(selectedEmoji)
     if (input && selectedEmoji) {
       input.value = input.value + selectedEmoji.emoji
     }
@@ -202,7 +202,7 @@ const Chat = ({ users, messages, settings, addMessages, deleteMessages, clearMes
     return () => {
       clearMessages()
       Object.keys(CONNECTIONS).forEach((u, i) => {
-        console.log('[Connection off]', CONNECTIONS[u])
+        // console.log('[Connection off]', CONNECTIONS[u])
         if (CONNECTIONS[u]) {
           CONNECTIONS[u].off()
           delete CONNECTIONS[u]

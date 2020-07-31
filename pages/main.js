@@ -51,7 +51,6 @@ function Main({ users, messages, settings, initUsers, clearUsers, selectedUser, 
         isLoading(true) 
       })
       .then(() => {
-        // return 'rndsmlch1'
         return smlog.API({
           method: 'get_chat_id',
           svid: svid
@@ -102,7 +101,6 @@ function Main({ users, messages, settings, initUsers, clearUsers, selectedUser, 
             }
           })
 
-          // console.log('users length', users.length, settings.key)
           clearUsers()
           initUsers(users)
           setSvid(params.svid)

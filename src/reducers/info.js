@@ -6,7 +6,7 @@ const initialState = {
 };
 
 const info = (state = [], action) => {
-  console.log('[action]:', action);
+  // console.log('[action]:', action);
   switch (action.type) {
     case 'CONNECT':
       return {

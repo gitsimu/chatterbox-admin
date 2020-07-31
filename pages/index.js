@@ -3,6 +3,10 @@ import Link from 'next/link'
 import Header from '../src/components/Header'
 
 export default function Home() {
+  return (<div></div>)
+}
+
+function _Home() {
   return (
     <div className="container">
       <Head>

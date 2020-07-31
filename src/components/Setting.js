@@ -96,7 +96,7 @@ const Setting = ({ settings, ...props }) => {
 
     return axios.post('/api/upload', formData, config)
       .then(res => {
-        console.log('upload-success', res)
+        // console.log('upload-success', res)
         isLoading(false)
 
         if (res.data.result === 'success') {
@@ -106,7 +106,7 @@ const Setting = ({ settings, ...props }) => {
         }
       })
       .catch(err => {
-        console.log('upload-failure', err)
+        // console.log('upload-failure', err)
         isLoading(false)
       })
   }
@@ -126,15 +126,15 @@ const Setting = ({ settings, ...props }) => {
 
     return axios.post('/api/remove', formData, config)
       .then(res => {
-        console.log('upload-success', res)
+        // console.log('upload-success', res)
         isLoading(false)
 
         if (res.data.result === 'success') {
-          console.log(res)
+          // console.log(res)
         }
       })
       .catch(err => {
-        console.log('upload-failure', err)
+        // console.log('upload-failure', err)
       })
   }
 
