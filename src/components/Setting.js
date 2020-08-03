@@ -140,10 +140,10 @@ const Setting = ({ settings, ...props }) => {
 
   const updateUserInfo = () => {
     database.ref(`/${settings.key}/config`).update({
-      title: title.trim(),
-      subTitle: subTitle.trim(),
-      nickname: nickname.trim(),
-      firstMessage: firstMessage.trim(),
+      title: title,
+      subTitle: subTitle,
+      nickname: nickname,
+      firstMessage: firstMessage,
       themeColor: themeColor
     })
   }
@@ -408,11 +408,11 @@ const Setting = ({ settings, ...props }) => {
               </div>
               <div style={{padding: 15}}>
                 <div style={{marginBottom: 10, display: 'flex', flexDirection: 'row'}}>
-                  <div style={{width: 150}}>* 크롬 브라우저(Chrome)</div>
+                  <div style={{width: 180}}>* 크롬 브라우저(Chrome)</div>
                   <a href="http://smlog.co.kr/faq_view.htm?no=475" target="_blank">http://smlog.co.kr/faq_view.htm?no=475</a>
                 </div>
                 <div style={{display: 'flex', flexDirection: 'row'}}>
-                  <div style={{width: 150}}>* 엣지 브라우저(Edge)</div>
+                  <div style={{width: 180}}>* 엣지 브라우저(Edge)</div>
                   <a href="http://smlog.co.kr/faq_view.htm?no=476" target="_blank">http://smlog.co.kr/faq_view.htm?no=476</a>
                 </div>
               </div>

@@ -1109,7 +1109,7 @@ div, input, textarea {
   display: flex;
   height: 60px;
   align-items: center;
-  box-shadow: 0px 5px 15px 0px rgba(0, 0, 0, 0.15);
+  /* box-shadow: 0px 5px 15px 0px rgba(0, 0, 0, 0.15); */
   z-index: 1;
 }
 .setting .header .header-image {
