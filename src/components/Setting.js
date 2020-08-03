@@ -21,7 +21,8 @@ const initConfig = {
   title: '채팅 상담',
   subTitle: '보통 몇 분 내에 응답합니다',
   nickname: 'Manager',
-  firstMessage: '방문해주셔서 감사합니다.\n궁금한 내용을 편하게 남겨주세요.'
+  firstMessage: '방문해주셔서 감사합니다.\n궁금한 내용을 편하게 남겨주세요.',
+  themeColor: '#444c5d'
 }  
 
 const Setting = ({ settings, ...props }) => {
@@ -140,11 +141,11 @@ const Setting = ({ settings, ...props }) => {
 
   const updateUserInfo = () => {
     database.ref(`/${settings.key}/config`).update({
-      title: title,
-      subTitle: subTitle,
-      nickname: nickname,
-      firstMessage: firstMessage,
-      themeColor: themeColor
+      title: title || initConfig.title,
+      subTitle: subTitle || initConfig.subTitle,
+      nickname: nickname || initConfig.nickname,
+      firstMessage: firstMessage || initConfig.firstMessage,
+      themeColor: themeColor || initConfig.themeColor
     })
   }
 
