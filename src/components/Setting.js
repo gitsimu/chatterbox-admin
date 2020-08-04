@@ -7,8 +7,8 @@ import * as smlog from '../js/smlog'
 
 const initWorkingDay = {
   isInit: true,
-  use: false, 
-  week: ['mo', 'tu', 'we', 'th', 'fr', 'sa', 'su'], 
+  use: false,
+  week: ['mo', 'tu', 'we', 'th', 'fr', 'sa', 'su'],
   allday: true,
   startWork: '0000', 
   endWork: '0000',
@@ -46,6 +46,8 @@ const Setting = ({ settings, ...props }) => {
     /* by firebase */
     database.ref(`/${settings.key}/config`).once('value', function(snapshot) {
       const data = snapshot.val()
+      let _message = '';
+
       if (data) {
         setTitle(data.title)
         setSubTitle(data.subTitle)
@@ -54,6 +56,7 @@ const Setting = ({ settings, ...props }) => {
         setThemeColor(data.themeColor)
         setProfileImage(data.profileImage || null)
         setMissedMessage(data.workingDay.message)
+        _message = data.workingDay.message;
       } else {
         setTitle(initConfig.title)
         setSubTitle(initConfig.subTitle)
@@ -62,15 +65,18 @@ const Setting = ({ settings, ...props }) => {
         setThemeColor(initConfig.themeColor)
       }
 
-    })
-
-    smlog.API({
-      method: 'get_chat_workingday',
-      svid: props.svid
-    }).then((workingDay) => {
-      workingDay && setWorkingDay({
-        isInit: true,
-        ...workingDay
+      smlog.API({
+        method: 'get_chat_workingday',
+        svid: props.svid
+      }).then((workingDay) => {
+        if(workingDay){
+          setUseChat(workingDay.state)
+          setWorkingDay({
+            isInit : false,
+            message : _message,
+            ...workingDay,
+          })
+        }
       })
     })
 
@@ -194,10 +200,16 @@ const Setting = ({ settings, ...props }) => {
       workingDay: workingDay
     })
 
+  }, [database, settings.key, workingDay, useChat])
+
+  React.useEffect(()=> {
+    if (workingDay.isInit) return
+
     const apiReq = {
       method: "update_chat_workingday",
       svid: props.svid,
       use: workingDay.use ? "1" : "0",
+      state: useChat ? "1" : "0",
       allday: workingDay.allday ? "1" : "0",
       startWork: workingDay.startWork,
       endWork: workingDay.endWork,
@@ -208,7 +220,8 @@ const Setting = ({ settings, ...props }) => {
     }
 
     smlog.API(apiReq)
-  }, [database, settings.key, workingDay])
+
+  }, [database, settings.key, useChat, workingDay])
 
   return (
     <div className="setting">
