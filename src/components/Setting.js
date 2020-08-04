@@ -7,7 +7,7 @@ import * as smlog from '../js/smlog'
 
 const initWorkingDay = {
   isInit: true,
-  use: false, 
+  use: false,
   week: ['mo', 'tu', 'we', 'th', 'fr', 'sa', 'su'], 
   allday: true,
   startWork: '0000', 
@@ -53,14 +53,24 @@ const Setting = ({ settings, ...props }) => {
         setFirstMessage(data.firstMessage)
         setThemeColor(data.themeColor)
         setProfileImage(data.profileImage || null)
-        setWorkingDay(data.workingDay || initWorkingDay)
         setMissedMessage(data.workingDay.message)
       } else {
         setTitle(initConfig.title)
         setSubTitle(initConfig.subTitle)
         setNickname(initConfig.nickname)
         setFirstMessage(initConfig.firstMessage)
-      }   
+      }
+
+    })
+
+    smlog.API({
+      method: 'get_chat_workingday',
+      svid: props.svid
+    }).then((workingDay) => {
+      workingDay && setWorkingDay({
+        isInit: true,
+        ...workingDay
+      })
     })
 
     /* use chat */
@@ -164,6 +174,7 @@ const Setting = ({ settings, ...props }) => {
 
     setWorkingDay({
       ...workingDay,
+      isInit: false,
       week: week,
       allday: allday.checked,
       startWork: startWork.value,
@@ -180,7 +191,22 @@ const Setting = ({ settings, ...props }) => {
 
     database.ref(`/${settings.key}/config`).update({
       workingDay: workingDay
-    })      
+    })
+
+    const apiReq = {
+      method: "update_chat_workingday",
+      svid: props.svid,
+      use: workingDay.use ? "1" : "0",
+      allday: workingDay.allday ? "1" : "0",
+      startWork: workingDay.startWork,
+      endWork: workingDay.endWork,
+      breaktime: workingDay.breaktime ? "1" : "0",
+      startBreak: workingDay.startBreak,
+      endBreak: workingDay.endBreak,
+      week: workingDay.week.join(',')
+    }
+
+    smlog.API(apiReq)
   }, [database, settings.key, workingDay])
 
   return (
@@ -250,7 +276,7 @@ const Setting = ({ settings, ...props }) => {
                     checked={workingDay.use}
                     onChange={(e) => {
                       // SET WORKING DATETIME
-                      setWorkingDay({...workingDay, use: e.target.checked, isInit: null})                      
+                      setWorkingDay({...workingDay, use: e.target.checked, isInit: null})
                     }}/>
                   <span>채팅시간 설정</span>
                 </label>
