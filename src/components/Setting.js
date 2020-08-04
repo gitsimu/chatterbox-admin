@@ -438,12 +438,12 @@ const Setting = ({ settings, ...props }) => {
                   <div style={{width: 180}}>* 크롬 브라우저(Chrome)</div>
                   <a href="http://smlog.co.kr/faq_view.htm?no=475" target="_blank">http://smlog.co.kr/faq_view.htm?no=475</a>
                 </div>
-                <div style={{display: 'flex', flexDirection: 'row'}}>
+                <div style={{marginBottom: 10, display: 'flex', flexDirection: 'row'}}>
                   <div style={{width: 180}}>* 엣지 브라우저(Edge)</div>
                   <a href="http://smlog.co.kr/faq_view.htm?no=476" target="_blank">http://smlog.co.kr/faq_view.htm?no=476</a>
                 </div>
                 <div style={{display: 'flex', flexDirection: 'row'}}>
-                  <div style={{width: 180}}>* 인터넷 익스플로러11(IE11) 이하는 알람을 지원하지 않습니다</div>
+                  <div>* 인터넷 익스플로러11(IE11) 이하는 알람을 지원하지 않습니다</div>
                 </div>
               </div>
             </div>
