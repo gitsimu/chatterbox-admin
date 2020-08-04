@@ -41,9 +41,6 @@ const Chat = ({ users, messages, settings, addMessages, deleteMessages, clearMes
         const value = snapshot.val()
         addMessages({ key: userid, value: value })
         isLoading(false)
-        setTimeout(() => {
-          scrollToBottom()
-        }, 1000)
       })
 
       CONNECTIONS[userid] = chat
@@ -136,10 +133,6 @@ const Chat = ({ users, messages, settings, addMessages, deleteMessages, clearMes
     showInfoDialog((target && target.key === userid) && target.value.state === 2)
     showOptionDialog(false)
     showEmojiContainer(false)
-
-    setTimeout(() => {
-      scrollToBottom()
-    }, 10)
   }, [userid, target, firebaseConnect])
 
   React.useEffect(() => {
@@ -197,6 +190,11 @@ const Chat = ({ users, messages, settings, addMessages, deleteMessages, clearMes
     }
   }, [key, handleFileInput])
 
+  // scroll to bottom
+  React.useEffect(() => {
+    scrollToBottom()
+  }, [messages, userid])
+
   React.useEffect(() => {
     /* Sign out 등의 이유로 Chat 객체를 내릴 때
      * 연결되어있는 firebase connection을 모두 off 처리한다
@@ -225,6 +223,7 @@ const Chat = ({ users, messages, settings, addMessages, deleteMessages, clearMes
               key={m.id}
               prev={messages[userid][i - 1]}
               next={messages[userid][i + 1]}
+              onloadImage={scrollToBottom}
               {...m}
               {...props}/>
             })
