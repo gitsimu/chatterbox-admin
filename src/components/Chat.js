@@ -6,12 +6,14 @@ import { connect } from 'react-redux'
 import { addMessages, deleteMessages, clearMessages, selectedUser } from '../actions'
 
 const CONNECTIONS = {}
-const Chat = ({ users, messages, settings, addMessages, deleteMessages, clearMessages, selectedUser, ...props }) => {
+const PAGE_SIZE = 50
+const Chat = ({ users, settings, messagesAll, addMessages, deleteMessages, clearMessages, selectedUser, ...props }) => {
   const key = settings.key
   const userid = settings.selectedUser.key
   const database = props.database
   const setTabState = props.setTabState
-  const target = settings.selectedUser  
+  const target = settings.selectedUser
+  const messages = messagesAll[userid]
 
   const [optionDialog, showOptionDialog] = React.useState(false)
   const [infoDialog, showInfoDialog] = React.useState(false)
@@ -24,30 +26,54 @@ const Chat = ({ users, messages, settings, addMessages, deleteMessages, clearMes
 
   let form, input
 
+  const [scrollTop, setScrollTop] = React.useState(null)
+
   const scrollToBottom = () => {
-    if (body && body.current) {
-      body.current.scrollTop = body.current.scrollHeight
-    }
+    body.current.scrollTop = body.current.scrollHeight
   }
   
   const firebaseConnect = React.useCallback((userid) => {
-    if (userid && !messages[userid]) { // 최초 1회만 연결
-      isLoading(true)
-      const database = props.database
-      const chat = database.ref(`/${settings.key}/messages/${userid}`).orderByChild('timestamp').limitToLast(50)
-      chat.on('child_added', (snapshot) => {
-        const value = snapshot.val()
-        addMessages({ key: userid, value: value })
-        doRefresh(refresh !== value.id ? value.id : null)
-        isLoading(false)
-        setTimeout(() => {
-          scrollToBottom()
-        }, 1000)
-      })
+    // 최초 1회만 연결
+    if (!userid || CONNECTIONS[userid]) return
 
-      CONNECTIONS[userid] = chat
-    }
-  }, [messages, refresh, props.database, settings.key, addMessages])
+    isLoading(true)
+    const chat = database.ref(`/${key}/messages/${userid}`)
+      .orderByChild('timestamp')
+      .limitToLast(PAGE_SIZE)
+
+    chat.on('child_added', (snapshot) => {
+      const value = snapshot.val()
+      addMessages({ key: userid, value: value })
+      doRefresh(refresh !== value.id ? value.id : null)
+      setTimeout(() => {
+        isLoading(false)
+      }, 10)
+    })
+    CONNECTIONS[userid] = {ref: chat, page: 1}
+  }, [database, key, addMessages])
+
+  const paging = React.useCallback(() => {
+    if (!CONNECTIONS[userid]) return
+    CONNECTIONS[userid].ref.off()
+    
+    isLoading(true)
+    deleteMessages({ key: userid })
+
+    const page = CONNECTIONS[userid].page + 1
+    const chat = database.ref(`/${key}/messages/${userid}`)
+      .orderByChild('timestamp')
+      .limitToLast(PAGE_SIZE * page)
+
+    chat.on('child_added', (snapshot) => {
+      const value = snapshot.val()
+      addMessages({ key: userid, value: value })
+  
+      setTimeout(() => {
+        isLoading(false)
+      }, 10)
+    })
+    CONNECTIONS[userid] = {ref: chat, page: page}
+  }, [addMessages, database, deleteMessages, key, userid])
 
   const sendMessage = React.useCallback((key, id, message, type, database) => {
     const messageId = Math.random().toString(36).substr(2, 9)
@@ -103,19 +129,18 @@ const Chat = ({ users, messages, settings, addMessages, deleteMessages, clearMes
 
     return axios.post('/api/upload', formData, config)
       .then(res => {
-        isLoading(false)
         if (res.data.result === 'success') {
           sendMessage(key, userid, JSON.stringify(res.data.file), 2, database)
           // console.log('upload-success', res)
         }
       })
       .catch(err => {
-        isLoading(false)
         if (err) {
           // console.log('upload-failure', err)
           throw err
         }
       })
+      .finally(()=> {isLoading(false)})
   }, [database, key, sendMessage, userid])
 
   const handleFileInputClear = (e) => {
@@ -135,9 +160,7 @@ const Chat = ({ users, messages, settings, addMessages, deleteMessages, clearMes
     showInfoDialog((target && target.key === userid) && target.value.state === 2)
     showOptionDialog(false)
 
-    setTimeout(() => {
-      scrollToBottom()
-    }, 10)
+    setScrollTop(null)
   }, [userid, target, firebaseConnect])
 
   React.useEffect(() => {
@@ -170,13 +193,20 @@ const Chat = ({ users, messages, settings, addMessages, deleteMessages, clearMes
       }
     }
 
-    /* 파일 드래그&드랍 지원 이벤트
+    const handleScroll = (e) => {
+      const chatBody = body.current
+      setScrollTop(chatBody.scrollHeight - (chatBody.scrollTop + chatBody.clientHeight))
+      // console.log('scroll', chatBody.scrollHeight - (chatBody.scrollTop + chatBody.clientHeight))
+    }
+
+    /* 파일 드래그&드랍 지원 이벤트, 스크롤 이벤트
      * dragover
      * dragenter
      * dragleave
      * drop
+     * scroll
      */
-    if (body && body.current && key) {
+    if (key) {
       const chatBody = body.current
 
       /* 이벤트 할당 */
@@ -184,6 +214,7 @@ const Chat = ({ users, messages, settings, addMessages, deleteMessages, clearMes
       document.getElementById('file-drop-layer').addEventListener('dragover', handleDragOver)
       document.getElementById('file-drop-layer').addEventListener('dragleave', handleDragLeave)
       document.getElementById('file-drop-layer').addEventListener('drop', handleDrop)
+      chatBody.addEventListener('scroll', handleScroll)
 
       /* 이벤트 해제 */
       return () => {
@@ -191,9 +222,15 @@ const Chat = ({ users, messages, settings, addMessages, deleteMessages, clearMes
         document.getElementById('file-drop-layer').removeEventListener('dragover', handleDragOver)
         document.getElementById('file-drop-layer').removeEventListener('dragleave', handleDragLeave)
         document.getElementById('file-drop-layer').removeEventListener('drop', handleDrop)
+        chatBody.removeEventListener('scroll', handleScroll)
       }
     }
   }, [key, handleFileInput])
+
+  // scroll to bottom
+  React.useEffect(() => {
+    scrollToBottom()
+  }, [messages, userid])
 
   React.useEffect(() => {
     /* Sign out 등의 이유로 Chat 객체를 내릴 때
@@ -204,7 +241,7 @@ const Chat = ({ users, messages, settings, addMessages, deleteMessages, clearMes
       Object.keys(CONNECTIONS).forEach((u, i) => {
         // console.log('[Connection off]', CONNECTIONS[u])
         if (CONNECTIONS[u]) {
-          CONNECTIONS[u].off()
+          CONNECTIONS[u].ref.off()
           delete CONNECTIONS[u]
         }
       })
@@ -213,19 +250,39 @@ const Chat = ({ users, messages, settings, addMessages, deleteMessages, clearMes
 
   return (
     <>
-      <div className='messages card' ref={body}>        
-        { messages[userid] // 중복호출 예외처리
-          && messages[userid].map((m, i) => {
-            scrollToBottom()
-            return <ChatMessage
-              opponent={userid}
-              target={target}
-              key={m.id}
-              prev={messages[userid][i - 1]}
-              next={messages[userid][i + 1]}
-              {...m}
-              {...props}/>
-            })
+      <div className='messages card' ref={body}>
+        {/* 이전 메세지 (paging) */}
+        {CONNECTIONS[userid] 
+        && messages
+        && messages.length >= PAGE_SIZE * CONNECTIONS[userid].page
+        && (
+          <div className="more-button">
+            <div onClick={paging}>
+              <i className="icon-arrow-up"></i>
+              이전 메세지
+            </div>
+          </div>
+        )}
+        {/* 최하단으로 스크롤 */}
+        {messages 
+        && scrollTop >= 100 
+        && (
+          <div className="scroll-bottom-button" onClick={scrollToBottom}>
+            <div>
+              <i className="icon-arrow-down"></i>
+            </div>
+          </div>
+        )}
+        {messages && messages.map((m, i) => {
+          return <ChatMessage
+            opponent={userid}
+            target={target}
+            key={m.id}
+            prev={messages[i - 1]}
+            next={messages[i + 1]}
+            {...m}
+            {...props}/>
+          })
         }
         <div id='file-drop-layer' className={ fileDropLayer ? 'file-drop-layer active' : 'file-drop-layer' }>
           <div>
@@ -300,7 +357,7 @@ const Chat = ({ users, messages, settings, addMessages, deleteMessages, clearMes
               deleteMessages({ key: userid })
               selectedUser({})
               /* connections */
-              CONNECTIONS[userid].off()
+              CONNECTIONS[userid].ref.off()
               delete CONNECTIONS[userid]
 
               alert('이 대화가 삭제처리 되었습니다.')
@@ -332,7 +389,7 @@ const Chat = ({ users, messages, settings, addMessages, deleteMessages, clearMes
 
 const mapStateToProps = state => ({
   users: state.users,
-  messages: state.messages,
+  messagesAll: state.messages,
   settings: state.settings
 })
 

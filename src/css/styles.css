@@ -632,9 +632,10 @@ div, input, textarea {
 }
 .message .message-inner {
   display: inline-block;
-  padding: 8px 12px;
+  padding: 6px 12px;
   border-radius: 10px;
   font-size: 13px;
+  max-width: 70%;
 
   text-align: left !important;
   white-space: pre-line !important;
@@ -667,6 +668,9 @@ div, input, textarea {
   height: 25px;
   border-radius: 5px;
 }
+.message .message-body {
+  width: 100%;
+}
 
 /* .message.opponent {
 } */
@@ -696,6 +700,10 @@ div, input, textarea {
 }
 .message.myself .message-inner {
   background: #0080F7;
+  color: #fff;
+}
+
+.message.myself .message-inner .message-url{
   color: #fff;
 }
 
@@ -1390,4 +1398,68 @@ div:hover > .tooltip {
   cursor: pointer;
   right: 20px;
   top: 20px;
+}
+
+
+.more-button {
+  text-align: center;
+  padding: 0 5px;
+}
+.more-button > div {
+  font-size: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 8px;
+  background: rgba(0, 0, 0, 0.3);
+  color: #7e8698;
+  border-radius: 3px;
+}
+.more-button > div i {
+  margin-right: 10px;
+  font-size: 10px;
+}
+
+.scroll-bottom-button {
+  position: absolute;
+  bottom: 55px;
+  right: 10px;
+  /* left: 10px; */
+  cursor: pointer;
+  z-index: 10;
+}
+.scroll-bottom-button > div {
+  display: flex;  
+  background: rgba(0,0,0,0.6);
+  border-radius: 50px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  /* width: 100%; */
+  font-size: 18px;
+}
+.scroll-bottom-button:hover > div {
+  background: rgba(0,0,0,0.7);
+}
+
+.scroll-bottom-button-message {
+  flex: 1;
+  padding-left: 20px;
+  white-space: nowrap;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.scroll-bottom-button-message span {
+  font-weight: bold;
+}
+.scroll-bottom-button-icon {
+  width: 40px;
+  padding: 0 10px;
+  display: flex;
+}
+.scroll-bottom-button-icon i {
+  font-size: 18px;
 }

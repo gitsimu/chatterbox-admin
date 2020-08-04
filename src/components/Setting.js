@@ -60,6 +60,7 @@ const Setting = ({ settings, ...props }) => {
         setSubTitle(initConfig.subTitle)
         setNickname(initConfig.nickname)
         setFirstMessage(initConfig.firstMessage)
+        setThemeColor(initConfig.themeColor)
       }   
     })
 
