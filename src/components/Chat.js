@@ -4,6 +4,7 @@ import EmojiContainer from './EmojiContainer'
 import axios from 'axios'
 import { connect } from 'react-redux'
 import { addMessages, deleteMessages, clearMessages, selectedUser } from '../actions'
+import useUserInput from '../hooks/useUserInput'
 
 const CONNECTIONS = {}
 const PAGE_SIZE = 50
