@@ -47,13 +47,13 @@ const Setting = ({ settings, ...props }) => {
     database.ref(`/${settings.key}/config`).once('value', function(snapshot) {
       const data = snapshot.val()
       if (data) {
-        setTitle(data.title)
-        setSubTitle(data.subTitle)
-        setNickname(data.nickname)
-        setFirstMessage(data.firstMessage)
-        setThemeColor(data.themeColor)
+        setTitle(data.title || initConfig.title)
+        setSubTitle(data.subTitle || initConfig.subTitle)
+        setNickname(data.nickname || initConfig.nickname)
+        setFirstMessage(data.firstMessage || initConfig.firstMessage)
+        setThemeColor(data.themeColor || initConfig.themeColor)
         setProfileImage(data.profileImage || null)
-        setMissedMessage(data.workingDay.message)
+        setMissedMessage(data.workingDay.message || '')
       } else {
         setTitle(initConfig.title)
         setSubTitle(initConfig.subTitle)
@@ -61,7 +61,6 @@ const Setting = ({ settings, ...props }) => {
         setFirstMessage(initConfig.firstMessage)
         setThemeColor(initConfig.themeColor)
       }
-
     })
 
     smlog.API({
