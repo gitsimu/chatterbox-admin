@@ -4,6 +4,7 @@ import EmojiContainer from './EmojiContainer'
 import axios from 'axios'
 import { connect } from 'react-redux'
 import { addMessages, deleteMessages, clearMessages, selectedUser } from '../actions'
+import useUserInput from '../hooks/useUserInput'
 
 const CONNECTIONS = {}
 const Chat = ({ users, messages, settings, addMessages, deleteMessages, clearMessages, selectedUser, ...props }) => {
@@ -22,7 +23,8 @@ const Chat = ({ users, messages, settings, addMessages, deleteMessages, clearMes
   const [fileDropLayer, showFileDropLayer] = React.useState(false)
   const body = React.useRef(null)
 
-  let form, input
+  const input = useUserInput(userid)
+  let form
 
   const scrollToBottom = () => {
     if (body && body.current) {
@@ -38,7 +40,6 @@ const Chat = ({ users, messages, settings, addMessages, deleteMessages, clearMes
       chat.on('child_added', (snapshot) => {
         const value = snapshot.val()
         addMessages({ key: userid, value: value })
-        doRefresh(refresh !== value.id ? value.id : null)
         isLoading(false)
         setTimeout(() => {
           scrollToBottom()
@@ -47,7 +48,7 @@ const Chat = ({ users, messages, settings, addMessages, deleteMessages, clearMes
 
       CONNECTIONS[userid] = chat
     }
-  }, [messages, refresh, props.database, settings.key, addMessages])
+  }, [messages, props.database, settings.key, addMessages])
 
   const sendMessage = React.useCallback((key, id, message, type, database) => {
     const messageId = Math.random().toString(36).substr(2, 9)
@@ -124,8 +125,8 @@ const Chat = ({ users, messages, settings, addMessages, deleteMessages, clearMes
 
   React.useEffect(() => {
     // console.log(selectedEmoji)
-    if (input && selectedEmoji) {
-      input.value = input.value + selectedEmoji.emoji
+    if (input.current && selectedEmoji) {
+      input.current.value = input.current.value + selectedEmoji.emoji
     }
   }, [input, selectedEmoji])
 
@@ -134,6 +135,7 @@ const Chat = ({ users, messages, settings, addMessages, deleteMessages, clearMes
 
     showInfoDialog((target && target.key === userid) && target.value.state === 2)
     showOptionDialog(false)
+    showEmojiContainer(false)
 
     setTimeout(() => {
       scrollToBottom()
@@ -149,7 +151,7 @@ const Chat = ({ users, messages, settings, addMessages, deleteMessages, clearMes
     const handleDragEnter = (e) => {
       e.preventDefault()
       e.stopPropagation()
-      if (e.dataTransfer) {
+      if (e.dataTransfer && e.dataTransfer.types[0] === 'Files') {
         showFileDropLayer(true)
       }
     }
@@ -242,10 +244,10 @@ const Chat = ({ users, messages, settings, addMessages, deleteMessages, clearMes
           selectEmoji={selectEmoji}/>
         <form ref={node => form = node} onSubmit={e => {
           e.preventDefault()
-          if (!input.value.trim()) return
+          if (!input.current.value.trim()) return
 
-          sendMessage(key, userid, input.value, 1, database)
-          input.value = ''
+          sendMessage(key, userid, input.current.value, 1, database)
+          input.current.value = ''
         }}>
           <div className='message-addon'>
             <label>
@@ -260,7 +262,7 @@ const Chat = ({ users, messages, settings, addMessages, deleteMessages, clearMes
             </label>
           </div>
           <textarea
-            ref={node => input = node}
+            ref={input}
             className='message-input'
             placeholder='메세지를 입력해주세요.'
             onKeyPress={(e) => {

@@ -132,6 +132,26 @@ function Main({ users, messages, settings, initUsers, clearUsers, selectedUser, 
       .finally(() => isLoading(false))
   }, [settings.key])
 
+  React.useEffect(() => {
+    if (imageViewer === null) return;
+
+    const onImageViewKey = (event) => {
+      // if (event.code === 'KeyS' && event.ctrlKey) {
+      //   window.open(imageViewer);
+      // }
+
+      if (event.code === 'Escape') {
+        showImageViewer(null)
+      }
+    }
+
+    document.addEventListener('keydown', onImageViewKey)
+
+    return () => {
+      document.removeEventListener('keydown', onImageViewKey)
+    }
+  }, [imageViewer, showImageViewer])
+
   return (
     <div className="App chatterbox-theme-light">
       {settings.key && (
