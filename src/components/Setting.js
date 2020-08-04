@@ -7,7 +7,7 @@ import * as smlog from '../js/smlog'
 
 const initWorkingDay = {
   isInit: true,
-  use: false,
+  use: false, 
   week: ['mo', 'tu', 'we', 'th', 'fr', 'sa', 'su'], 
   allday: true,
   startWork: '0000', 
@@ -59,6 +59,7 @@ const Setting = ({ settings, ...props }) => {
         setSubTitle(initConfig.subTitle)
         setNickname(initConfig.nickname)
         setFirstMessage(initConfig.firstMessage)
+        setThemeColor(initConfig.themeColor)
       }
 
     })
