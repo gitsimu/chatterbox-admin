@@ -72,7 +72,7 @@ const Setting = ({ settings, ...props }) => {
         if(workingDay){
           setUseChat(workingDay.state)
           setWorkingDay({
-            isInit : false,
+            isInit : true,
             message : _message,
             ...workingDay,
           })
@@ -200,12 +200,7 @@ const Setting = ({ settings, ...props }) => {
       workingDay: workingDay
     })
 
-  }, [database, settings.key, workingDay, useChat])
-
-  React.useEffect(()=> {
-    if (workingDay.isInit) return
-
-    const apiReq = {
+    smlog.API({
       method: "update_chat_workingday",
       svid: props.svid,
       use: workingDay.use ? "1" : "0",
@@ -217,11 +212,9 @@ const Setting = ({ settings, ...props }) => {
       startBreak: workingDay.startBreak,
       endBreak: workingDay.endBreak,
       week: workingDay.week.join(',')
-    }
+    })
 
-    smlog.API(apiReq)
-
-  }, [database, settings.key, useChat, workingDay])
+  }, [database, settings.key, workingDay, useChat])
 
   return (
     <div className="setting">
@@ -276,7 +269,10 @@ const Setting = ({ settings, ...props }) => {
                         svid: props.svid,
                         is_use_chat: use ? 1 : 0
                       }).then(({code}) => {
-                        code === "1" && setUseChat(use)
+                        if(code === "1"){
+                          setUseChat(use)
+                          setWorkingDay({...workingDay, isInit : false})
+                        }
                       })
                     }}/>
                   <span>채팅기능 사용</span>
