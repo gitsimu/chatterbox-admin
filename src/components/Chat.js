@@ -50,7 +50,7 @@ const Chat = ({ users, settings, messagesAll, addMessages, initMessages, deleteM
 
            // 기존 child_add 이벤트 off
            .then(()=> {
-             if (!CONNECTIONS[userid]) return;
+             if (!CONNECTIONS[userid]) return
 
              CONNECTIONS[userid].ref.off()
            })
@@ -70,19 +70,19 @@ const Chat = ({ users, settings, messagesAll, addMessages, initMessages, deleteM
 
              initMessages({ key: userid, value: arr })
 
-             const lastMessage = arr[arr.length - 1];
+             const lastMessage = arr[arr.length - 1]
              return lastMessage.timestamp
            })
 
            // child_add 이벤트 on
            .then((lastTimestamp) => {
-             const ref =  chat.startAt(lastTimestamp + 1);
+             const ref =  chat.startAt(lastTimestamp + 1)
              ref.on('child_added', (snapshot) => {
                           const value = snapshot.val()
                           addMessages({ key: userid, value: value })
                         })
 
-             return ref;
+             return ref
            })
            .then((ref) => {
              CONNECTIONS[userid] = { ref: ref, page: page }
@@ -172,7 +172,7 @@ const Chat = ({ users, settings, messagesAll, addMessages, initMessages, deleteM
   React.useEffect(() => {
     paging(true)
 
-    input.current.focus();
+    input.current.focus()
     showInfoDialog((target && target.key === userid) && target.value.state === 2)
     showOptionDialog(false)
     showEmojiContainer(false)
