@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import axios from 'axios'
 import Mockup from './Mockup'
+import PrettoSlider from './PrettoSlider'
 import { ChromePicker } from 'react-color'
 import * as smlog from '../js/smlog'
 
@@ -23,7 +24,22 @@ const initConfig = {
   nickname: 'Manager',
   firstMessage: '방문해주셔서 감사합니다.\n궁금한 내용을 편하게 남겨주세요.',
   themeColor: '#444c5d'
-}  
+}
+const iconConfig = {
+  position: 'rb',
+  pc: {
+    displayed: true,
+    axisX: 15,
+    axisY: 15,
+    size: 70
+  },
+  mobile: {
+    displayed: true,
+    axisX: 15,
+    axisY: 15,
+    size: 70
+  }
+}
 
 const Setting = ({ settings, ...props }) => {
   const database = props.database
@@ -40,6 +56,14 @@ const Setting = ({ settings, ...props }) => {
   const [workingDay, setWorkingDay] = React.useState(initWorkingDay)
   const [missedMessage, setMissedMessage] = React.useState('')
   const [settingMenuState, setSettingMenuState] = React.useState(0)
+
+  const [selectDevice, setSelectDevice] = React.useState(0)
+  const [iconDisplayed, setIconDisplayed] = React.useState(iconConfig.pc.displayed)
+  const [iconPosition, setIconPosition] = React.useState(iconConfig.position)
+  const [iconAxisX, setIconAxisX] = React.useState(iconConfig.pc.axisX)
+  const [iconAxisY, setIconAxisY] = React.useState(iconConfig.pc.axisY)
+  const [iconSize, setIconSize] = React.useState(iconConfig.pc.size)
+
   const isLoading = props.isLoading
   
   React.useEffect(() => {
@@ -468,50 +492,15 @@ const Setting = ({ settings, ...props }) => {
                 nickname={nickname}
                 firstMessage={firstMessage}
                 themeColor={themeColor}
-                profileImage={profileImage}/>
-
-              <div className="setting-theme">
-                <div className="setting-input-item">
-                  <span>테마색상</span>
-                  <input type="text"
-                    value={themeColor}                    
-                    onChange={() => {}}
-                    onClick={() => {
-                      showThemeColorPicker(!themeColorPicker)
-                    }}/>
-                  <div className="setting-color-sample" style={{ backgroundColor: themeColor }}></div>
-                  <div className={themeColorPicker ? "setting-color-picker active" : "setting-color-picker"}>
-                    <ChromePicker
-                      color={themeColor}
-                      onChange={(color) => { 
-                        const _color = color.rgb.a === 1 ? color.hex : `rgba(${color.rgb.r}, ${color.rgb.g}, ${color.rgb.b}, ${color.rgb.a})`
-                        setThemeColor(_color) 
-                      }}/>
-                    <div className="empty-background"
-                      onClick={() => {
-                        updateUserInfo()
-                        showThemeColorPicker(false)
-                      }}>
-                    </div>
-                  </div>
-                </div>
-                <div className="setting-input-item">
-                  <span>프로필 이미지</span>
-                  <div style={{ display: "flex" }}>
-                    <label className="setting-profile-image-upload">
-                      <div>새 이미지 업로드</div>
-                      <input type="file" onChange={e => handleFileInput(e)}/>
-                    </label>
-                    <div
-                      className="setting-profile-image-remove"
-                      onClick={() => { handleFileRemove() }}>이미지 삭제</div>
-                  </div>
-                </div>
-              </div>
+                profileImage={profileImage}
+                iconPosition={iconPosition}
+                iconAxisX={iconAxisX}
+                iconAxisY={iconAxisY}
+                iconSize={iconSize}/>
             </div>
             <div style={{ flex: 1, marginLeft: 20, maxWidth: 400 }}>
               <div className="setting-input-item">
-                <span>제목</span>                
+                <span>제목</span>
                 <input value={title}
                   onBlur={() => updateUserInfo()}
                   onChange={(e) => { setTitle(e.target.value) }}/>
@@ -533,6 +522,126 @@ const Setting = ({ settings, ...props }) => {
                 <textarea value={firstMessage}
                   onBlur={() => updateUserInfo()}
                   onChange={(e) => { setFirstMessage(e.target.value) }}/>
+              </div>
+              <div className="setting-input-item">
+                <span>테마색상</span>
+                <input type="text"
+                  value={themeColor}
+                  onChange={() => {}}              
+                  onClick={() => {
+                    showThemeColorPicker(!themeColorPicker)
+                  }}/>
+                <div className="setting-color-sample" style={{ backgroundColor: themeColor }}></div>
+                <div className={themeColorPicker ? "setting-color-picker active" : "setting-color-picker"}>
+                  <ChromePicker
+                    color={themeColor}
+                    onChange={(color) => { 
+                      const _color = color.rgb.a === 1 ? color.hex : `rgba(${color.rgb.r}, ${color.rgb.g}, ${color.rgb.b}, ${color.rgb.a})`
+                      setThemeColor(_color) 
+                    }}/>
+                  <div className="empty-background"
+                    onClick={() => {
+                      updateUserInfo()
+                      showThemeColorPicker(false)
+                    }}>
+                  </div>
+                </div>
+              </div>
+              <div className="setting-input-item">
+                <span>프로필 이미지</span>
+                <div style={{ display: "flex" }}>
+                  <label className="setting-profile-image-upload">
+                    <div>새 이미지 업로드</div>
+                    <input type="file" onChange={e => handleFileInput(e)}/>
+                  </label>
+                  { profileImage !== null && (
+                    <div className="setting-profile-image-remove"
+                    onClick={() => { handleFileRemove() }}>이미지 삭제</div>
+                  )}                     
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="setting-menu-column">
+            <div className="setting-menu-tab">
+              <div className={selectDevice === 0 ? 'active' : ''}
+                onClick={() => {setSelectDevice(0)}}>PC</div>
+              <div className={selectDevice === 1 ? 'active' : ''}
+                onClick={() => {setSelectDevice(1)}}>Mobile</div>
+            </div>
+            <div className="setting-menu-device">
+              <div>
+                <div className="setting-menu-device-item">
+                  <label>
+                    <input type="checkbox"
+                      checked={iconDisplayed}
+                      onChange={(e) => {
+                        setIconDisplayed(e.target.checked)
+                      }}/>
+                    <span>채팅 아이콘 숨기기</span>
+                  </label>
+                </div>
+                <div className="setting-menu-device-item">
+                  <div className="setting-menu-device-item-title">아이콘 위치</div>
+                  <div className="row">
+                    <div className="screen-axis">
+                      <div className={iconPosition === 'lt' ? "screen-axis-lt active" : "screen-axis-lt"}
+                        onClick={() => {setIconPosition('lt')}}></div>
+                      <div className={iconPosition === 'rt' ? "screen-axis-rt active" : "screen-axis-rt"}
+                        onClick={() => {setIconPosition('rt')}}></div>
+                      <div className={iconPosition === 'lb' ? "screen-axis-lb active" : "screen-axis-lb"}
+                        onClick={() => {setIconPosition('lb')}}></div>
+                      <div className={iconPosition === 'rb' ? "screen-axis-rb active" : "screen-axis-rb"}
+                        onClick={() => {setIconPosition('rb')}}></div>
+                    </div>
+                    <div style={{width: 300, marginLeft: 50}}>
+                      <div className="row">
+                        <div className="setting-menu-device-item-title">가로 여백</div>
+                        <PrettoSlider
+                          defaultValue={15}
+                          step={1}
+                          min={0}
+                          max={100}
+                          valueLabelDisplay="auto"
+                          value={iconAxisX}
+                          onChange={(event, value) => { 
+                            setIconAxisX(value)
+                          }}
+                        />
+                      </div>
+                      <div className="row">
+                        <div className="setting-menu-device-item-title">세로 여백</div>
+                        <PrettoSlider
+                          defaultValue={15}
+                          step={1}
+                          min={0}
+                          max={100}
+                          valueLabelDisplay="auto"
+                          value={iconAxisY}
+                          onChange={(event, value) => { 
+                            setIconAxisY(value)
+                          }}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="setting-menu-device-item">
+                  <div className="setting-menu-device-item-title">아이콘 크기</div>
+                  <div style={{width: 250}}>
+                    <PrettoSlider
+                      defaultValue={60}
+                      step={1}
+                      min={50}
+                      max={80}
+                      valueLabelDisplay="auto"
+                      value={iconSize}
+                      onChange={(event, value) => { 
+                        setIconSize(value)
+                      }}
+                    />
+                  </div>
+                </div>
               </div>
             </div>
           </div>

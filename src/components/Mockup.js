@@ -2,10 +2,29 @@ import React from 'react'
 
 const Mockup = (props) => {
   const iconText = (props.nickname && props.nickname.length > 0) ? props.nickname.substring(0, 1) : 'S'
+  let iconStyle = {backgroundColor: props.themeColor}
+  switch(props.iconPosition) {
+    case 'lt':
+      iconStyle = {...iconStyle, top: props.iconAxisY, left: props.iconAxisX}
+      break
+    case 'rt':
+      iconStyle = {...iconStyle, top: props.iconAxisY, right: props.iconAxisX}
+      break
+    case 'lb':
+      iconStyle = {...iconStyle, bottom: props.iconAxisY, left: props.iconAxisX}
+      break
+    case 'rb':
+      iconStyle = {...iconStyle, bottom: props.iconAxisY, right: props.iconAxisX}
+      break
+    default:
+      break
+  }
+
 
   return (
+    <>
     <div className="chat-window">
-      <div className="header" style={{ backgroundColor: props.themeColor}}>
+      <div className="header" style={{backgroundColor: props.themeColor}}>
         { props.profileImage && (
           <div className="header-image">
             <img src={ JSON.parse(props.profileImage).location } alt="header"/>
@@ -41,6 +60,15 @@ const Mockup = (props) => {
         </div>
       </div>
     </div>
+
+    <div className="chat-screen">
+      <div className="chat-icon" style={iconStyle}>
+        <img
+          style={{width: props.iconSize}}
+          src="https://chat.smlog.co.kr/resources/icon_bubble_256.png" alt="chat-icon"/>
+      </div>
+    </div>
+    </>
   )
 }
 

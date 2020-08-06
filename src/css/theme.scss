@@ -281,6 +281,42 @@
     color: #555;
   }
 
+  .setting .chat-window {
+    border: 1px solid #eee;
+  }
+  .setting .chat-screen {
+    background-color: #fff;
+    border: 1px solid #eee;
+  }
+  .setting .chat-icon {
+    background-color: #444c5d;
+    color: #fff;
+  }
+  .setting-menu-tab {
+    border-bottom: 1px solid #eee;
+  }
+  .setting-menu-tab > div {
+    color: #888;
+  }
+  .setting-menu-device label span {
+    color: #494949;
+  }
+  .setting-menu-device-item-title {
+    color: #494949;
+  }
+  .screen-axis:after {
+    color: #888;
+  }
+  .screen-axis > div {
+    border-color: #eee;
+  }
+  .screen-axis > div:hover {
+    border-color: #ccc;
+  }
+  .screen-axis > div.active {
+    border-color: #0080F7;
+  }
+
   .more-button > div {
     background: #DFE5F1;
   }
