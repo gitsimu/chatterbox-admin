@@ -341,16 +341,18 @@ const Chat = ({ users, settings, messagesAll, addMessages, deleteMessages, clear
         </form>
 
         <div className={optionDialog ? 'message-option-dialog' : 'message-option-dialog hide'}>
-          <div className='message-option-complete'
-            onClick={() => {
-              database.ref(`/${key}/users/${userid}`).update({ state: 2 })
-              // setTabState(2)
-              showOptionDialog(false)
-              showInfoDialog(true)
-              alert('이 대화가 종료처리 되었습니다.')
-            }}>
-            <i className='icon-power'></i>대화 종료하기
-          </div>
+          {target.value.state !== 2 && (
+            <div className='message-option-complete'
+              onClick={() => {
+                database.ref(`/${key}/users/${userid}`).update({ state: 2 })
+                // setTabState(2)
+                showOptionDialog(false)
+                showInfoDialog(true)
+                alert('이 대화가 종료처리 되었습니다.')
+              }}>
+              <i className='icon-power'></i>대화 종료하기
+            </div>
+          )}
           <div className='message-option-delete'
             onClick={() => {
               /* firebase */
