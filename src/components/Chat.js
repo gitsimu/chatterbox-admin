@@ -7,7 +7,7 @@ import { addMessages, initMessages, clearMessages, deleteMessages, selectedUser 
 import useUserInput from '../hooks/useUserInput'
 
 const CONNECTIONS = {}
-const PAGE_SIZE = 3
+const PAGE_SIZE = 50
 const Chat = ({ users, settings, messagesAll, addMessages, initMessages, deleteMessages, clearMessages, selectedUser, ...props }) => {
   const key = settings.key
   const userid = settings.selectedUser.key
