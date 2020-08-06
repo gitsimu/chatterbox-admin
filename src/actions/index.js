@@ -25,6 +25,11 @@ export const clearUsers = () => ({
 })
 
 /* messages */
+export const initMessages = messagesList => ({
+  type: 'INIT_MESSAGES',
+  key: messagesList.key,
+  value: messagesList.value
+})
 export const addMessages = messages => ({
   type: 'ADD_MESSAGES',
   key: messages.key,

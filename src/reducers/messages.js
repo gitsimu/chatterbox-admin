@@ -1,5 +1,11 @@
 const messages = (state = {}, action) => {
     switch (action.type) {
+      case 'INIT_MESSAGES':
+        return {
+          ...state,
+          [action.key] : action.value
+        }
+
       case 'ADD_MESSAGES':
         return {
           ...state,
