@@ -54,7 +54,7 @@ const Setting = ({ settings, ...props }) => {
   const [themeColor, setThemeColor] = React.useState('#444c5d')
   const [themeColorPicker, showThemeColorPicker] = React.useState(false)
   
-  const [useChat, setUseChat] = React.useState(true)
+  const [useChat, setUseChat] = React.useState(false)
   const [workingDay, setWorkingDay] = React.useState(initWorkingDay)
   const [missedMessage, setMissedMessage] = React.useState('')
   const [settingMenuState, setSettingMenuState] = React.useState(0)
