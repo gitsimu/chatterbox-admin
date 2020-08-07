@@ -71,7 +71,6 @@ const Setting = ({ settings, ...props }) => {
   const isLoading = props.isLoading
 
   React.useEffect(() => {
-
     const getFirebase = database.ref(`/${settings.key}/config`)
                                 .once('value')
     const getDb =  smlog.API({
@@ -79,26 +78,29 @@ const Setting = ({ settings, ...props }) => {
       svid: props.svid
     })
 
+    getFirebase.then((snapshot)=>{
+      const firebaseData = snapshot.val()
+
+      if (firebaseData) {
+        setTitle(firebaseData.title)
+        setSubTitle(firebaseData.subTitle)
+        setNickname(firebaseData.nickname)
+        setFirstMessage(firebaseData.firstMessage)
+        setThemeColor(firebaseData.themeColor)
+        setProfileImage(firebaseData.profileImage || null)
+        setMissedMessage(firebaseData.workingDay.message)
+      } else {
+        setTitle(initConfig.title)
+        setSubTitle(initConfig.subTitle)
+        setNickname(initConfig.nickname)
+        setFirstMessage(initConfig.firstMessage)
+        setThemeColor(initConfig.themeColor)
+      }
+    })
+
     Promise.all([getFirebase, getDb])
-           .then(([_byFirebase, dbData])=> {
-             const firebaseData = _byFirebase.val()
-
-             if (firebaseData) {
-               setTitle(firebaseData.title)
-               setSubTitle(firebaseData.subTitle)
-               setNickname(firebaseData.nickname)
-               setFirstMessage(firebaseData.firstMessage)
-               setThemeColor(firebaseData.themeColor)
-               setProfileImage(firebaseData.profileImage || null)
-               setMissedMessage(firebaseData.workingDay.message)
-             } else {
-               setTitle(initConfig.title)
-               setSubTitle(initConfig.subTitle)
-               setNickname(initConfig.nickname)
-               setFirstMessage(initConfig.firstMessage)
-               setThemeColor(initConfig.themeColor)
-             }
-
+           .then(([snapshot, dbData])=> {
+             const firebaseData = snapshot.val()
              if(dbData){
                setWorkingDay({
                  isInit: true,
