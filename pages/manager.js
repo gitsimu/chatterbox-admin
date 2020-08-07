@@ -3,15 +3,19 @@ import { connect } from 'react-redux'
 import axios from 'axios'
 import FirebaseConfig from '../firebase.config'
 
+const publicIp = require('public-ip')
 const Manager = ({ settings, ...props }) => {
   const [managers, setManagers] = React.useState([])
 
   React.useEffect(() => {
     Promise.resolve()
       .then(() => {
-        setManagers([])
+        return publicIp.v4()
       })
-      .then(() => {
+      .then((ip) => {
+        if (ip !== '14.39.40.147') {
+          throw new Error('허용된 아이피 값이 아닙니다.')
+        }
         const config = { headers: { 'content-type': 'application/x-www-form-urlencoded' } }
         const formData = new FormData()
         formData.append('method', 'get_chat_list')
@@ -19,6 +23,9 @@ const Manager = ({ settings, ...props }) => {
       })
       .then(({data}) => {
         fetchData(data.data)
+      })
+      .catch(err => {
+        console.error(err)
       })
 
     const fetchData = async (res) => {
