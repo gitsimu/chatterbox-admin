@@ -37,8 +37,6 @@ const Chat = ({ users, settings, messagesAll, addMessages, initMessages, deleteM
     if (!userid) return
     if (isInit && CONNECTIONS[userid]) return
 
-    if (!isInit) CONNECTIONS[userid].ref.off()
-
     const chat = database.ref(`/${key}/messages/${userid}`).orderByChild('timestamp')
     const page = CONNECTIONS[userid] 
                 ? CONNECTIONS[userid].page + 1
