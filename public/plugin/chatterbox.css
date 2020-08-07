@@ -2,8 +2,6 @@
   position: fixed;
   right: 30px;
   bottom: 30px;
-  width: 60px;
-  height: 60px;
   background-color: #444c5d;
   border-radius: 50%;
   cursor: pointer;
@@ -32,8 +30,8 @@
   z-index: 9900000000;
 }
 #chatterbox-root .chat-icon img {
-  max-width: 65px;
-  max-height: 65px;
+  max-width: 80px;
+  max-height: 80px;
 }
 
 #chatterbox-root iframe.chatterbox-iframe {

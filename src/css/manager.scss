@@ -1,8 +1,32 @@
+.managers-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+}
+
+.managers-container > div {
+  border: 1px solid #eee;
+  margin: 20px;
+  border-radius: 15px;
+}
 .managers {
   display: flex;
   flex-direction: row;
+  padding: 5px;
 
-  .managers-id {
-    min-width: 120px;
+  & > div {
+    min-width: 150px;
+    text-align: center;
   }
+}
+.managers:nth-child(2n) {
+  background: #f7f7f7;
+}
+.thead {
+  font-weight: bold;
+  padding: 10px 0;
 }
