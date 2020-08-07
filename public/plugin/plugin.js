@@ -9,16 +9,18 @@
         node.setAttribute('svid', smtgs_chat_data.svid);
 
         // icon config
-        node.setAttribute('themeColor', smtgs_chat_data.themeColor);
-        node.setAttribute('position', smtgs_chat_data.position);
-        node.setAttribute('pc-hide', smtgs_chat_data.pc.hide);
-        node.setAttribute('pc-axisX', smtgs_chat_data.pc.axisX);
-        node.setAttribute('pc-axisY', smtgs_chat_data.pc.axisY);
-        node.setAttribute('pc-size', smtgs_chat_data.pc.size);
-        node.setAttribute('mobile-hide', smtgs_chat_data.mobile.hide);
-        node.setAttribute('mobile-axisX', smtgs_chat_data.mobile.axisX);
-        node.setAttribute('mobile-axisY', smtgs_chat_data.mobile.axisY);
-        node.setAttribute('mobile-size', smtgs_chat_data.mobile.size);
+        if (smtgs_chat_data.pc && smtgs_chat_data.mobile) {
+            node.setAttribute('themeColor', smtgs_chat_data.themeColor);
+            node.setAttribute('position', smtgs_chat_data.position);
+            node.setAttribute('pc-hide', smtgs_chat_data.pc.hide);
+            node.setAttribute('pc-axisX', smtgs_chat_data.pc.axisX);
+            node.setAttribute('pc-axisY', smtgs_chat_data.pc.axisY);
+            node.setAttribute('pc-size', smtgs_chat_data.pc.size);
+            node.setAttribute('mobile-hide', smtgs_chat_data.mobile.hide);
+            node.setAttribute('mobile-axisX', smtgs_chat_data.mobile.axisX);
+            node.setAttribute('mobile-axisY', smtgs_chat_data.mobile.axisY);
+            node.setAttribute('mobile-size', smtgs_chat_data.mobile.size);
+        }
 
         document.body.appendChild(node);
 
