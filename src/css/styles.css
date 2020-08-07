@@ -980,6 +980,7 @@ div, input, textarea {
   align-items: center;
   justify-content: flex-start;
   max-width: 400px;
+  height: 100%;
 }
 .setting-items {
   flex: 1;
@@ -1175,9 +1176,9 @@ div, input, textarea {
 }
 .setting .chat-window {
   position: relative;
+  flex: 1;
   /* background: #fff; */
   width: 350px;
-  height: 300px;
   margin: 0 auto;
   overflow: hidden;
   border-radius: 20px;
@@ -1251,7 +1252,7 @@ div, input, textarea {
 
 .setting .chat-screen {
   position: relative;
-  margin-top: 15px;
+  margin: 15px 0;
   width: 350px;
   height: 200px;
   background-color: #fff;
