@@ -897,7 +897,6 @@ div, input, textarea {
   display: flex;
   flex-direction: column;
   height: 100%;
-  overflow: auto;
 }
 .setting-menu-header {
   border-bottom: 1px solid rgba(34, 37, 43, 1);
@@ -1595,4 +1594,10 @@ div:hover > .tooltip {
 }
 .scroll-bottom-button-icon i {
   font-size: 18px;
+}
+
+.setting-body {
+  position: relative;
+  display: block;
+  overflow: auto;
 }
