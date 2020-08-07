@@ -100,11 +100,10 @@ const Setting = ({ settings, ...props }) => {
              }
 
              if(dbData){
-               setUseChat(dbData.scm_state)
                setWorkingDay({
                  isInit: true,
                  message: firebaseData ? firebaseData.workingDay.message : '',
-                 use: dbData.scm_state === '1',
+                 use: dbData.scm_time_state === '1',
                  week: dbData.scm_weeks.split(','),
                  allday: dbData.scm_all_day === '1',
                  startWork: dbData.scm_view_time_s,
@@ -113,6 +112,7 @@ const Setting = ({ settings, ...props }) => {
                  startBreak: dbData.scm_break_time_s,
                  endBreak: dbData.scm_break_time_e
                })
+               setUseChat(dbData.scm_state === '1')
                setIconConfig({
                  isInit: true,
                  themeColor: firebaseData ? firebaseData.themeColor : initConfig.themeColor,
