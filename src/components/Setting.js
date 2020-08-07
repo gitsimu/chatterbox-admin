@@ -25,16 +25,18 @@ const initConfig = {
   firstMessage: '방문해주셔서 감사합니다.\n궁금한 내용을 편하게 남겨주세요.',
   themeColor: '#444c5d'
 }
-const iconConfig = {
+const initIconConfig = {
+  isInit: true,
+  themeColor: '#444c5d',
   position: 'rb',
   pc: {
-    displayed: true,
+    hide: false,
     axisX: 15,
     axisY: 15,
     size: 70
   },
   mobile: {
-    displayed: true,
+    hide: false,
     axisX: 15,
     axisY: 15,
     size: 70
@@ -58,59 +60,84 @@ const Setting = ({ settings, ...props }) => {
   const [settingMenuState, setSettingMenuState] = React.useState(0)
 
   const [selectDevice, setSelectDevice] = React.useState(0)
-  const [iconDisplayed, setIconDisplayed] = React.useState(iconConfig.pc.displayed)
-  const [iconPosition, setIconPosition] = React.useState(iconConfig.position)
-  const [iconAxisX, setIconAxisX] = React.useState(iconConfig.pc.axisX)
-  const [iconAxisY, setIconAxisY] = React.useState(iconConfig.pc.axisY)
-  const [iconSize, setIconSize] = React.useState(iconConfig.pc.size)
+  const [iconConfig, setIconConfig] = React.useState(initIconConfig)
+
+  const [iconHide, setIconHide] = React.useState(initIconConfig.pc.hide)
+  const [iconPosition, setIconPosition] = React.useState(initIconConfig.position)
+  const [iconAxisX, setIconAxisX] = React.useState(initIconConfig.pc.axisX)
+  const [iconAxisY, setIconAxisY] = React.useState(initIconConfig.pc.axisY)
+  const [iconSize, setIconSize] = React.useState(initIconConfig.pc.size)
 
   const isLoading = props.isLoading
-  
+
   React.useEffect(() => {
-    /* by firebase */
-    database.ref(`/${settings.key}/config`).once('value', function(snapshot) {
-      const data = snapshot.val()
-      let _message = '';
 
-      if (data) {
-        setTitle(data.title)
-        setSubTitle(data.subTitle)
-        setNickname(data.nickname)
-        setFirstMessage(data.firstMessage)
-        setThemeColor(data.themeColor)
-        setProfileImage(data.profileImage || null)
-        setMissedMessage(data.workingDay.message)
-        _message = data.workingDay.message;
-      } else {
-        setTitle(initConfig.title)
-        setSubTitle(initConfig.subTitle)
-        setNickname(initConfig.nickname)
-        setFirstMessage(initConfig.firstMessage)
-        setThemeColor(initConfig.themeColor)
-      }
-
-      smlog.API({
-        method: 'get_chat_workingday',
-        svid: props.svid
-      }).then((workingDay) => {
-        if(workingDay){
-          setUseChat(workingDay.state)
-          setWorkingDay({
-            isInit : true,
-            message : _message,
-            ...workingDay,
-          })
-        }
-      })
-    })
-
-    /* use chat */
-    smlog.API({
-      method: 'get_chat_state',
+    const getFirebase = database.ref(`/${settings.key}/config`)
+                                .once('value')
+    const getDb =  smlog.API({
+      method: 'get_chat_config',
       svid: props.svid
-    }).then(({code, use_chat}) => {
-      code === "1" && setUseChat(use_chat === "1")
     })
+
+    Promise.all([getFirebase, getDb])
+           .then(([_byFirebase, dbData])=> {
+             const firebaseData = _byFirebase.val()
+
+             if (firebaseData) {
+               setTitle(firebaseData.title)
+               setSubTitle(firebaseData.subTitle)
+               setNickname(firebaseData.nickname)
+               setFirstMessage(firebaseData.firstMessage)
+               setThemeColor(firebaseData.themeColor)
+               setProfileImage(firebaseData.profileImage || null)
+               setMissedMessage(firebaseData.workingDay.message)
+             } else {
+               setTitle(initConfig.title)
+               setSubTitle(initConfig.subTitle)
+               setNickname(initConfig.nickname)
+               setFirstMessage(initConfig.firstMessage)
+               setThemeColor(initConfig.themeColor)
+             }
+
+             if(dbData){
+               setUseChat(dbData.scm_state)
+               setWorkingDay({
+                 isInit: true,
+                 message: firebaseData ? firebaseData.workingDay.message : '',
+                 use: dbData.scm_state === '1',
+                 week: dbData.scm_weeks.split(','),
+                 allday: dbData.scm_all_day === '1',
+                 startWork: dbData.scm_view_time_s,
+                 endWork: dbData.scm_view_time_e,
+                 breaktime: dbData.scm_break_time === '1',
+                 startBreak: dbData.scm_break_time_s,
+                 endBreak: dbData.scm_break_time_e
+               })
+               setIconConfig({
+                 isInit: true,
+                 themeColor: firebaseData ? firebaseData.themeColor : initConfig.themeColor,
+                 position: dbData.scm_position,
+                 pc: {
+                   hide: dbData.scm_pc_display === '0',
+                   axisX: +dbData.scm_pc_x,
+                   axisY: +dbData.scm_pc_y,
+                   size: +dbData.scm_pc_width
+                 },
+                 mobile: {
+                   hide: dbData.scm_mo_display === '0',
+                   axisX: +dbData.scm_mo_x,
+                   axisY: +dbData.scm_mo_y,
+                   size: +dbData.scm_mo_width
+                 }
+               })
+               setIconHide(dbData.scm_pc_display === '0')
+               setIconPosition(dbData.scm_position)
+               setIconAxisX(+dbData.scm_pc_x)
+               setIconAxisY(+dbData.scm_pc_y)
+               setIconSize(+dbData.scm_pc_width)
+               setSelectDevice(0)
+             }
+           })
   }, [database, settings.key])
 
   /* file upload handler */
@@ -225,20 +252,70 @@ const Setting = ({ settings, ...props }) => {
     })
 
     smlog.API({
-      method: "update_chat_workingday",
+      method: 'update_chat_workingday',
       svid: props.svid,
-      use: workingDay.use ? "1" : "0",
-      state: useChat ? "1" : "0",
-      allday: workingDay.allday ? "1" : "0",
+      themeColor: themeColor,
+      use: workingDay.use ? '1' : '0',
+      state: useChat ? '1' : '0',
+      allday: workingDay.allday ? '1' : '0',
       startWork: workingDay.startWork,
       endWork: workingDay.endWork,
-      breaktime: workingDay.breaktime ? "1" : "0",
+      breaktime: workingDay.breaktime ? '1' : '0',
       startBreak: workingDay.startBreak,
       endBreak: workingDay.endBreak,
       week: workingDay.week.join(',')
     })
 
   }, [database, settings.key, workingDay, useChat])
+
+  const onChangeIconConfig = (param) => {
+
+    let newConfig = {
+      ...iconConfig,
+      isInit:false,
+      position: iconPosition,
+      [selectDevice == '0' ? 'pc' : 'mobile'] : {
+        hide: iconHide,
+        axisX: iconAxisX,
+        axisY: iconAxisY,
+        size: iconSize,
+        ...(param || {})
+      },
+      ...(param || {})
+    }
+
+    setIconConfig(newConfig)
+  }
+
+  React.useEffect(()=>{
+    if(iconConfig.isInit) return
+
+    smlog.API({
+        method: 'update_chat_icon_config',
+        svid: props.svid,
+        scm_theme_color: themeColor,
+        scm_position: iconConfig.position,
+        scm_pc_display: iconConfig.pc.hide  ? '0' : '1',
+        scm_pc_x: iconConfig.pc.axisX,
+        scm_pc_y: iconConfig.pc.axisY,
+        scm_pc_width: iconConfig.pc.size,
+        scm_mo_display: iconConfig.mobile.hide ? '0' : '1',
+        scm_mo_x: iconConfig.mobile.axisX,
+        scm_mo_y: iconConfig.mobile.axisY,
+        scm_mo_width: iconConfig.mobile.size
+      }
+    )
+  }, [iconConfig])
+
+
+  React.useEffect(()=>{
+    const _config = selectDevice == '0' ? iconConfig.pc : iconConfig.mobile
+
+    setIconHide(_config.hide)
+    setIconAxisX(_config.axisX)
+    setIconAxisY(_config.axisY)
+    setIconSize(_config.size)
+  }, [selectDevice])
 
   return (
     <div className="setting">
@@ -537,7 +614,8 @@ const Setting = ({ settings, ...props }) => {
                     color={themeColor}
                     onChange={(color) => { 
                       const _color = color.rgb.a === 1 ? color.hex : `rgba(${color.rgb.r}, ${color.rgb.g}, ${color.rgb.b}, ${color.rgb.a})`
-                      setThemeColor(_color) 
+                      setThemeColor(_color)
+                      onChangeIconConfig()
                     }}/>
                   <div className="empty-background"
                     onClick={() => {
@@ -574,9 +652,10 @@ const Setting = ({ settings, ...props }) => {
                 <div className="setting-menu-device-item">
                   <label>
                     <input type="checkbox"
-                      checked={iconDisplayed}
+                      checked={iconHide}
                       onChange={(e) => {
-                        setIconDisplayed(e.target.checked)
+                        setIconHide(e.target.checked)
+                        onChangeIconConfig({hide : e.target.checked})
                       }}/>
                     <span>채팅 아이콘 숨기기</span>
                   </label>
@@ -586,19 +665,31 @@ const Setting = ({ settings, ...props }) => {
                   <div className="row">
                     <div className="screen-axis">
                       <div className={iconPosition === 'lt' ? "screen-axis-lt active" : "screen-axis-lt"}
-                        onClick={() => {setIconPosition('lt')}}></div>
+                           onClick={() => {
+                             setIconPosition('lt')
+                             onChangeIconConfig({position: 'lt' })
+                           }}></div>
                       <div className={iconPosition === 'rt' ? "screen-axis-rt active" : "screen-axis-rt"}
-                        onClick={() => {setIconPosition('rt')}}></div>
+                           onClick={() => {
+                             setIconPosition('rt')
+                             onChangeIconConfig({position: 'rt' })
+                           }}></div>
                       <div className={iconPosition === 'lb' ? "screen-axis-lb active" : "screen-axis-lb"}
-                        onClick={() => {setIconPosition('lb')}}></div>
+                           onClick={() => {
+                             setIconPosition('lb')
+                             onChangeIconConfig({position: 'lb' })
+                           }}></div>
                       <div className={iconPosition === 'rb' ? "screen-axis-rb active" : "screen-axis-rb"}
-                        onClick={() => {setIconPosition('rb')}}></div>
+                           onClick={() => {
+                             setIconPosition('rb')
+                             onChangeIconConfig({position: 'rb' })
+                           }}></div>
                     </div>
                     <div style={{width: 300, marginLeft: 50}}>
                       <div className="row">
                         <div className="setting-menu-device-item-title">가로 여백</div>
                         <PrettoSlider
-                          defaultValue={15}
+                          // defaultValue={15}
                           step={1}
                           min={0}
                           max={100}
@@ -607,19 +698,25 @@ const Setting = ({ settings, ...props }) => {
                           onChange={(event, value) => { 
                             setIconAxisX(value)
                           }}
+                          onChangeCommitted={(e, v)=>{
+                            onChangeIconConfig()
+                          }}
                         />
                       </div>
                       <div className="row">
                         <div className="setting-menu-device-item-title">세로 여백</div>
                         <PrettoSlider
-                          defaultValue={15}
+                          // defaultValue={15}
                           step={1}
                           min={0}
                           max={100}
                           valueLabelDisplay="auto"
                           value={iconAxisY}
-                          onChange={(event, value) => { 
+                          onChange={(event, value) => {
                             setIconAxisY(value)
+                          }}
+                          onChangeCommitted={(e, v)=>{
+                            onChangeIconConfig()
                           }}
                         />
                       </div>
@@ -638,6 +735,9 @@ const Setting = ({ settings, ...props }) => {
                       value={iconSize}
                       onChange={(event, value) => { 
                         setIconSize(value)
+                      }}
+                      onChangeCommitted={(e, v)=>{
+                        onChangeIconConfig()
                       }}
                     />
                   </div>
