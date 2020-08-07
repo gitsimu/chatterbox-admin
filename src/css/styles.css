@@ -1274,6 +1274,7 @@ div, input, textarea {
 .setting-menu-column {
   padding: 10px 50px;
   max-width: 900px;
+  min-height: 350px;
 }
 .setting-menu-tab {
   display: flex;
