@@ -16,17 +16,75 @@
 .managers {
   display: flex;
   flex-direction: row;
-  padding: 5px;
+  padding: 8px;
+  cursor: pointer;
 
   & > div {
     min-width: 150px;
     text-align: center;
   }
+  .managers-no {
+    min-width: 50px;
+  }
 }
-.managers:nth-child(2n) {
+.item {
+  animation: fadein2 .2s ease-in-out;
+}
+.item.active {
+  outline: 1px solid #0080F7;
+}
+.item:nth-child(2n) {
   background: #f7f7f7;
 }
+.item:hover {
+  background: rgba(0,0,0,0.1);
+}
+
+.user-list {
+  // border-top: 1px solid #f1f1f1;
+  // border-bottom: 1px solid #f1f1f1;
+  // outline: 1px solid #f1f1f1;
+}
+.user {
+  display: flex;
+  flex-direction: row;
+  padding: 5px 8px;
+  text-align: center;
+  font-size: 13px;
+  background: #fff;
+  color: #777;
+  animation: fadein2 .2s ease-in-out;
+  cursor: default;
+}
+.user:hover {
+  background: #f1f1f1;
+}
+.user-no {
+  width: 50px;
+}
+.user-id {
+  flex: 2;
+}
+.user-message-count {
+  flex: 1;
+
+  & > span {
+    min-width: 20px;
+    display: inline-flex;
+    margin-left: 5px;
+  }
+}
+
 .thead {
   font-weight: bold;
-  padding: 10px 0;
+  padding: 10px 5px;
+}
+
+@keyframes fadein2 {
+  0% {opacity:0; transform: translateX(10px)}
+	100% {opacity:1;  transform: translateX(0px)}
+}
+@-webkit-keyframes fadein2 {
+  0% {opacity:0; transform: translateX(10px)}
+	100% {opacity:1;  transform: translateX(0px)}
 }
