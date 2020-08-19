@@ -320,4 +320,17 @@
   .more-button > div {
     background: #DFE5F1;
   }
+
+  .chat-list-option {
+    border-top: 1px solid #f6f6f6;
+    color: #7e8698;
+  }
+  .chat-user.selected:before {
+    background: rgba(178, 217, 255, 0.3);
+    // border-bottom: 1px solid rgb(237, 246, 255);
+  }
+  .chat-list-option > div.all-complete:hover,
+  .chat-list-option > div.all-delete:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+  }
 }

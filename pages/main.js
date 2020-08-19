@@ -197,7 +197,8 @@ function Main({ users, messages, settings, initUsers, clearUsers, selectedUser, 
               <UserList
                 database={database}
                 tabState={tabState}
-                setTabState={setTabState}/>
+                setTabState={setTabState}
+                isLoading={isLoading}/>
             </div>
             <div className="chat-body">
               {(settings.selectedUser && settings.selectedUser.key) && (

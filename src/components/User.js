@@ -1,21 +1,38 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { selectedUser, addMessages } from '../actions'
+import { selectedUser, addMessages, changeUserState } from '../actions'
 import * as script from '../js/script.js'
 
-const User = ({ messages, settings, addMessages, selectedUser, ...props }) => {
+const User = ({ users, messages, settings, addMessages, selectedUser, changeUserState, ...props }) => {
   const userInfo = props.data.value
   const lastMessage = (userInfo && userInfo.lastMessage) ? userInfo.lastMessage : ''
   const dateTime = (userInfo && userInfo.timestamp) ? userInfo.timestamp : null
 
   const guestCode = props.data.guestCode
   const colorCode = props.data.colorCode
+  const state = props.data.state
+  const mode = props.mode
 
+  const userClassName = () => {
+    let cn = ''
+    if (mode === 1) {
+      cn = state
+    } else if (settings.selectedUser.key === props.data.key) {
+      cn = 'active'
+    }
+    return `chat-user ${cn}`
+  }
+  
   return (
     <div
-      className={settings.selectedUser.key === props.data.key ? 'chat-user active' : 'chat-user'}
+      className={userClassName()}
       onClick={() => {
-        selectedUser(props.data)
+        if (mode === 1) {
+          const value = state === '' ? 'selected' : ''
+          changeUserState({key: props.data.key, state: value})
+        } else {
+          selectedUser(props.data)
+        }
       }}>
 
       <div className="chat-user-icon">
@@ -39,12 +56,14 @@ const User = ({ messages, settings, addMessages, selectedUser, ...props }) => {
 }
 
 const mapStateToProps = state => ({
+  users: state.users,
   messages: state.messages,
   settings: state.settings
 })
 const mapDispatchToProps = dispatch => ({
   addMessages: m => dispatch(addMessages(m)),
-  selectedUser: u => dispatch(selectedUser(u))
+  selectedUser: u => dispatch(selectedUser(u)),  
+  changeUserState: u => dispatch(changeUserState(u))
 })
 
 // export default User

@@ -14,7 +14,7 @@ const Info = ({ users, settings, ...props }) => {
 
   React.useEffect(() => {
     if (i.value) {
-      setNickname(i.value.nickname || '')
+      setNickname(i.value.nickname || i.guestCode)
       setMobile(i.value.mobile || '')
       setEmail(i.value.email || '')
 
@@ -30,7 +30,7 @@ const Info = ({ users, settings, ...props }) => {
         }
         smlog.API(req)
           .then((data) => {
-            if (data.code === "1") {
+            if (data && data.code === "1") {
               // console.log('smlog data', data)
               setSmlogData(data)
             }

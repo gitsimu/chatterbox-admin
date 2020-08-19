@@ -24,6 +24,16 @@ export const clearUsers = () => ({
   type: 'CLEAR_USERS'
 })
 
+export const changeUserState = users => ({
+  type: 'CHANGE_USER_STATE',
+  key: users.key,
+  state: users.state
+})
+
+export const initUserState = () => ({
+  type: 'INIT_USER_STATE',  
+})
+
 /* messages */
 export const initMessages = messagesList => ({
   type: 'INIT_MESSAGES',
