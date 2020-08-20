@@ -613,6 +613,7 @@ const Setting = ({ settings, ...props }) => {
                 <div className="setting-color-sample" style={{ backgroundColor: themeColor }}></div>
                 <div className={themeColorPicker ? "setting-color-picker active" : "setting-color-picker"}>
                   <ChromePicker
+                    disableAlpha={true}
                     color={themeColor}
                     onChange={(color) => { 
                       const _color = color.rgb.a === 1 ? color.hex : `rgba(${color.rgb.r}, ${color.rgb.g}, ${color.rgb.b}, ${color.rgb.a})`
