@@ -22,6 +22,7 @@ export default async (req, res) => {
       console.log('files', files)
 
       const filename = newFileName(files.file.name)
+      const tagValue = fields.tag || '1month'
 
       var params = {
         Bucket: 'smartlog',
@@ -33,7 +34,7 @@ export default async (req, res) => {
         tags: [
           {
             Key: 'type',
-            Value: '1month'
+            Value: tagValue
           }
         ]
       }
