@@ -123,7 +123,7 @@ div, input, textarea {
 .chat-list {
   display: flex;
   flex-direction: column;
-  width: 250px;
+  width: 280px;
   max-height: calc(100vh - 10px);
   margin-right: 5px;
   overflow: auto;
@@ -132,9 +132,6 @@ div, input, textarea {
 .chat-list-tab {
   display: flex;
   border-bottom: 1px solid rgb(35, 38, 45);
-}
-.chat-list-tab > div {
-  transition: 0.2s ease all;
 }
 .chat-list-tab > div.active {
   /* border-top: 3px solid rgb(114, 220, 134);
@@ -152,6 +149,7 @@ div, input, textarea {
   cursor: pointer;
   border-top: 3px solid transparent;
   color: rgb(141, 152, 177);
+  transition: 0.2s ease all;
 }
 .chat-list-option {
   display: flex;
@@ -1296,6 +1294,7 @@ div, input, textarea {
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
+  padding: 0 3px;
 }
 .setting .message.opponent .message-bottom {
   display: flex;

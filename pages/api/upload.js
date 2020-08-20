@@ -29,8 +29,16 @@ export default async (req, res) => {
         ACL: 'public-read',
         Body: require('fs').createReadStream(files.file.path)
       }
+      var tag = {
+        tags: [
+          {
+            Key: 'type',
+            Value: '1month'
+          }
+        ]
+      }
 
-      s3.upload(params, function(err, data) {
+      s3.upload(params, tag, function(err, data) {
       // s3.putObject(params, function(err, data) {
         if (err) {
           console.log('err', err)
