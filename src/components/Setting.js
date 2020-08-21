@@ -759,7 +759,7 @@ const Setting = ({ settings, ...props }) => {
                   <div className="setting-menu-device-item">
                     <div className="setting-menu-device-item-title">아이콘 텍스트</div>
                     <div className="setting-input-item" style={{margin: 0}}>
-                      <input value={iconText}
+                      <input value={iconText || ''}
                         placeholder="채팅 상담"
                         onBlur={(e) => onChangeIconConfig({text: e.target.value})}
                         onChange={(e) => { setIconText(e.target.value) }}/>

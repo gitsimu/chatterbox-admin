@@ -38,6 +38,7 @@ const User = ({ users, messages, settings, addMessages, selectedUser, changeUser
       <div className="chat-user-icon">
         <div style={{ backgroundColor: colorCode }}>
           <div className="bubble"></div>
+          <div className={userInfo.live === 1 ? 'live-on' : 'live-off'}></div>
         </div>
       </div>
       <div className="chat-user-info">

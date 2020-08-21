@@ -229,6 +229,7 @@ div, input, textarea {
   width: 50px;
 }
 .chat-user-icon > div {
+  position: relative;
   width: 30px;
   height: 30px;
   margin-left: 5px;
@@ -1547,6 +1548,20 @@ div:hover > .tooltip {
   bottom: -2px;
   right: 3px;
   transform: rotate(45deg);
+}
+.live-on,
+.live-off {
+  position: absolute;
+  bottom: -2px;
+  right: -3px;
+  width: 12px;
+  height: 12px;
+  border-radius: 20px;
+  border: 1px solid #fff;
+  background-color: #42E470;
+}
+.live-off {
+  background-color: #ccc;
 }
 
 .file-drop-layer {
