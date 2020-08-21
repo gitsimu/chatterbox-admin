@@ -83,14 +83,19 @@ function Main({ users, messages, settings, initUsers, clearUsers, selectedUser, 
         chat.on('value', (snapshot) => {
           let items = []
           snapshot.forEach((childSnapshot) => {
-            items.push(childSnapshot)
-          })
-
-          const users = items.reverse().map((childSnapshot) => { // order by desc
             const k = childSnapshot.key
             const v = childSnapshot.val()
-            const code = script.guestCodeGenerator(k)
+            
+            if (v.lastMessage) {
+              items.push({k: k, v: v})
+            } else {
+              // invalid user remove
+              database.ref(`/${settings.key}/users/${k}`).remove()
+            }
+          })
 
+          const users = items.reverse().map(({k, v}) => { // order by desc            
+            const code = script.guestCodeGenerator(k)
             return {
               key: k,
               value: v,
