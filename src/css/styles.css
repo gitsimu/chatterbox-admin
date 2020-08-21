@@ -867,7 +867,9 @@ div, input, textarea {
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid rgb(33, 36, 43);
+  /* border: 1px solid rgb(33, 36, 43); */
+  min-height: 40px;
+  background: #000;
 }
 .message-thumbnail img {
   max-width: 250px;
@@ -1334,7 +1336,7 @@ div, input, textarea {
 .setting .chat-icon {
   position: absolute;
   background-color: #444c5d;
-  border-radius: 50%;
+  border-radius: 100px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1343,6 +1345,14 @@ div, input, textarea {
 }
 .setting .chat-icon img {
   max-width: 80px
+}
+.setting .chat-icon .icon-text {
+  font-size: 18px;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  max-width: 200px;
 }
 .setting-menu-column {
   padding: 10px 50px;
@@ -1397,6 +1407,14 @@ div, input, textarea {
   align-items: center;
   font-weight: bold;
   color: rgb(141, 152, 177);
+}
+.setting-menu-device-item-input-radio {
+  display: flex;
+  flex-direction: row;
+  margin-left: 20px;
+}
+.setting-menu-device-item-input-radio > label{
+  margin: 0 10px;
 }
 .screen-axis {
   position: relative;
@@ -1578,7 +1596,7 @@ div:hover > .tooltip {
 .image-viewer img {
   max-width: 90%;
   max-height: 90%;
-  border-radius: 3px;
+  /* border-radius: 3px; */
 }
 .image-viewer-close:before,
 .image-viewer-close:after {

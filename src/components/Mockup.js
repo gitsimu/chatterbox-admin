@@ -1,7 +1,7 @@
 import React from 'react'
 
 const Mockup = (props) => {
-  const iconText = (props.nickname && props.nickname.length > 0) ? props.nickname.substring(0, 1) : 'S'
+  const symbolText = (props.nickname && props.nickname.length > 0) ? props.nickname.substring(0, 1) : 'S'
   let iconStyle = {backgroundColor: props.themeColor}
   switch(props.iconPosition) {
     case 'lt':
@@ -18,6 +18,14 @@ const Mockup = (props) => {
       break
     default:
       break
+  }
+
+  let iconText
+  if (props.text && props.device === 0) {
+    iconText = <div className="icon-text" style={props.textAlign === 'right' ? {paddingRight: 20} : {paddingLeft: 20}}>{props.text}</div>
+    if (props.textAlign === 'right') {
+      iconStyle.flexFlow = 'row-reverse'
+    }
   }
 
 
@@ -40,7 +48,7 @@ const Mockup = (props) => {
         <div className="message opponent">
           <div className="message-profile">
             { props.profileImage === null ? (
-              <div className="message-profile-icon">{ iconText }</div>
+              <div className="message-profile-icon">{ symbolText }</div>
             ) : (
               <div className="message-profile-image">
                 <img src={ JSON.parse(props.profileImage).location } alt="message-profile"/>
@@ -63,6 +71,7 @@ const Mockup = (props) => {
 
     <div className="chat-screen">
       <div className="chat-icon" style={iconStyle}>
+        {iconText && (iconText)}
         <img
           style={{width: props.iconSize}}
           src="https://chat.smlog.co.kr/resources/icon_bubble_256.png" alt="chat-icon"/>

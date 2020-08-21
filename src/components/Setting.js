@@ -67,6 +67,8 @@ const Setting = ({ settings, ...props }) => {
   const [iconAxisX, setIconAxisX] = React.useState(initIconConfig.pc.axisX)
   const [iconAxisY, setIconAxisY] = React.useState(initIconConfig.pc.axisY)
   const [iconSize, setIconSize] = React.useState(initIconConfig.pc.size)
+  const [iconText, setIconText] = React.useState()
+  const [iconTextAlign, setIconTextAlign] = React.useState()
 
   const isLoading = props.isLoading
 
@@ -164,6 +166,7 @@ const Setting = ({ settings, ...props }) => {
     const formData = new FormData()
     formData.append('file', target)
     formData.append('key', settings.key)
+    formData.append('tag', 'profile')
 
     return axios.post('/api/upload', formData, config)
       .then(res => {
@@ -276,16 +279,18 @@ const Setting = ({ settings, ...props }) => {
       ...iconConfig,
       isInit:false,
       position: iconPosition,
-      [selectDevice == '0' ? 'pc' : 'mobile'] : {
+      [selectDevice === 0 ? 'pc' : 'mobile'] : {
         hide: iconHide,
         axisX: iconAxisX,
         axisY: iconAxisY,
         size: iconSize,
         ...(param || {})
       },
+      text: iconText,
+      textAlign: iconTextAlign,
       ...(param || {})
     }
-
+    
     setIconConfig(newConfig)
   }
 
@@ -297,14 +302,16 @@ const Setting = ({ settings, ...props }) => {
         svid: props.svid,
         scm_theme_color: themeColor,
         scm_position: iconConfig.position,
-        scm_pc_display: iconConfig.pc.hide  ? '0' : '1',
+        scm_pc_display: iconConfig.pc.hide ? '0' : '1',
         scm_pc_x: iconConfig.pc.axisX,
         scm_pc_y: iconConfig.pc.axisY,
         scm_pc_width: iconConfig.pc.size,
         scm_mo_display: iconConfig.mobile.hide ? '0' : '1',
         scm_mo_x: iconConfig.mobile.axisX,
         scm_mo_y: iconConfig.mobile.axisY,
-        scm_mo_width: iconConfig.mobile.size
+        scm_mo_width: iconConfig.mobile.size,
+        // scm_text: iconConfig.text || '',
+        // scm_text_align: iconConfig.textAlign || ''
       }
     )
   }, [iconConfig])
@@ -575,7 +582,10 @@ const Setting = ({ settings, ...props }) => {
                 iconPosition={iconPosition}
                 iconAxisX={iconAxisX}
                 iconAxisY={iconAxisY}
-                iconSize={iconSize}/>
+                iconSize={iconSize}
+                device={selectDevice}
+                text={iconText}
+                textAlign={iconTextAlign}/>
             </div>
             <div style={{ flex: 1, marginLeft: 20, maxWidth: 400 }}>
               <div className="setting-input-item">
@@ -745,6 +755,47 @@ const Setting = ({ settings, ...props }) => {
                     />
                   </div>
                 </div>
+                {false && selectDevice === 0 && (
+                  <div className="setting-menu-device-item">
+                    <div className="setting-menu-device-item-title">아이콘 텍스트</div>
+                    <div className="setting-input-item" style={{margin: 0}}>
+                      <input value={iconText}
+                        placeholder="채팅 상담"
+                        onBlur={(e) => onChangeIconConfig({text: e.target.value})}
+                        onChange={(e) => { setIconText(e.target.value) }}/>
+                    </div>
+                    {iconText && iconText !== '' && (
+                      <div className="setting-menu-device-item-input-radio">
+                        <label>
+                          <input type="radio"
+                            name="icon-text-align"
+                            checked={iconTextAlign !== 'right'}
+                            onChange={(e) => {
+                              const checked = e.target.checked
+                              if (checked) {
+                                setIconTextAlign('left')
+                                onChangeIconConfig({textAlign: 'left'})
+                              }
+                            }}/>
+                          <span>왼쪽</span>
+                        </label>
+                        <label>
+                          <input type="radio"
+                            name="icon-text-align"
+                            checked={iconTextAlign === 'right'}
+                            onChange={(e) => {
+                              const checked = e.target.checked
+                              if (checked) {
+                                setIconTextAlign('right')
+                                onChangeIconConfig({textAlign: 'right'})
+                              }
+                            }}/>
+                          <span>오른쪽</span>
+                        </label>
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
           </div>
