@@ -120,7 +120,7 @@ const UserList = ({ users, settings, changeUserState, initUserState, ...props })
         key="chat-list">
         { users.filter((f) => {
           const userState = f.value.state || 0
-          return (userState === tabState)
+          return (userState === tabState && f.value.lastMessage && f.value.lastMessage !== '')
         }).map((m, i) => (
           <User
             mode={mode}
