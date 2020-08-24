@@ -42,6 +42,7 @@
   max-width: 200px;
   vertical-align: middle;
   font-family: "Noto Sans Japanese", "Noto Sans KR", "Apple SD Gothic Neo", "Nanum Barun Gothic", "Arial", "Malgun Gothic", "맑은 고딕", "돋움", "Dotum", "sans-serif";
+  line-height: 1;
 }
 
 #chatterbox-root iframe.chatterbox-iframe {
