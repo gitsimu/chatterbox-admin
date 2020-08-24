@@ -20,6 +20,8 @@
             node.setAttribute('mobile-axisX', smtgs_chat_data.mobile.axisX);
             node.setAttribute('mobile-axisY', smtgs_chat_data.mobile.axisY);
             node.setAttribute('mobile-size', smtgs_chat_data.mobile.size);
+            node.setAttribute('text', smtgs_chat_data.pc.iconText);
+            node.setAttribute('textAlign', smtgs_chat_data.pc.iconTextAlign);
         }
 
         document.body.appendChild(node);
