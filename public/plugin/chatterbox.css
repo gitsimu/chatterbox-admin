@@ -34,12 +34,14 @@
   max-height: 100px;
 }
 #chatterbox-root .chat-icon > .icon-text {
-  font-size: 18px;
+  font-size: 15px;
   font-weight: 700;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
   max-width: 200px;
+  vertical-align: middle;
+  font-family: "Noto Sans Japanese", "Noto Sans KR", "Apple SD Gothic Neo", "Nanum Barun Gothic", "Arial", "Malgun Gothic", "맑은 고딕", "돋움", "Dotum", "sans-serif";
 }
 
 #chatterbox-root iframe.chatterbox-iframe {
