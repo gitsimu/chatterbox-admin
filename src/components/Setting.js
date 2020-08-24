@@ -139,6 +139,8 @@ const Setting = ({ settings, ...props }) => {
                setIconAxisX(+dbData.scm_pc_x)
                setIconAxisY(+dbData.scm_pc_y)
                setIconSize(+dbData.scm_pc_width)
+               setIconText(dbData.scm_icon_text)
+               setIconTextAlign(dbData.scm_icon_text_align)
                setSelectDevice(0)
              }
            })
@@ -310,8 +312,8 @@ const Setting = ({ settings, ...props }) => {
         scm_mo_x: iconConfig.mobile.axisX,
         scm_mo_y: iconConfig.mobile.axisY,
         scm_mo_width: iconConfig.mobile.size,
-        // scm_text: iconConfig.text || '',
-        // scm_text_align: iconConfig.textAlign || ''
+        scm_icon_text: iconConfig.text || '',
+        scm_icon_text_align: iconConfig.textAlign || 'left'
       }
     )
   }, [iconConfig])
@@ -755,7 +757,7 @@ const Setting = ({ settings, ...props }) => {
                     />
                   </div>
                 </div>
-                {false && selectDevice === 0 && (
+                {selectDevice === 0 && (
                   <div className="setting-menu-device-item">
                     <div className="setting-menu-device-item-title">아이콘 텍스트</div>
                     <div className="setting-input-item" style={{margin: 0}}>

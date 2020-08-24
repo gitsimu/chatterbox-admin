@@ -1348,12 +1348,13 @@ div, input, textarea {
   max-width: 80px
 }
 .setting .chat-icon .icon-text {
-  font-size: 18px;
+  font-size: 15px;
   font-weight: 700;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
   max-width: 200px;
+  vertical-align: middle;
 }
 .setting-menu-column {
   padding: 10px 50px;
