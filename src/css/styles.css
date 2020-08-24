@@ -1355,6 +1355,7 @@ div, input, textarea {
   overflow: hidden;
   max-width: 200px;
   vertical-align: middle;
+  line-height: 1;
 }
 .setting-menu-column {
   padding: 10px 50px;
