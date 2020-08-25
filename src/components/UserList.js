@@ -36,6 +36,27 @@ const UserList = ({ users, settings, changeUserState, initUserState, ...props })
     }).length)
   }, [users])
 
+  /* 마지막 메세지 작성으로부터 12시간 이상 경과한 사용자가 live 상태라면 off 로 업데이트
+   * - 대상이 실제 Live 상태인 경우 : 채팅 클라이언트에서 변경을 감지하고 다시 Live on으로 업데이트
+   * - 대상이 Live 상태가 아닐 경우 : Live off 처리됨
+   * ! off로 업데이트는 한 번만 시도하도록 함(채팅 클라이언트와 관리자 간 on-off 루프가 돌게된다)
+   */
+  React.useEffect(() => {
+    const offlineUser = users.filter(u => {
+      const halfDay = 3600 * 12 * 1000
+      const timeInterval = new Date().getTime() - u.value.timestamp
+      return halfDay < timeInterval && u.value.live === 1
+    })
+    
+    offlineUser.forEach(o => {
+      if (KICKED.indexOf(o.key) === -1) {
+        KICKED.push(o.key)
+        database.ref(`/${settings.key}/users/${o.key}`).child('live').set(0)
+        console.log('offlineUser kicked', o.key, KICKED)
+      }
+    })
+  }, [database, settings.key, users])
+
   const initMode = React.useCallback(() => {
     setMode(0)
     initUserState()
