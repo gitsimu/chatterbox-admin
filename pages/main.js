@@ -138,8 +138,8 @@ function Main({ users, messages, settings, initUsers, clearUsers, selectedUser, 
       .finally(() => isLoading(false))
 
       return (() => {      
-        // chat.off()
-        // recent.off()
+        chat.off()
+        recent.off()
       })
   }, [settings.key])
 
