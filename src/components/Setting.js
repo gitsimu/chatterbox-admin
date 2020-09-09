@@ -103,7 +103,7 @@ const Setting = ({ settings, ...props }) => {
     Promise.all([getFirebase, getDb])
            .then(([snapshot, dbData])=> {
              const firebaseData = snapshot.val()
-             if(dbData){
+             if (dbData && dbData.code !== 1337) {
                setWorkingDay({
                  isInit: true,
                  message: firebaseData ? firebaseData.workingDay.message : '',

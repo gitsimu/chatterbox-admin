@@ -31,6 +31,7 @@ function Main({ users, messages, settings, initUsers, clearUsers, selectedUser, 
 
   React.useEffect(() => {
     let chat
+    let recent
     // simpleline icons
     let simplelineLink = document.createElement("link")
     simplelineLink.href = "https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.4.1/css/simple-line-icons.min.css"
@@ -112,7 +113,7 @@ function Main({ users, messages, settings, initUsers, clearUsers, selectedUser, 
         })
       })
       .then(() => {
-          const recent = database.ref(`/${settings.key}/recents`)
+          recent = database.ref(`/${settings.key}/recents`)
           recent.on('value', (snapshot) => {
             const recentsData = snapshot.val()
             if (recentsData) {
@@ -135,6 +136,11 @@ function Main({ users, messages, settings, initUsers, clearUsers, selectedUser, 
       })
       .catch((error) => error && alert(error))
       .finally(() => isLoading(false))
+
+      return (() => {      
+        chat.off()
+        recent.off()
+      })
   }, [settings.key])
 
   React.useEffect(() => {
