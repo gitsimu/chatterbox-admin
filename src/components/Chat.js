@@ -89,21 +89,18 @@ const Chat = ({ users, settings, messagesAll, addMessages, initMessages, deleteM
     const messageId = Math.random().toString(36).substr(2, 9)
     const lastMessage = (type === 2) ? JSON.parse(message).name : message.trim()
 
-    const update = {}
-    update[`/${key}/users/${id}`] = {
+    database.ref(`/${key}/users/${id}`).update({
       state:1,
       lastMessage: lastMessage,
       timestamp: new Date().getTime()
-    }
-    update[`/${key}/messages/${id}/${messageId}`] = {
+    })
+    database.ref(`/${key}/messages/${id}/${messageId}`).update({
       id: messageId,
       userId: key,
       message: message.trim(),
       type: type,
       timestamp: new Date().getTime()
-    }
-    database.ref().update(update)
-
+    })
     setTabState(1)
     showInfoDialog(false)
   }, [setTabState])
