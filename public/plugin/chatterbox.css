@@ -33,7 +33,7 @@
   max-width: 100px;
   max-height: 100px;
 }
-#chatterbox-root .chat-icon > .icon-text {
+#chatterbox-root .chat-icon > .chat-icon-text {
   font-size: 15px;
   font-weight: 700;
   text-overflow: ellipsis;
