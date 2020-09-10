@@ -13,7 +13,7 @@
   color: #fff;
   box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 15px 5px;
 
-  transition: 0.2s ease all;
+  transition: 0.2s ease opacity, 0.2s ease transform;
   transform: scale(0.85);
   visibility: hidden;
   opacity: 0;
@@ -52,7 +52,7 @@
   transform: scale(0.85);
   transition: 0.2s ease all;
   overflow: hidden;
-  font-family: "Avenir", "Noto Sans Japanese", "Hiragino Kaku Gothic ProN", "YuGothic", "Yu Gothic", "メイリオ", "Apple SD Gothic Neo", "Nanum Barun Gothic", "Helvetica", "Arial", "Malgun Gothic", "맑은 고딕", "돋움", "Dotum", "sans-serif";
+  font-family: "Avenir", "Noto Sans Japanese", "Hiragino Kaku Gothic ProN", "YuGothic", "Yu Gothic", "メイリオ", "Apple SD Gothic Neo", "Nanum Barun Gothic", "Helvetica", "Arial", "Malgun Gothic", "맑은 고딕", "돋움", "Dotum", "sans-serif";  
 }
 #chatterbox-root iframe.chatterbox-iframe.active {
   opacity: 1 !important;
