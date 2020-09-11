@@ -2,6 +2,7 @@ import React from 'react'
 import ChatMessage from './ChatMessage'
 import EmojiContainer from './EmojiContainer'
 import axios from 'axios'
+import * as firebase from "firebase/app"
 import { connect } from 'react-redux'
 import { addMessages, initMessages, clearMessages, deleteMessages, selectedUser } from '../actions'
 import useUserInput from '../hooks/useUserInput'
@@ -86,20 +87,21 @@ const Chat = ({ users, settings, messagesAll, addMessages, initMessages, deleteM
   }, [database, key, userid, addMessages, initMessages])
 
   const sendMessage = React.useCallback((key, id, message, type, database) => {
+    const timestamp = firebase.database.ServerValue.TIMESTAMP
     const messageId = Math.random().toString(36).substr(2, 9)
     const lastMessage = (type === 2) ? JSON.parse(message).name : message.trim()
 
     database.ref(`/${key}/users/${id}`).update({
       state:1,
       lastMessage: lastMessage,
-      timestamp: new Date().getTime()
+      timestamp: timestamp
     })
     database.ref(`/${key}/messages/${id}/${messageId}`).update({
       id: messageId,
       userId: key,
       message: message.trim(),
       type: type,
-      timestamp: new Date().getTime()
+      timestamp: timestamp
     })
     setTabState(1)
     showInfoDialog(false)

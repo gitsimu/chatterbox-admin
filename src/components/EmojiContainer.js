@@ -20,7 +20,7 @@ const EmojiContainer = (props) => {
           key={i}
           className="emoji"
           onClick={(e) => {
-            props.selectEmoji({ emoji: e.currentTarget.textContent, timestamp: new Date().getTime() })
+            props.selectEmoji({ emoji: e.currentTarget.textContent })
             props.setState(false)
           }}>
           {m}
@@ -32,7 +32,7 @@ const EmojiContainer = (props) => {
           key={i}
           className="emoji"
           onClick={(e) => {
-            props.selectEmoji({ emoji: e.currentTarget.textContent, timestamp: new Date().getTime() })
+            props.selectEmoji({ emoji: e.currentTarget.textContent })
             props.setState(false)
           }}>
           {m}
