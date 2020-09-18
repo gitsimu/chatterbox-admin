@@ -278,7 +278,7 @@ const Chat = ({ users, settings, messagesAll, addMessages, initMessages, deleteM
         {messages
         && scrollTop >= 100
         && (
-          <div className="scroll-bottom-button" onClick={scrollToBottom}>
+          <div className="scroll-bottom-button" onClick={scrollToBottom} style={{bottom: infoDialog ? 100 : 55}}>
             <div>
               <i className="icon-arrow-down"></i>
             </div>
@@ -382,10 +382,10 @@ const Chat = ({ users, settings, messagesAll, addMessages, initMessages, deleteM
 
         { infoDialog && (
           <div className='dialog info'>
-            <div className='dialog-header'>
+            {/* <div className='dialog-header'>
               <i className='icon-exclamation'></i>
               <span>Infomation</span>
-            </div>
+            </div> */}
             <div className='dialog-body'>
               <div>이 대화는 이미 종료된 대화입니다.</div>
               <div>메세지를 보내면 다시 활성화됩니다.</div>

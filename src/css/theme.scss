@@ -215,7 +215,10 @@
     background: rgba(27, 29, 35, 0.1);
   }
   
-  .dialog,
+  .dialog {
+    color: #fff;
+    background: #494949;
+  }
   .message-option-dialog {
     background: #fff;
     color: #494949;
@@ -332,5 +335,9 @@
   .chat-list-option > div.all-complete:hover,
   .chat-list-option > div.all-delete:hover {
     background-color: rgba(0, 0, 0, 0.05);
+  }
+
+  .chat-history-list {
+    border: 1px solid #f1f1f1;
   }
 }

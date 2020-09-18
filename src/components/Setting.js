@@ -390,7 +390,7 @@ const Setting = ({ settings, ...props }) => {
                   <span>채팅기능 사용</span>
                 </label>
               </div>
-            </div>      
+            </div>
             <div className="setting-checkbox-item">
               <div className="setting-checkbox-item-title">
                 <label>

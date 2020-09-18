@@ -49,9 +49,7 @@ function Main({ users, messages, settings, initUsers, clearUsers, selectedUser, 
     }
     
     Promise.resolve()
-      .then(() => {
-        isLoading(true) 
-      })
+      .then(() => { isLoading(true) })
       .then(() => {
         return smlog.API({
           method: 'get_chat_id',
@@ -111,6 +109,7 @@ function Main({ users, messages, settings, initUsers, clearUsers, selectedUser, 
           clearUsers()
           initUsers(users)
           setSvid(params.svid)
+          isLoading(false)
         })
       })
       .then(() => {
@@ -136,8 +135,6 @@ function Main({ users, messages, settings, initUsers, clearUsers, selectedUser, 
           })
       })
       .catch((error) => error && alert(error))
-      .finally(() => isLoading(false))
-
 
       return (() => {      
         chat && chat.off()
@@ -227,7 +224,10 @@ function Main({ users, messages, settings, initUsers, clearUsers, selectedUser, 
           </div>
           <div className="container-right">
             <Memo database={database}/>
-            <Info database={database}/>
+            <Info 
+              database={database}                     
+              setTabState={setTabState}
+              selectedUser={selectedUser}/>
           </div>
         </div>
         <div className={ screenState === 1 ? "container-screen-1" : "container-screen-1 hide" }>

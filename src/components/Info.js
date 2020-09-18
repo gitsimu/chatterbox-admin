@@ -11,6 +11,11 @@ const Info = ({ users, settings, ...props }) => {
   const [mobile, setMobile] = React.useState('')
   const [email, setEmail] = React.useState('')
   const [smlogData, setSmlogData] = React.useState(null)
+  const [chatHistory, setChatHistory] = React.useState([])
+  const [activeChatHistory, setActiveChatHistory] = React.useState(false)
+  
+  const setTabState = props.setTabState
+  const selectedUser = props.selectedUser
 
   React.useEffect(() => {
     if (i.value) {
@@ -42,6 +47,22 @@ const Info = ({ users, settings, ...props }) => {
       }
     }
   }, [i])
+
+  React.useEffect(() => {
+    if (i.value) {      
+      const 
+        ip = i.value.ip,
+        ck = i.value.ck,
+        muid = i.value.muid
+
+      // Chat history
+      setChatHistory(users.filter(u => {
+        return (muid === '') ? 
+          (u.value.ck === ck || u.value.ip === ip) :      // pc
+          (u.value.ck === ck || u.value.muid === muid)    // mobile
+      }))      
+    }
+  }, [i, users])
 
   const saveInfo = (type) => {
     let data
@@ -213,7 +234,7 @@ const Info = ({ users, settings, ...props }) => {
               {/* 총 체류시간 */}
               <div className="chat-info-item">
                 <span>체류</span>
-                <div className="chat-info-item-smlog">{smlogData.info.sum_vtime}간 체류</div>
+                <div className="chat-info-item-smlog">{smlogData.info.sum_vtime} 체류</div>
               </div>
               {/* 상태 */}
               {(smlogData.info.state !== '' || smlogData.info.state_naver_ban_ip === '1') && (
@@ -231,7 +252,52 @@ const Info = ({ users, settings, ...props }) => {
                   )}
                   </div>
                 </div>
-              )}             
+              )}
+              {/* 대화 내역 */}
+              {chatHistory && chatHistory.length > 1 && (
+                <>
+                <div className="chat-info-item" style={{cursor: 'pointer'}} onClick={() => {setActiveChatHistory(!activeChatHistory)}}>
+                  <span>대화 내역</span>
+                  <div className="chat-info-item-smlog">{chatHistory.length} 건</div>
+                  <div className={activeChatHistory ? "arrowup" : "arrowdown"}></div>
+                </div>
+                {activeChatHistory && (
+                  <div className="chat-history">
+                    {/* <div className="chat-history-title">대화 내역 {`(${chatHistory.length})`}</div> */}
+                    <div className="chat-history-list">
+                    {chatHistory.map((item, index) => {
+                      const state = ['대기', '진행 중', '종료']
+                      const userState = item.value.state ? item.value.state : 0
+
+                      return (                      
+                        <div className="chat-user" key={`${item.key}-history`}
+                          onClick={() => {
+                            setTabState(userState)
+                            selectedUser(item)
+                          }}>
+                          <div className="chat-user-icon">
+                            <div style={{backgroundColor: item.colorCode}}>
+                              <div className="bubble"></div>
+                            </div>
+                          </div>
+                          <div className="chat-user-info">
+                            <div className="chat-user-name">
+                              <div style={{flex: 1}}>{item.guestCode}</div>
+                              <div style={{marginRight: 5}}>{state[userState]}</div>
+                            </div>
+                            <div className="chat-user-detail">
+                              <div className="chat-user-message">{item.value.lastMessage}</div>
+                              <div className="chat-user-datetime">{script.getNiceTime(item.value.timestamp, new Date(), 1, true)}</div>
+                            </div>
+                          </div>
+                        </div>                      
+                      )
+                    })}                  
+                    </div>                 
+                  </div>
+                )}                
+                </>
+              )}
               {/* 광고 클릭 내역 */}
               {smlogData.ad_history.length > 0 && (
                 <div className="ad-click-history">
@@ -257,7 +323,7 @@ const Info = ({ users, settings, ...props }) => {
                       </div>
                       <div className="ad-click-history-item">
                         <span>체류시간</span>
-                        <div>{item.vtime}간 체류</div>
+                        <div>{item.vtime} 체류</div>
                       </div>
                       <div className="ad-click-history-item">
                         <span>키워드</span>

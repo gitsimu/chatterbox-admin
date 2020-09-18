@@ -65,6 +65,26 @@ const pad = (n) => {
 }
 
 export const getNiceTime = (fromDate, toDate, levels, prefix) => {
+  const 
+    diff = fromDate - (toDate ? toDate : new Date()),
+    diffrent = diff < 0 ? diff * -1 : diff,
+    date = new Date(new Date(1970,0,1,0).getTime()+diffrent),
+    months = date.getMonth(),
+    days = date.getDate() - 1;
+  
+  if (days > 7 || months > 0) {
+    const 
+      newDate = new Date(fromDate),
+      m = newDate.getMonth() + 1,
+      d = newDate.getDate()
+
+    return `${m > 9 ? m : '0' + m}/${d > 9 ? d : '0' + d}`    
+  } else {
+    return _getNiceTime(fromDate, toDate, levels, prefix)
+  }
+}
+
+const _getNiceTime = (fromDate, toDate, levels, prefix) => {
         var lang = {
         "date.past": "{0} 전",
         "date.future": "{0} 후",

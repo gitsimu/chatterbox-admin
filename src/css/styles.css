@@ -6,6 +6,11 @@ div, input, textarea {
   font-family: "Avenir", "Noto Sans Japanese", "Hiragino Kaku Gothic ProN", "YuGothic", "Yu Gothic", "メイリオ", "Apple SD Gothic Neo", "Nanum Barun Gothic", "Helvetica", "Arial", "Malgun Gothic", "맑은 고딕", "돋움", "Dotum", "sans-serif";
   /* font-family: 'Nanum Gothic', cursive; */
 }
+
+.chatterbox-theme-dark a:-webkit-any-link  {
+  color: #00aaff;
+}
+
 /* width */
 ::-webkit-scrollbar {
   width: 7px;
@@ -340,7 +345,7 @@ div, input, textarea {
 } */
 
 .chat-memo {
-  height: 200px;
+  height: 180px;
   padding: 0 !important;
   overflow: hidden;
 }
@@ -357,7 +362,7 @@ div, input, textarea {
 .chat-memo-body textarea {
   resize: none;
   width: 100%;
-  height: 120px;
+  height: 100px;
   outline: 0 !important;
   border: none !important;
   padding: 10px 20px;
@@ -404,9 +409,13 @@ div, input, textarea {
   background: rgba(0,0,0,0.1);
   height: 100%;
   padding: 12px 0;
-  overflow: auto;
+  overflow-y: scroll;
+}
+.chat-info-body > div {
+  animation: fadein .5s ease-in-out;
 }
 .chat-info-item {
+  position: relative;
   display: flex;
   align-items: center;
   padding: 2px 10px;
@@ -544,6 +553,25 @@ div, input, textarea {
   margin-right: 3px;
   margin-bottom: 3px;
 }
+
+.chat-history {
+  padding: 0 2px 5px 10px;
+}
+.chat-history-title {  
+  font-size: 13px;
+  margin-bottom: 8px;
+  padding: 0 5px;
+  color: rgb(141, 152, 177);
+}
+.chat-history-list {
+  border-radius: 5px;
+  overflow: hidden;
+  /* margin-top: 5px; */
+}
+.chat-history .chat-user-name {
+  display: flex;
+}
+
 .messages {
   flex: 1;
   overflow: auto;
@@ -672,11 +700,11 @@ div, input, textarea {
   color: #ccc;
   font-size: 14px;
   position: absolute;
-  bottom: 60px;
+  bottom: 52px;
   left: 50%;
   border-radius: 5px;
   box-shadow: 0 0 15px 5px rgba(0, 0, 0, 0.1);
-  width: 300px;
+  width: 97%;
   -webkit-user-select: none;
   user-select: none;
   text-align: center;
@@ -700,10 +728,14 @@ div, input, textarea {
   font-size: 16px;
 }
 .dialog > div.dialog-body {
-  padding: 15px;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .dialog > div.dialog-body > div {
   padding: 3px;
+  font-weight: bold;
 }
 .dialog.info > div.dialog-header {
   color: #FFC107;
@@ -1505,6 +1537,14 @@ div, input, textarea {
   0% {opacity:0}
   100% {opacity:1}
 }
+@-webkit-keyframes fadeout {
+  0% { opacity: 1; }
+  100% { opacity: 0; }
+  }
+@keyframes fadeout {
+  0% { opacity: 1; }
+  100% { opacity: 0; }
+}
 
 .tooltip {
   display: none;
@@ -1641,7 +1681,6 @@ div:hover > .tooltip {
   top: 20px;
 }
 
-
 .more-button {
   text-align: center;
   padding: 0 5px;
@@ -1710,3 +1749,24 @@ div:hover > .tooltip {
   display: block;
   overflow: auto;
 }
+
+
+.arrowup {
+  width: 0;
+  height: 0;
+  border: 5px solid transparent;
+  border-bottom: 5px solid #494949;
+  position: absolute;
+  right: 10px;
+  transform: translateY(-2px);
+}
+.arrowdown {
+  width: 0;
+  height: 0;
+  border: 5px solid transparent;
+  border-top: 5px solid #494949;
+  position: absolute;
+  right: 10px;
+  transform: translateY(2px);
+}
+
