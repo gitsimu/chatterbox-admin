@@ -2,28 +2,6 @@
     if (!document.getElementById('chatterbox-root')) {
         var node = document.createElement('div');
         node.id = 'chatterbox-root';
-        node.setAttribute('key', smtgs_chat_data.key);
-        node.setAttribute('ck', smtgs_chat_data.ck);
-        node.setAttribute('muid', smtgs_chat_data.muid);
-        node.setAttribute('ip', smtgs_chat_data.ip);
-        node.setAttribute('svid', smtgs_chat_data.svid);
-
-        // icon config
-        if (smtgs_chat_data.pc && smtgs_chat_data.mobile) {
-            node.setAttribute('themeColor', smtgs_chat_data.themeColor);
-            node.setAttribute('position', smtgs_chat_data.position);
-            node.setAttribute('pc-hide', smtgs_chat_data.pc.hide);
-            node.setAttribute('pc-axisX', smtgs_chat_data.pc.axisX);
-            node.setAttribute('pc-axisY', smtgs_chat_data.pc.axisY);
-            node.setAttribute('pc-size', smtgs_chat_data.pc.size);
-            node.setAttribute('mobile-hide', smtgs_chat_data.mobile.hide);
-            node.setAttribute('mobile-axisX', smtgs_chat_data.mobile.axisX);
-            node.setAttribute('mobile-axisY', smtgs_chat_data.mobile.axisY);
-            node.setAttribute('mobile-size', smtgs_chat_data.mobile.size);
-            node.setAttribute('text', smtgs_chat_data.pc.iconText ? smtgs_chat_data.pc.iconText : '');
-            node.setAttribute('textAlign', smtgs_chat_data.pc.iconTextAlign ? smtgs_chat_data.pc.iconTextAlign : '');
-        }
-
         document.body.appendChild(node);
 
         var style = document.createElement('link');
