@@ -121,9 +121,11 @@ const Info = ({ users, settings, ...props }) => {
       case 'nate':
         logo += 'nt.png'
         break
-      case 'naver':
-      default:
+      case 'naver':      
         logo += 'nv.png'
+        break
+      default:
+        logo = undefined
         break
     }
     return logo
@@ -325,7 +327,9 @@ const Info = ({ users, settings, ...props }) => {
                       <div className="ad-click-history-item">
                         <span>광고종류</span>
                         <div>
-                          <img src={getLogoUrl(item.itype_img)} style={{height: 10, marginRight: 5}} alt=""></img>
+                          {getLogoUrl(item.itype_img) && (
+                            <img src={getLogoUrl(item.itype_img)} style={{height: 10, marginRight: 5}} alt=""></img>
+                          )}
                           {item.itype}
                         </div>
                       </div>
