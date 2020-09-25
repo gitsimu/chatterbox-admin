@@ -481,7 +481,7 @@ div, input, textarea {
 .chat-info-item > div.chat-info-item-smlog {
   display: flex;
   align-items: center;
-  padding: 5px 7px;
+  padding: 5px 10px;
   font-size: 13px;
 }
 .chat-info-item > div.chat-info-item-smlog img {

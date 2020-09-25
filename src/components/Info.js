@@ -156,6 +156,14 @@ const Info = ({ users, settings, ...props }) => {
               )}
             </div>
           </div>
+          {i.value.member_id && (
+            <div className="chat-info-item">
+              <span>회원 아이디</span>
+              <div className="chat-info-item-smlog">           
+                {i.value.member_id}
+              </div>
+            </div>
+          )}
           <div className="chat-info-item">
             <span>연락처</span>
             <div className="chat-info-item-input">
