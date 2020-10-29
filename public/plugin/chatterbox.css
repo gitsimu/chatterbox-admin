@@ -53,6 +53,8 @@
   transition: 0.2s ease all;
   overflow: hidden;
   font-family: "Avenir", "Noto Sans Japanese", "Hiragino Kaku Gothic ProN", "YuGothic", "Yu Gothic", "メイリオ", "Apple SD Gothic Neo", "Nanum Barun Gothic", "Helvetica", "Arial", "Malgun Gothic", "맑은 고딕", "돋움", "Dotum", "sans-serif";  
+  max-width: calc(100vw - 30px);
+  max-height: calc(100vh - 30px);
 }
 #chatterbox-root iframe.chatterbox-iframe.active {
   opacity: 1 !important;
