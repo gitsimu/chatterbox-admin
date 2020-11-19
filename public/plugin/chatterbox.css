@@ -48,7 +48,8 @@
 
 #chatterbox-root iframe.chatterbox-iframe {
   opacity: 0 !important;
-  visibility: hidden !important;
+  /* visibility: hidden !important; */
+  pointer-events: none;
   transform: scale(0.85);
   transition: 0.2s ease all;
   overflow: hidden;
@@ -58,6 +59,7 @@
 }
 #chatterbox-root iframe.chatterbox-iframe.active {
   opacity: 1 !important;
-  visibility: visible !important;
+  /* visibility: visible !important; */
+  pointer-events: auto;
   transform: scale(1);
 }
