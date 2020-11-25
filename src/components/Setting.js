@@ -5,6 +5,7 @@ import Mockup from './Mockup'
 import PrettoSlider from './PrettoSlider'
 import { ChromePicker } from 'react-color'
 import * as smlog from '../js/smlog'
+import Chatbot from './Chatbot'
 
 const initWorkingDay = {
   isInit: true,
@@ -23,7 +24,14 @@ const initConfig = {
   subTitle: '보통 몇 분 내에 응답합니다',
   nickname: 'Manager',
   firstMessage: '방문해주셔서 감사합니다.\n궁금한 내용을 편하게 남겨주세요.',
-  themeColor: '#444c5d'
+  themeColor: '#444c5d',
+  chatbot: {
+    state: '0',
+    list : [
+      {id: 'START', title: '처음으로', questions: [{message: '안녕하세요 챗봇입니다.', type: 1}, {message: '궁금한 사항을 선택해주세요.', type: 1}], answers: [{message:'상담원 연결', to:'CHAT'}]},
+      {id: 'CHAT', title: '상담원 연결', questions: [{message: '상담원을 연결해드리겠습니다.', type: 1}], answers: [], action: 'CHAT'},
+    ]
+  }
 }
 const initIconConfig = {
   isInit: true,
@@ -43,8 +51,10 @@ const initIconConfig = {
   }
 }
 
+
 const Setting = ({ settings, ...props }) => {
   const database = props.database
+  const isLoading = props.isLoading
 
   const [title, setTitle] = React.useState('')
   const [subTitle, setSubTitle] = React.useState('')
@@ -70,11 +80,67 @@ const Setting = ({ settings, ...props }) => {
   const [iconText, setIconText] = React.useState()
   const [iconTextAlign, setIconTextAlign] = React.useState()
 
-  const isLoading = props.isLoading
+  const chatbotListOrigin = React.useRef([])
+  const [chatbotList, setChatbotList] = React.useState(initConfig.chatbot.list)
+  const [chatbotState, setChatbotState] = React.useState(initConfig.chatbot.state)
+
+  const setChatbotConfig = (chatbotConfig) => {
+    if(!chatbotConfig) return
+
+    setChatbotState(chatbotConfig.state)
+    chatbotListOrigin.current = chatbotConfig.list
+    resetChatbotList()
+  }
+
+  const resetChatbotList= () => {
+    setChatbotList(JSON.parse(JSON.stringify(chatbotListOrigin.current)))
+  }
+
+  const saveChatbotConfig = () => {
+    const hasEmptyQuestions = chatbotList.some(chatbot=> !chatbot.questions?.length)
+    if(hasEmptyQuestions){
+      alert("메시지가 없는 챗봇이 있습니다.")
+      return
+    }
+    const hasEmptyAnswers = chatbotList.some(chatbot=> chatbot.action !== "CHAT" && !chatbot.answers?.length)
+    if(hasEmptyAnswers){
+      alert("버튼이 없는 챗봇이 있습니다.")
+      return
+    }
+    const hasEmptyLink = chatbotList.some(chatbot=> chatbot.answers?.some(answer=> !answer.to) || false)
+    if(hasEmptyLink){
+      alert('연결되지 않은 링크가 있습니다.')
+      return
+    }
+
+    isLoading(true)
+
+    database.ref(`/${settings.key}/config/chatbot`)
+      .update({
+        list: chatbotList
+      })
+      .then(()=> {
+        chatbotListOrigin.current = chatbotList
+        resetChatbotList()
+        isLoading(false)
+      })
+  }
 
   React.useEffect(() => {
-    const getFirebase = database.ref(`/${settings.key}/config`)
-                                .once('value')
+    smlog.API({
+      method: 'update_chatbot_config',
+      svid: props.svid,
+      state : chatbotState
+    })
+
+    database.ref(`/${settings.key}/config/chatbot`)
+      .update({
+        state: chatbotState,
+      })
+  }, [chatbotState])
+
+  React.useEffect(() => {
+    const getFirebase = database.ref(`/${settings.key}/config`).once('value')
     const getDb =  smlog.API({
       method: 'get_chat_config',
       svid: props.svid
@@ -91,6 +157,7 @@ const Setting = ({ settings, ...props }) => {
         setThemeColor(firebaseData.themeColor)
         setProfileImage(firebaseData.profileImage || null)
         setMissedMessage(firebaseData.workingDay.message)
+        setChatbotConfig(firebaseData.chatbot)
       } else {
         setTitle(initConfig.title)
         setSubTitle(initConfig.subTitle)
@@ -292,7 +359,7 @@ const Setting = ({ settings, ...props }) => {
       textAlign: iconTextAlign,
       ...(param || {})
     }
-    
+
     setIconConfig(newConfig)
   }
 
@@ -342,6 +409,11 @@ const Setting = ({ settings, ...props }) => {
           onClick={() => { setSettingMenuState(1) }}>
           <div>채팅 설정</div>
         </div>
+        <div
+          className={ settingMenuState === 3 ? "setting-list-tab active" : "setting-list-tab"}
+          onClick={() => { setSettingMenuState(3) }}>
+          <div>챗봇 설정</div>
+        </div>
         {/* <div className="setting-list-title">Etc</div>
         <div className="setting-list-tab"
           onClick={() => {
@@ -367,7 +439,7 @@ const Setting = ({ settings, ...props }) => {
           <div className="setting-menu-header">
             기본 설정
           </div>
-          <div className="setting-menu-body setting-basic">     
+          <div className="setting-menu-body setting-basic">
             <div className="setting-checkbox-item">
               <div className="setting-checkbox-item-title">
                 <label>
@@ -413,14 +485,14 @@ const Setting = ({ settings, ...props }) => {
                     <label><input type="checkbox" ref={node => we = node} checked={workingDay.week.indexOf('we') > -1} onChange={(e) => { onChangeWorkingDay(e) }}/>수</label>
                     <label><input type="checkbox" ref={node => th = node} checked={workingDay.week.indexOf('th') > -1} onChange={(e) => { onChangeWorkingDay(e) }}/>목</label>
                     <label><input type="checkbox" ref={node => fr = node} checked={workingDay.week.indexOf('fr') > -1} onChange={(e) => { onChangeWorkingDay(e) }}/>금</label>
-                    <label><input type="checkbox" ref={node => sa = node} checked={workingDay.week.indexOf('sa') > -1} onChange={(e) => { onChangeWorkingDay(e) }}/>토</label>                  
+                    <label><input type="checkbox" ref={node => sa = node} checked={workingDay.week.indexOf('sa') > -1} onChange={(e) => { onChangeWorkingDay(e) }}/>토</label>
                     <label><input type="checkbox" ref={node => su = node} checked={workingDay.week.indexOf('su') > -1} onChange={(e) => { onChangeWorkingDay(e) }}/>일</label>
                   </div>
                   <div className="setting-working-time">
                     <div className="setting-working-time-title">채팅가능 시간</div>
                     <div className={workingDay.allday ? 'hide' : ''}><div>
                       <select ref={node => startWork = node} value={workingDay.startWork} onChange={(e) => { onChangeWorkingDay(e) }}>
-                        <option value="0000">00:00</option><option value="0030">00:30</option>                        
+                        <option value="0000">00:00</option><option value="0030">00:30</option>
                         <option value="0100">01:00</option><option value="0130">01:30</option>
                         <option value="0200">02:00</option><option value="0230">02:30</option>
                         <option value="0300">03:00</option><option value="0330">03:30</option>
@@ -449,7 +521,7 @@ const Setting = ({ settings, ...props }) => {
                     <div>~</div>
                     <div>
                       <select ref={node => endWork = node} value={workingDay.endWork} onChange={(e) => { onChangeWorkingDay(e) }}>
-                        <option value="0000">00:00</option><option value="0030">00:30</option>                        
+                        <option value="0000">00:00</option><option value="0030">00:30</option>
                         <option value="0100">01:00</option><option value="0130">01:30</option>
                         <option value="0200">02:00</option><option value="0230">02:30</option>
                         <option value="0300">03:00</option><option value="0330">03:30</option>
@@ -481,7 +553,7 @@ const Setting = ({ settings, ...props }) => {
                     <div className="setting-working-time-title">브레이크 타임</div>
                     <div className={workingDay.breaktime ? '' : 'hide'}><div>
                       <select ref={node => startBreak = node} value={workingDay.startBreak} onChange={(e) => { onChangeWorkingDay(e) }}>
-                        <option value="0000">00:00</option><option value="0030">00:30</option>                        
+                        <option value="0000">00:00</option><option value="0030">00:30</option>
                         <option value="0100">01:00</option><option value="0130">01:30</option>
                         <option value="0200">02:00</option><option value="0230">02:30</option>
                         <option value="0300">03:00</option><option value="0330">03:30</option>
@@ -510,7 +582,7 @@ const Setting = ({ settings, ...props }) => {
                     <div>~</div>
                     <div>
                       <select ref={node => endBreak = node} value={workingDay.endBreak} onChange={(e) => { onChangeWorkingDay(e) }}>
-                        <option value="0000">00:00</option><option value="0030">00:30</option>                        
+                        <option value="0000">00:00</option><option value="0030">00:30</option>
                         <option value="0100">01:00</option><option value="0130">01:30</option>
                         <option value="0200">02:00</option><option value="0230">02:30</option>
                         <option value="0300">03:00</option><option value="0330">03:30</option>
@@ -540,7 +612,7 @@ const Setting = ({ settings, ...props }) => {
                   </div>
                   <div className="setting-working-message">
                     <div className="setting-working-message-title">부재중 메세지 (최대 200자)</div>
-                    <textarea 
+                    <textarea
                       ref={node => message = node}
                       value={missedMessage}
                       onChange={(e) => {setMissedMessage(e.target.value)}}
@@ -618,7 +690,7 @@ const Setting = ({ settings, ...props }) => {
                 <span>테마색상</span>
                 <input type="text"
                   value={themeColor}
-                  onChange={() => {}}              
+                  onChange={() => {}}
                   onClick={() => {
                     showThemeColorPicker(!themeColorPicker)
                   }}/>
@@ -627,7 +699,7 @@ const Setting = ({ settings, ...props }) => {
                   <ChromePicker
                     disableAlpha={true}
                     color={themeColor}
-                    onChange={(color) => { 
+                    onChange={(color) => {
                       const _color = color.rgb.a === 1 ? color.hex : `rgba(${color.rgb.r}, ${color.rgb.g}, ${color.rgb.b}, ${color.rgb.a})`
                       setThemeColor(_color)
                       onChangeIconConfig()
@@ -650,7 +722,7 @@ const Setting = ({ settings, ...props }) => {
                   { profileImage !== null && (
                     <div className="setting-profile-image-remove"
                     onClick={() => { handleFileRemove() }}>이미지 삭제</div>
-                  )}                     
+                  )}
                 </div>
               </div>
             </div>
@@ -710,7 +782,7 @@ const Setting = ({ settings, ...props }) => {
                           max={100}
                           valueLabelDisplay="auto"
                           value={iconAxisX}
-                          onChange={(event, value) => { 
+                          onChange={(event, value) => {
                             setIconAxisX(value)
                           }}
                           onChangeCommitted={(e, v)=>{
@@ -748,7 +820,7 @@ const Setting = ({ settings, ...props }) => {
                       max={80}
                       valueLabelDisplay="auto"
                       value={iconSize}
-                      onChange={(event, value) => { 
+                      onChange={(event, value) => {
                         setIconSize(value)
                       }}
                       onChangeCommitted={(e, v)=>{
@@ -802,7 +874,6 @@ const Setting = ({ settings, ...props }) => {
             </div>
           </div>
         </div>
-
         <div className={ settingMenuState === 2 ? "setting-menu-2" : "setting-menu-2 hide" }>
           <div className="setting-menu-header">
             버전 정보
@@ -812,6 +883,120 @@ const Setting = ({ settings, ...props }) => {
         </div>
 
         <div className={ settingMenuState === 3 ? "setting-menu-3" : "setting-menu-3 hide" }>
+          <div className="setting-menu-header">
+            챗봇 설정
+          </div>
+          <div className="setting-menu-body" style={{flexDirection : "column"}}>
+            <div className="setting-checkbox-item">
+              <div className="setting-checkbox-item-title">
+                <label>
+                  <input type="checkbox"
+                         checked={chatbotState !== '0'}
+                         onChange={(e) => {
+                           setChatbotState(e.target.checked ? '1' : '0')
+                         }}/>
+                  <span>챗봇기능 사용</span>
+                </label>
+
+                {chatbotState !== '0' && (
+                  <div style={{
+                    margin: '13px 0 0 25px'
+                  }}>
+                    <label style={{
+                      marginRight: '20px'
+                    }}>
+                      <input type="radio"
+                             name="chat_active_time"
+                             checked={chatbotState === '1'}
+                             onChange={(e) => {
+                               setChatbotState('1')
+                             }}/>
+                      <span>24시간</span>
+                    </label>
+                    <label>
+                      <input type="radio"
+                             name="chat_active_time"
+                             checked={chatbotState === '2'}
+                             onChange={(e) => {
+                               setChatbotState('2')
+                             }}/>
+                      <span>채팅 운영시간</span>
+                    </label>
+                    <label>
+                      <input type="radio"
+                             name="chat_active_time"
+                             checked={chatbotState === '3'}
+                             onChange={(e) => {
+                               setChatbotState('3')
+                             }}/>
+                      <span>채팅 비운영시간</span>
+                    </label>
+
+                  </div>
+                )}
+              </div>
+            </div>
+            <div
+              style={{
+                fontSize: '16px'
+              }}>
+              <span
+                  className="init-chatbot-btn"
+                  onClick={() => resetChatbotList()}>초기화</span>
+              <span
+                className="save-chatbot-btn"
+                onClick={() => saveChatbotConfig()}>저장</span>
+            </div>
+            <div className="chatbot-list">
+              {chatbotList.map((chatbot, index) => (
+                <Chatbot
+                  key={chatbot.id}
+                  index={index}
+                  chatbotList={chatbotList}
+                  chatbot={chatbot}
+                  setChatbot={(newChatbot) => {
+                    chatbotList[index] = newChatbot
+                    setChatbotList([...chatbotList])
+                  }}
+                  deleteChatbot={() => {
+                    const deleted = chatbotList.splice(index, 1)[0]
+                    chatbotList.forEach(chatbot => {
+                      chatbot.answers?.forEach(t => t.to = t.to === deleted.id
+                        ? ''
+                        : t.to)
+                    })
+                    setChatbotList([...chatbotList])
+                  }}
+                  nickname={nickname}
+                  profileImage={profileImage}
+                />
+              ))}
+              <div
+                className="add-chatbot-btn"
+                onClick={() => {
+                  const newChatbot = {
+                    id: `${new Date().getTime()}`,
+                    title: '제목',
+                    answers: [
+                      {
+                        message: '내용을 입력해주세요.',
+                        to: ''
+                      }
+                    ],
+                    questions: [
+                      {
+                        message: '내용을 입력해주세요.',
+                        type: 1
+                      }
+                    ],
+                    action: null
+                  }
+                  setChatbotList([...chatbotList, newChatbot])
+                }}>
+                추가
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
