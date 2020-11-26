@@ -1,11 +1,13 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import axios from 'axios'
-import Mockup from './Mockup'
-import PrettoSlider from './PrettoSlider'
 import { ChromePicker } from 'react-color'
+import PrettoSlider from './PrettoSlider'
 import * as smlog from '../js/smlog'
+import * as script from '../js/script'
+import Mockup from './Mockup'
 import Chatbot from './Chatbot'
+import ChatbotPreview from './ChatbotPreview'
 
 const initWorkingDay = {
   isInit: true,
@@ -28,8 +30,8 @@ const initConfig = {
   chatbot: {
     state: '0',
     list : [
-      {id: 'START', title: '처음으로', questions: [{message: '안녕하세요 챗봇입니다.', type: 1}, {message: '궁금한 사항을 선택해주세요.', type: 1}], answers: [{message:'상담원 연결', to:'CHAT'}]},
-      {id: 'CHAT', title: '상담원 연결', questions: [{message: '상담원을 연결해드리겠습니다.', type: 1}], answers: [], action: 'CHAT'},
+      {id: script.genId(), title: '처음으로', questions: [{message: '안녕하세요 챗봇입니다.', type: 1}, {message: '궁금한 사항을 선택해주세요.', type: 1}], answers: [{message:'상담원 연결', to:'CHAT'}]},
+      {id: script.genId(), title: '상담원 연결', questions: [{message: '상담원을 연결해드리겠습니다.', type: 1}], answers: [], action: 'CHAT'},
     ]
   }
 }
@@ -50,6 +52,433 @@ const initIconConfig = {
     size: 70
   }
 }
+
+const chatbotTemplate = [
+  {
+    name: '쇼핑몰',
+    description: '쇼핑몰입니다 쇼핑몰입니다 쇼핑몰입니다 쇼핑몰입니다 쇼핑몰입니다 쇼핑몰입니다 쇼핑몰입니다 쇼핑몰입니다 쇼핑몰입니다 쇼핑몰입니다 쇼핑몰입니다 쇼핑몰입니다 ',
+    list: [
+      {
+        title: '쇼핑몰1',
+        id: '1',
+        questions: [
+          {
+            message: '안녕하세요 쇼핑몰 챗봇입니다.',
+            type: 1
+          }, {
+            message: '궁금한 사항을 선택해주세요.',
+            type: 1
+          }
+        ],
+        answers: [
+          {
+            message: '2번으로',
+            to: '2'
+          },
+          {
+            message: '3번으로',
+            to: '3'
+          }
+        ]
+      },
+      {
+        title: '쇼핑몰2',
+        id: '2',
+        questions: [
+          {
+            message: '안녕하세요 챗봇입니다.',
+            type: 1
+          }, {
+            message: '궁금한 사항을 선택해주세요.',
+            type: 1
+          }],
+        answers: [
+          {
+            message: '1번으로',
+            to: '1'
+          },
+          {
+            message: '3번으로',
+            to: '3'
+          }
+        ]
+      },
+      {
+        title: '쇼핑몰3',
+        id: '3',
+        questions: [
+          {
+            message: '안녕하세요 챗봇입니다.',
+            type: 1
+          }, {
+            message: '궁금한 사항을 선택해주세요.',
+            type: 1
+          }
+        ],
+        answers: [
+          {
+            message: '1번으로',
+            to: '1'
+          },
+          {
+            message: '2번으로',
+            to: '2'
+          }
+        ]
+      }
+    ],
+  },
+  {
+    name: '프렌차이즈',
+    description: '프렌차이즈 입니다 프렌차이즈 입니다 프렌차이즈 입니다 ',
+    list: [
+      {
+        title: '프렌차이즈1',
+        id: '1',
+        questions: [
+          {
+            message: '안녕하세요 프렌차이즈 챗봇입니다.',
+            type: 1
+          }, {
+            message: '궁금한 사항을 선택해주세요.',
+            type: 1
+          }],
+        answers: [
+          {
+            message: '2번으로',
+            to: '2'
+          }
+        ]
+      },
+      {
+        title: '프렌차이즈2',
+        id: '2',
+        questions: [
+          {
+            message: '안녕하세요 챗봇입니다.',
+            type: 1
+          }, {
+            message: '궁금한 사항을 선택해주세요.',
+            type: 1
+          }],
+        answers: [
+          {
+            message: '1번으로',
+            to: '1'
+          }
+        ]
+      },
+      {
+        title: '프렌차이즈3',
+        id: '3',
+        questions: [
+          {
+            message: '안녕하세요 챗봇입니다.',
+            type: 1
+          }, {
+            message: '궁금한 사항을 선택해주세요.',
+            type: 1
+          }],
+        answers: [
+          {
+            message: '1번으로',
+            to: '1'
+          },
+          {
+            message: '2번으로',
+            to: '2'
+          }
+        ]
+      }
+    ],
+  },
+  {
+    name: '스타트업',
+    description: '스타트업입니다 스타트업입니다 스타트업입니다 스타트업입니다 스타트업입니다 스타트업입니다 스타트업입니다 스타트업입니다 스타트업입니다 스타트업입니다 스타트업입니다 스타트업입니다 ',
+    list: [
+      {
+        title: '스타트업1',
+        id: '1',
+        questions: [
+          {
+            message: '안녕하세요 스타트업 챗봇입니다.',
+            type: 1
+          }, {
+            message: '궁금한 사항을 선택해주세요.',
+            type: 1
+          }
+        ],
+        answers: [
+          {
+            message: '2번으로',
+            to: '2'
+          },
+          {
+            message: '3번으로',
+            to: '3'
+          }
+        ]
+      },
+      {
+        title: '스타트업2',
+        id: '2',
+        questions: [
+          {
+            message: '안녕하세요 챗봇입니다.',
+            type: 1
+          }, {
+            message: '궁금한 사항을 선택해주세요.',
+            type: 1
+          }],
+        answers: [
+          {
+            message: '1번으로',
+            to: '1'
+          },
+          {
+            message: '3번으로',
+            to: '3'
+          }
+        ]
+      },
+      {
+        title: '스타트업3',
+        id: '3',
+        questions: [
+          {
+            message: '안녕하세요 챗봇입니다.',
+            type: 1
+          }, {
+            message: '궁금한 사항을 선택해주세요.',
+            type: 1
+          }
+        ],
+        answers: [
+          {
+            message: '1번으로',
+            to: '1'
+          },
+          {
+            message: '2번으로',
+            to: '2'
+          }
+        ]
+      }
+    ],
+  },
+  {
+    name: '쇼핑몰',
+    description: '쇼핑몰입니다 쇼핑몰입니다 쇼핑몰입니다 쇼핑몰입니다 쇼핑몰입니다 쇼핑몰입니다 쇼핑몰입니다 쇼핑몰입니다 쇼핑몰입니다 쇼핑몰입니다 쇼핑몰입니다 쇼핑몰입니다 ',
+    list: [
+      {
+        title: '쇼핑몰1',
+        id: '1',
+        questions: [
+          {
+            message: '안녕하세요 쇼핑몰 챗봇입니다.',
+            type: 1
+          }, {
+            message: '궁금한 사항을 선택해주세요.',
+            type: 1
+          }
+        ],
+        answers: [
+          {
+            message: '2번으로',
+            to: '2'
+          },
+          {
+            message: '3번으로',
+            to: '3'
+          }
+        ]
+      },
+      {
+        title: '쇼핑몰2',
+        id: '2',
+        questions: [
+          {
+            message: '안녕하세요 챗봇입니다.',
+            type: 1
+          }, {
+            message: '궁금한 사항을 선택해주세요.',
+            type: 1
+          }],
+        answers: [
+          {
+            message: '1번으로',
+            to: '1'
+          },
+          {
+            message: '3번으로',
+            to: '3'
+          }
+        ]
+      },
+      {
+        title: '쇼핑몰3',
+        id: '3',
+        questions: [
+          {
+            message: '안녕하세요 챗봇입니다.',
+            type: 1
+          }, {
+            message: '궁금한 사항을 선택해주세요.',
+            type: 1
+          }
+        ],
+        answers: [
+          {
+            message: '1번으로',
+            to: '1'
+          },
+          {
+            message: '2번으로',
+            to: '2'
+          }
+        ]
+      }
+    ],
+  },
+  {
+    name: '프렌차이즈',
+    description: '프렌차이즈 입니다 프렌차이즈 입니다 프렌차이즈 입니다 ',
+    list: [
+      {
+        title: '프렌차이즈1',
+        id: '1',
+        questions: [
+          {
+            message: '안녕하세요 프렌차이즈 챗봇입니다.',
+            type: 1
+          }, {
+            message: '궁금한 사항을 선택해주세요.',
+            type: 1
+          }],
+        answers: [
+          {
+            message: '2번으로',
+            to: '2'
+          }
+        ]
+      },
+      {
+        title: '프렌차이즈2',
+        id: '2',
+        questions: [
+          {
+            message: '안녕하세요 챗봇입니다.',
+            type: 1
+          }, {
+            message: '궁금한 사항을 선택해주세요.',
+            type: 1
+          }],
+        answers: [
+          {
+            message: '1번으로',
+            to: '1'
+          }
+        ]
+      },
+      {
+        title: '프렌차이즈3',
+        id: '3',
+        questions: [
+          {
+            message: '안녕하세요 챗봇입니다.',
+            type: 1
+          }, {
+            message: '궁금한 사항을 선택해주세요.',
+            type: 1
+          }],
+        answers: [
+          {
+            message: '1번으로',
+            to: '1'
+          },
+          {
+            message: '2번으로',
+            to: '2'
+          }
+        ]
+      }
+    ],
+  },
+  {
+    name: '스타트업',
+    description: '스타트업입니다 스타트업입니다 스타트업입니다 스타트업입니다 스타트업입니다 스타트업입니다 스타트업입니다 스타트업입니다 스타트업입니다 스타트업입니다 스타트업입니다 스타트업입니다 ',
+    list: [
+      {
+        title: '스타트업1',
+        id: '1',
+        questions: [
+          {
+            message: '안녕하세요 스타트업 챗봇입니다.',
+            type: 1
+          }, {
+            message: '궁금한 사항을 선택해주세요.',
+            type: 1
+          }
+        ],
+        answers: [
+          {
+            message: '2번으로',
+            to: '2'
+          },
+          {
+            message: '3번으로',
+            to: '3'
+          }
+        ]
+      },
+      {
+        title: '스타트업2',
+        id: '2',
+        questions: [
+          {
+            message: '안녕하세요 챗봇입니다.',
+            type: 1
+          }, {
+            message: '궁금한 사항을 선택해주세요.',
+            type: 1
+          }],
+        answers: [
+          {
+            message: '1번으로',
+            to: '1'
+          },
+          {
+            message: '3번으로',
+            to: '3'
+          }
+        ]
+      },
+      {
+        title: '스타트업3',
+        id: '3',
+        questions: [
+          {
+            message: '안녕하세요 챗봇입니다.',
+            type: 1
+          }, {
+            message: '궁금한 사항을 선택해주세요.',
+            type: 1
+          }
+        ],
+        answers: [
+          {
+            message: '1번으로',
+            to: '1'
+          },
+          {
+            message: '2번으로',
+            to: '2'
+          }
+        ]
+      }
+    ],
+  }
+]
 
 
 const Setting = ({ settings, ...props }) => {
@@ -83,6 +512,9 @@ const Setting = ({ settings, ...props }) => {
   const chatbotListOrigin = React.useRef([])
   const [chatbotList, setChatbotList] = React.useState(initConfig.chatbot.list)
   const [chatbotState, setChatbotState] = React.useState(initConfig.chatbot.state)
+  const [showTemplate, isShowTemplate] = React.useState(false)
+  const [seletedTemplate, setSeletedTemplate] = React.useState(null)
+  const [showTest, isShowTest] = React.useState(false)
 
   const setChatbotConfig = (chatbotConfig) => {
     if(!chatbotConfig) return
@@ -94,6 +526,23 @@ const Setting = ({ settings, ...props }) => {
 
   const resetChatbotList= () => {
     setChatbotList(JSON.parse(JSON.stringify(chatbotListOrigin.current)))
+  }
+
+  const addChatbotFromTemplate = (_list) => {
+    const list = JSON.parse(JSON.stringify(_list))
+    const answersAll = list.reduce((a,b)=> [...a, ...b.answers], [])
+
+    list.forEach(chatbot=> {
+      const oldId = chatbot.id
+      chatbot.id = script.genId()
+
+      answersAll.forEach(answer => {
+        if(answer.to !== oldId) return
+        answer.to = chatbot.id
+      })
+    })
+
+    setChatbotList([...chatbotList, ...list])
   }
 
   const saveChatbotConfig = () => {
@@ -125,6 +574,25 @@ const Setting = ({ settings, ...props }) => {
         isLoading(false)
       })
   }
+
+  React.useEffect(() => {
+    if (showTemplate) {
+      setSeletedTemplate(null)
+      const close = ({ code }) => code === 'Escape' && isShowTemplate(false)
+      document.addEventListener('keydown', close)
+      return () => {
+        document.removeEventListener('keydown', close)
+      }
+    }
+
+    if(showTest) {
+      const close = ({ code }) => code === 'Escape' && isShowTest(false)
+      document.addEventListener('keydown', close)
+      return () => {
+        document.removeEventListener('keydown', close)
+      }
+    }
+  }, [showTemplate, showTest])
 
   React.useEffect(() => {
     smlog.API({
@@ -902,9 +1370,7 @@ const Setting = ({ settings, ...props }) => {
                   <div style={{
                     margin: '13px 0 0 25px'
                   }}>
-                    <label style={{
-                      marginRight: '20px'
-                    }}>
+                    <label>
                       <input type="radio"
                              name="chat_active_time"
                              checked={chatbotState === '1'}
@@ -931,22 +1397,42 @@ const Setting = ({ settings, ...props }) => {
                              }}/>
                       <span>채팅 비운영시간</span>
                     </label>
-
                   </div>
                 )}
               </div>
             </div>
             <div
               style={{
-                fontSize: '16px'
+                fontSize: '16px',
+                display: 'flex'
               }}>
-              <span
-                  className="init-chatbot-btn"
-                  onClick={() => resetChatbotList()}>초기화</span>
-              <span
-                className="save-chatbot-btn"
-                onClick={() => saveChatbotConfig()}>저장</span>
+              <div>
+                <span
+                className="init-chatbot-btn"
+                onClick={() => resetChatbotList()}>초기화</span>
+                <span
+                  className="save-chatbot-btn"
+                  onClick={() => saveChatbotConfig()}>저장</span>
+              </div>
+
+              <div
+                style={{
+                  marginLeft: '235px',
+                }}
+              >
+                <div
+                  onClick={()=> {
+                    isShowTemplate(true)
+                  }}>템플릿</div>
+                <div
+                  onClick={()=> {
+                    isShowTest(true)
+                  }}
+                >미리보기</div>
+              </div>
             </div>
+
+
             <div className="chatbot-list">
               {chatbotList.map((chatbot, index) => (
                 <Chatbot
@@ -975,7 +1461,7 @@ const Setting = ({ settings, ...props }) => {
                 className="add-chatbot-btn"
                 onClick={() => {
                   const newChatbot = {
-                    id: `${new Date().getTime()}`,
+                    id: script.genId(),
                     title: '제목',
                     answers: [
                       {
@@ -999,6 +1485,192 @@ const Setting = ({ settings, ...props }) => {
           </div>
         </div>
       </div>
+
+
+      {showTemplate && (
+        <div
+          onClick={(e)=> {
+            if(e.target.id === 'chatbot-template-modal'){
+              isShowTemplate(false)
+            }
+          }}
+          id="chatbot-template-modal"
+          style={{
+            position: 'fixed',
+            left: '0',
+            top: '0',
+            width: '100%',
+            height: '100%',
+            display : 'flex',
+            alignItems : 'center',
+            justifyContent : 'center',
+            backgroundColor: '#0000004d'
+          }}>
+          <div
+            style={{
+              zIndex: '10000',
+              border: '1px solid #b6b6b6',
+              backgroundColor: 'white',
+              position: 'fixed',
+              width : '900px',
+              height : '65%',
+              borderRadius: '10px'
+            }}>
+            <div
+              className="chatbot-close"
+              onClick={() => isShowTemplate(false)}>
+              <i className="chatbot-close-icon"></i>
+            </div>
+
+            <div style={{
+              display: 'flex',
+              height: '100%'
+            }}>
+              <div style={{
+                flex : '1',
+                borderRight : '1px solid rgba(0, 0, 0, 0.12)',
+                height : '100%',
+                display : 'flex',
+                flexFlow : 'column',
+              }}>
+                <div style={{
+                  textAlign : 'center',
+                  margin : '16px',
+                }}>
+                  템플릿
+                </div>
+                <div style={{overflow:'auto'}}>
+                  {chatbotTemplate.map((template, index) => (
+                    <div
+                      className="chatbot-template"
+                      key={index}
+                      style={{
+                        ...(seletedTemplate === template
+                          ? { backgroundColor: '#0075ff0d' }
+                          : undefined),
+                        margin: '15px',
+                        textAlign: 'center',
+                        cursor: 'pointer',
+                        transitionProperty: 'background',
+                        transitionDuration: '0.2s'
+                      }}
+                      onClick={() => {
+                        setSeletedTemplate(template)
+                      }}>
+                      <div
+                        className="chatbot-name"
+                        style={{
+                          textAlign: 'left',
+                          padding: '5px 0 0 20px',
+                          fontSize: '20px'
+                        }}>
+                        {template.name}
+                      </div>
+                      <div
+                        className="chatbot-description"
+                        style={{
+                          color: '#000000ba',
+                          fontSize: '13px',
+                          textAlign: 'left',
+                          padding: '10px'
+                        }}>
+                        {template.description}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div style={{
+                width:'420px'
+                // flex: '1'
+              }}>
+                {seletedTemplate && (<div style={{
+                    display: 'flex',
+                    flexFlow: 'column',
+                    height: '100%',
+                    width: '100%',
+                  }}>
+                    <div
+                      onClick={() => {
+                        addChatbotFromTemplate(seletedTemplate.list)
+                        isShowTemplate(false)
+                      }}
+                      style={{
+                        alignSelf : 'center',
+                        width : '122px',
+                        textAlign : 'center',
+                        borderRadius : '10px',
+                        backgroundColor : '#0080F7',
+                        color : 'white',
+                        fontSize : '16px',
+                        margin : '18px',
+                        cursor: 'pointer',
+                      }}>
+                      적용하기
+                    </div>
+
+                    {seletedTemplate && (
+                      <ChatbotPreview
+                      profileImage={profileImage}
+                      list={seletedTemplate.list}>
+                      </ChatbotPreview>
+                    )}
+                  </div>)}
+              </div>
+            </div>
+
+
+          </div>
+        </div>
+      )}
+
+      {showTest && (
+        <div
+          onKeyDown={()=> console.log(1)}
+          onClick={(e)=> {
+            if(e.target.id === 'chatbot-test-modal'){
+              isShowTest(false)
+            }
+          }}
+          id="chatbot-test-modal"
+          style={{
+            position: 'fixed',
+            display : 'flex',
+            alignItems : 'center',
+            justifyContent : 'center',
+            left: '0',
+            top: '0',
+            width: '100%',
+            height: '100%',
+            backgroundColor: '#0000004d'
+          }}>
+          <div style={{
+            zIndex : '10000',
+            border : '1px solid rgb(182, 182, 182)',
+            backgroundColor : 'white',
+            position : 'fixed',
+            width : '400px',
+            height : '80%',
+            borderRadius: '10px',
+          }}>
+            <div style={{
+              padding: '10px 0 10px 10px',
+              height: '100%'
+            }}>
+              <div
+                className="chatbot-close"
+                onClick={() => isShowTest(false)}>
+                <i className="chatbot-close-icon"></i>
+              </div>
+              <ChatbotPreview
+                profileImage={profileImage}
+                list={chatbotList}>
+              </ChatbotPreview>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

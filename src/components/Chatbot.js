@@ -75,7 +75,7 @@ const Chatbot = ({ color, index, setChatbot, deleteChatbot, chatbotList, ...prop
             name="edit-title"
             onChange={(e) => tempUpdate({ title: e.target.value })}/>
 
-          {id !== 'CHAT' && id !== 'START' && (
+          {index >= 2 && (
             <div
               className="chatbot-close"
               onClick={deleteChatbot}>

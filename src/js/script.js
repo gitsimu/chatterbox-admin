@@ -268,3 +268,5 @@ export const initConfig = {
   nickname: 'Manager',
   firstMessage: '방문해주셔서 감사합니다.\n궁금한 내용을 편하게 남겨주세요.'
 }
+
+export const genId = () => Math.random().toString(36).substr(2, 9)

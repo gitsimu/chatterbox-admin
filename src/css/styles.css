@@ -2018,3 +2018,35 @@ div:hover > .tooltip {
   top: 7px;
   right: 0;
 }
+
+.chatbot-message {
+  font-size: 15px;
+  max-width: 280px;
+  margin: 3px 5px;
+  word-break: break-word;
+  background-color: #fff;
+  border-radius: 15px;
+  border-color: #e4e4e5;
+  border-width: 1px;
+  border-style: solid;
+  padding: 10px;
+  cursor: pointer;
+  animation: fadein .3s ease-in-out;
+  outline: none;
+}
+
+.chatbot-message:hover {
+  background-color: #a4bad440;
+}
+
+.chatbot-template {
+  border-radius: 10px;
+  border: 1px solid #0000001a;
+}
+.chatbot-template:hover {
+  background-color: #0075ff0d;
+}
+
+.chatbot-preview {
+  animation: fadein .3s ease-in-out;
+}
