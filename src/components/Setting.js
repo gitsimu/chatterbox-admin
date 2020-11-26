@@ -562,6 +562,8 @@ const Setting = ({ settings, ...props }) => {
       return
     }
 
+    console.log(chatbotList)
+
     isLoading(true)
 
     database.ref(`/${settings.key}/config/chatbot`)
