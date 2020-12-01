@@ -2,8 +2,10 @@
   position: fixed;
   right: 30px;
   bottom: 30px;
+  width: 60px;
+  height: 60px;
   background-color: #444c5d;
-  border-radius: 100px;
+  border-radius: 50%;
   cursor: pointer;
 
   display: flex;
@@ -13,7 +15,7 @@
   color: #fff;
   box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 15px 5px;
 
-  transition: 0.2s ease opacity, 0.2s ease transform;
+  transition: 0.2s ease all;
   transform: scale(0.85);
   visibility: hidden;
   opacity: 0;
@@ -23,43 +25,26 @@
   padding-right: 2px;
   padding-top: 2px;
 }
+#chatterbox-root .chat-icon > img {
+  width: 75px;
+}
 #chatterbox-root .chat-icon.active {
   transform: scale(1);
   visibility: visible;
   opacity: 1;
-  z-index: 9900000000;
-}
-#chatterbox-root .chat-icon img {
-  max-width: 100px;
-  max-height: 100px;
-}
-#chatterbox-root .chat-icon > .chat-icon-text {
-  font-size: 15px;
-  font-weight: 700;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
-  max-width: 200px;
-  vertical-align: middle;
-  font-family: "Noto Sans Japanese", "Noto Sans KR", "Apple SD Gothic Neo", "Nanum Barun Gothic", "Arial", "Malgun Gothic", "맑은 고딕", "돋움", "Dotum", "sans-serif";
-  line-height: 1;
-  color: #fff;
+  z-index: 99998;
 }
 
 #chatterbox-root iframe.chatterbox-iframe {
   opacity: 0 !important;
-  /* visibility: hidden !important; */
-  pointer-events: none;
+  visibility: hidden !important;
   transform: scale(0.85);
   transition: 0.2s ease all;
   overflow: hidden;
-  font-family: "Avenir", "Noto Sans Japanese", "Hiragino Kaku Gothic ProN", "YuGothic", "Yu Gothic", "メイリオ", "Apple SD Gothic Neo", "Nanum Barun Gothic", "Helvetica", "Arial", "Malgun Gothic", "맑은 고딕", "돋움", "Dotum", "sans-serif";  
-  max-width: calc(100vw - 30px);
-  max-height: calc(100vh - 30px);
+  font-family: "Avenir", "Noto Sans Japanese", "Hiragino Kaku Gothic ProN", "YuGothic", "Yu Gothic", "メイリオ", "Apple SD Gothic Neo", "Nanum Barun Gothic", "Helvetica", "Arial", "Malgun Gothic", "맑은 고딕", "돋움", "Dotum", "sans-serif";
 }
 #chatterbox-root iframe.chatterbox-iframe.active {
   opacity: 1 !important;
-  /* visibility: visible !important; */
-  pointer-events: auto;
+  visibility: visible !important;
   transform: scale(1);
 }
