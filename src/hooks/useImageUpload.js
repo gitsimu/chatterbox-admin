@@ -1,5 +1,5 @@
-import React from 'react';
-import {useDispatch, useSelector} from 'react-redux'
+import React from 'react'
+import { useSelector } from 'react-redux'
 import axios from 'axios'
 
 const useImageUpload = () => {
@@ -31,7 +31,7 @@ const useImageUpload = () => {
     formData.append('file', target)
     formData.append('key', key)
 
-    return axios.post('https://chat.smlog.co.kr/api/upload', formData, config)
+    return axios.post('/api/upload', formData, config)
       .then(res=> {
         if (res.data.result !== 'success') {
           throw new Error('이미지 업로드에 실패하였습니다.')

@@ -125,7 +125,7 @@ const Chatbot = ({ id, title, answers, questions, action, isLoading, color, inde
 
         <div className="chat-window-body">
           <ReactSortable
-            draggable=".sort-target"
+            handle=".sort-target"
             list={questions}
             setList={newQuestions => update({ questions : newQuestions })}
           >
@@ -228,7 +228,7 @@ const Chatbot = ({ id, title, answers, questions, action, isLoading, color, inde
             <div className="message myself"
                  style={{ flexDirection: 'column' }}>
               <ReactSortable
-                draggable=".sort-target"
+                handle=".sort-target"
                 list={answers}
                 setList={newAnswers => update({ answers : newAnswers })}
               >
