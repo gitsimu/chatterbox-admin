@@ -16,8 +16,9 @@ import Setting from '../src/components/Setting'
 
 import * as script from '../src/js/script.js'
 import * as smlog from '../src/js/smlog'
+import useEscapeKey from '../src/hooks/useEscapeKey'
 
-function Main({ users, messages, settings, initUsers, clearUsers, selectedUser, signIn, signOut, ...props }) {
+function Main({ settings, initUsers, clearUsers, selectedUser, signIn, signOut, ...props }) {
   const [screenState, setScreenState] = React.useState(0)
   const [tabState, setTabState] = React.useState(0)
   const [imageViewer, showImageViewer] = React.useState(null)
@@ -28,6 +29,8 @@ function Main({ users, messages, settings, initUsers, clearUsers, selectedUser, 
     firebase.initializeApp(FirebaseConfig)
   }
   const database = firebase.database()
+
+  useEscapeKey(()=> showImageViewer(null), imageViewer)
 
   React.useEffect(() => {
     let chat
@@ -106,7 +109,6 @@ function Main({ users, messages, settings, initUsers, clearUsers, selectedUser, 
             }
           })
 
-          clearUsers()
           initUsers(users)
           setSvid(params.svid)
           isLoading(false)
@@ -142,25 +144,7 @@ function Main({ users, messages, settings, initUsers, clearUsers, selectedUser, 
       })
   }, [settings.key])
 
-  React.useEffect(() => {
-    if (imageViewer === null) return;
 
-    const onImageViewKey = (event) => {
-      // if (event.code === 'KeyS' && event.ctrlKey) {
-      //   window.open(imageViewer);
-      // }
-
-      if (event.code === 'Escape') {
-        showImageViewer(null)
-      }
-    }
-
-    document.addEventListener('keydown', onImageViewKey)
-
-    return () => {
-      document.removeEventListener('keydown', onImageViewKey)
-    }
-  }, [imageViewer, showImageViewer])
 
   return (
     <div className="App chatterbox-theme-light">
@@ -238,7 +222,8 @@ function Main({ users, messages, settings, initUsers, clearUsers, selectedUser, 
             <Setting
               database={database}
               svid={svid}
-              isLoading={isLoading}/>
+              isLoading={isLoading}
+              showImageViewer={showImageViewer}/>
           )}  
         </div>
       </div>
@@ -273,13 +258,11 @@ const getParams = url => {
 }
 
 const getFirebaseAuthToken = async (uuid) => {
-  const res = await axios.post('/api/auth', { uuid: uuid })
-  return await res
+  // return axios.post('https://chat.smlog.co.kr/api/auth', { uuid: uuid })
+  return axios.post('/api/auth', { uuid: uuid })
 }
 
 const mapStateToProps = state => ({
-  users: state.users,
-  messages: state.messages,
   settings: state.settings
 })
 

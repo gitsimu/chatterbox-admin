@@ -1,64 +1,102 @@
 import React from 'react'
+import { useSelector } from 'react-redux'
+import useClickOustside from '../hooks/useClickOustside'
+import ChatbotAnswer from './ChatbotAnswer'
+import ChatbotTitleIcon from './ChatbotTitleIcon'
+import ChatbotQuestion from './ChatbotQuestion'
+import useImageUpload from '../hooks/useImageUpload'
+import { ReactSortable } from 'react-sortablejs'
 
-const COLOR = ['#6dd2eb', '#7fc1e3', '#53a8dd', '#3f92d8', '#588ac7', '#4374c6', '#2c50c3', '#4d61b8', '#3b50a9', '#26398c', '#091c6f']
+const Chatbot = ({ id, title, answers, questions, action, isLoading, color, index, updateChatbot, deleteChatbot, chatbotList, ...props }) => {
+  const { key } = useSelector(state => state.settings)
 
-const Chatbot = ({ color, index, setChatbot, deleteChatbot, chatbotList, ...props }) => {
+  const [showAdd, setShowAdd] = React.useState(false)
+  const titleRef = React.useRef()
 
-  const [questionsEditIndex, setQuestionsEditIndex] = React.useState(null)
-  const [answersEditIndex, setAnswersEditIndex] = React.useState(null)
-  const [chatbot, setTempChatbot] = React.useState(props.chatbot)
+  const [uploadImage] = useImageUpload()
+  useClickOustside(()=> setShowAdd(false), '.add-questions-list', showAdd)
 
-  /** @type {{current: HTMLTextAreaElement}} */
-  const questionsEditText = React.useRef()
-  /** @type {{current: HTMLTextAreaElement}} */
-  const answersEditText = React.useRef()
+  React.useEffect(() => {
+    titleRef.current.value = title
+  }, [title])
 
-  const id = props.chatbot.id
-  const otherChatbot = chatbotList.filter(t => t.id !== id)
+  const updateTitle = (newTitle) => {
+    update({
+      title: newTitle
+    })
+  }
+  const addQuestion = (newQuestion) => {
+    update({
+      questions : [...questions, newQuestion]
+    })
+  }
+  const deleteQuestion = (index) => {
+    update({
+      questions : [
+        ...questions.slice(0, index),
+        ...questions.slice(index + 1)
+      ]
+    })
+  }
+  const updateQuestion = (index, newQuestion) => {
+    update({
+      questions : [
+        ...questions.slice(0, index),
+        newQuestion,
+        ...questions.slice(index + 1)
+      ]
+    })
+  }
 
-  const tempUpdate = (newVal) => {
-    setTempChatbot({ ...chatbot, ...newVal })
+  const addAnswer = (newAnswer) => {
+    update({
+      answers:[...answers, newAnswer]
+    })
+  }
+  const deleteAnswer = (index) => {
+    update({
+      answers: [
+        ...answers.slice(0, index),
+        ...answers.slice(index + 1)
+      ]
+    })
+  }
+  const updateAnswer = (index, newAnswer) => {
+    update({
+      answers:[
+        ...answers.slice(0, index),
+        newAnswer,
+        ...answers.slice(index + 1)
+      ]
+    })
   }
 
   const update = (newVal) => {
-    setChatbot({ ...chatbot, ...newVal })
+    updateChatbot({
+      id,
+      title : title || '',
+      answers : answers || [],
+      questions : questions || [],
+      action : action || '',
+      ...newVal
+    })
   }
 
-  const titleIcon = (index) => (
-    <span style={{
-      backgroundColor: index === 0 ? COLOR[0] : COLOR[index%(COLOR.length - 1) + 1],
-      padding: '5px 12px',
-      color: 'white',
-      borderRadius: '25px',
-      fontSize: '11px',
-    }}>
-      {index === 0 ? '시작':`답변${index}`}
-    </span>
-  )
+  const handleFileInput = React.useCallback((e, file) => {
+    const target = file || e.target.files[0]
 
-  React.useEffect(() => {
-    if (questionsEditIndex == null) return
-    setAnswersEditIndex(null)
-
-    questionsEditText.current.value = chatbot.questions[questionsEditIndex].message
-    questionsEditText.current.focus()
-    questionsEditText.current.style.height = (questionsEditText.current.scrollHeight + 12) + 'px'
-  }, [questionsEditIndex])
-
-  React.useEffect(() => {
-    if (answersEditIndex == null) return
-    setQuestionsEditIndex(null)
-
-    answersEditText.current.value = chatbot.answers[answersEditIndex].message
-    answersEditText.current.focus()
-    answersEditText.current.style.height = (answersEditText.current.scrollHeight + 12) + 'px'
-  }, [answersEditIndex])
-
-  React.useEffect(() => {
-    setTempChatbot(props.chatbot)
-    setAnswersEditIndex(null)
-    setQuestionsEditIndex(null)
-  }, [props.chatbot])
+    Promise.resolve()
+      .then(()=> isLoading(true))
+      .then(()=> uploadImage(target))
+      .then(res => {
+        addQuestion({
+          message: JSON.stringify(res.data.file),
+          type: 3
+        })
+      })
+      .catch(({ message }) => message && alert(message))
+      .finally(()=> isLoading(false))
+  }, [key])
 
   return (
     <div className="chatbot">
@@ -66,15 +104,16 @@ const Chatbot = ({ color, index, setChatbot, deleteChatbot, chatbotList, ...prop
         <div className="chat-window-header">
           <div
             className="chatbot-title-wrap">
-            {titleIcon(index)}
+            <ChatbotTitleIcon
+              index={index}
+            />
           </div>
 
           <input
-            value={chatbot.title}
-            onBlur={()=> update()}
-            name="edit-title"
-            onChange={(e) => tempUpdate({ title: e.target.value })}/>
-
+            type="text"
+            ref={titleRef}
+            onBlur={()=> updateTitle(titleRef.current.value)}
+            name="edit-title"/>
           {index >= 2 && (
             <div
               className="chatbot-close"
@@ -85,180 +124,134 @@ const Chatbot = ({ color, index, setChatbot, deleteChatbot, chatbotList, ...prop
         </div>
 
         <div className="chat-window-body">
-          {chatbot.questions && chatbot.questions.map((question, index) => (
-            <div
-              key={index}
-              className="message opponent">
-              <div className="message-profile">
-                {index === 0 && props.profileImage === null && (
-                  <div className="message-profile-icon">
-                    {props.nickname[0] || 'S'}
+          <ReactSortable
+            draggable=".sort-target"
+            list={questions}
+            setList={newQuestions => update({ questions : newQuestions })}
+          >
+            {questions && questions.map((question, index) => (
+              <div
+                key={index}
+                className="message opponent">
+
+                <div className="message-profile">
+                  {index === 0 && props.profileImage === null && (
+                    <div className="message-profile-icon">
+                      {props.nickname[0] || 'S'}
+                    </div>
+                  )}
+                  {index === 0 && props.profileImage !== null && (
+                    <div className="message-profile-image">
+                      <img src={JSON.parse(props.profileImage).location}
+                           alt="message-profile"/>
+                    </div>
+                  )}
+                </div>
+                <div className="message-body">
+                  {(index === 0) && (
+                    <div className="message-top">
+                      <div className="message-name">{props.nickname}</div>
+                    </div>
+                  )}
+                  <div className="message-bottom">
+                    <ChatbotQuestion
+                      index={index}
+                      type={question.type}
+                      message={question.message}
+                      isLoading={isLoading}
+                      onClickDelete={()=> deleteQuestion(index)}
+                      onClickSave={newQuestion => updateQuestion(index, newQuestion)}
+                    />
                   </div>
-                )}
-                {index === 0 && props.profileImage !== null && (
-                  <div className="message-profile-image">
-                    <img src={JSON.parse(props.profileImage).location}
-                         alt="message-profile"/>
-                  </div>
-                )}
-              </div>
-              <div className="message-body">
-                {(index === 0) && (
-                  <div className="message-top">
-                    <div className="message-name">{props.nickname}</div>
-                  </div>
-                )}
-                <div className="message-bottom">
-                  {questionsEditIndex !== index
-                    ? (
-                      <div
-                        onClick={() => {
-                          setQuestionsEditIndex(index)
-                        }}
-                        style={{ marginRight: '5px', cursor: 'pointer' }}
-                        className="message-inner">
-                        {question.message}
-                      </div>
-                    )
-                    : (
-                      <div className="message-edit">
-                        <textarea
-                          ref={questionsEditText}
-                          onChange={(e) => {
-                            e.target.style.height = 'auto'
-                            e.target.style.height = `${e.target.scrollHeight + 12}px`
-                          }}/>
-                        <div className="flex-row">
-                          <button
-                            className="edit-button"
-                            onClick={() => {
-                              chatbot.questions.splice(index, 1)
-                              update()
-                            }}
-                            style={{
-                              color: 'red',
-                              marginLeft: 'auto'
-                            }}>삭제
-                          </button>
-                          <button
-                            onClick={() => {
-                              chatbot.questions[index].message = questionsEditText.current.value.trim()
-                              setQuestionsEditIndex(null)
-                              update()
-                            }}
-                            className="edit-button">저장
-                          </button>
-                        </div>
-                      </div>
-                    )}
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </ReactSortable>
 
           <div className="message opponent">
             <div className="message-body">
               <div
+                style={{
+                  ...(showAdd ? {background: '1px solid #0000ff66'} : undefined)
+                }}
                 className="chatbot-button add-questions"
                 onClick={() => {
-                  chatbot.questions.push({
-                    message: '내용을 입력해주세요.',
-                    type: 1
-                  })
-                  update()
+                  setShowAdd(!showAdd)
                 }}>+ 메시지 추가
+              </div>
+
+              <div
+                className="add-questions-list"
+                style={{
+                ...(!showAdd ? {display : 'none'} : undefined),
+                position: 'absolute',
+              }}>
+                <div
+                  onClick={()=> {
+                    addQuestion({
+                      message: '내용을 입력해주세요.',
+                      type: 1
+                    })
+                    setShowAdd(false)
+                  }}
+                  className="chatbot-button add-questions">텍스트</div>
+                <div
+                  onClick={(e) => {
+                    document.querySelector(`[name=add-image_${index}]`).click()
+                    setShowAdd(false)
+                  }}
+                  className="chatbot-button add-questions">
+                  이미지
+                  <input type="file"
+                         name={`add-image_${index}`}
+                         onClick={e => (e.target.value = '')}
+                         onChange={e => {
+                           handleFileInput(e)
+                         }}
+                         style={{ display: 'none' }}/>
+                </div>
+                <div
+                  onClick={()=> {
+                    addQuestion({
+                      message: JSON.stringify({url : '', text: '버튼명을 입력해주세요.'}),
+                      type: 4
+                    })
+                    setShowAdd(false)
+                  }}
+                  className="chatbot-button add-questions">링크
+                </div>
               </div>
             </div>
           </div>
 
-          {(chatbot.action !== 'CHAT') && (
+          {(action !== 'CHAT') && (
             <div className="message myself"
                  style={{ flexDirection: 'column' }}>
-              {chatbot.answers?.map((answer, index) => (
-                <div key={index}>
-                  {(answersEditIndex !== index)
-                    ? (
-                      <div
-                        className="flex-row"
-                        style={{
-                          alignItems:'center'
-                        }}>
-                        <div
-                          className="flex-row"
-                          onClick={() => {
-                            setAnswersEditIndex(index)
-                          }}
-                          style={{
-                            cursor:'pointer'
-                          }}>
-                          <span className="chatbot-to-title">
-                            {(i => i !== -1
-                              ? titleIcon(i)
-                              : <img src="/resources/link_off.png" alt=""/>
-                            )(chatbotList.findIndex(t => t.id === answer.to))}
-                          </span>
-                          <div
-                            className="chatbot-button">
-                            {answer.message}
-                          </div>
-                        </div>
-                        <i
-                          onClick={() => {
-                            chatbot.answers.splice(index, 1)
-                            update()
-                          }}
-                          className="close-icon"/>
-                      </div>
-                    )
-                    : (
-                      <div className="message-edit">
-                        <textarea
-                          ref={answersEditText}
-                          onChange={(e) => {
-                            e.target.style.height = 'auto'
-                            e.target.style.height = `${e.target.scrollHeight + 12}px`
-                          }}
-                        />
-                        <div className="flex-row">
-                          <select
-                            className="chatbot-option"
-                            value={answer.to}
-                            onChange={(e) => {
-                              chatbot.answers[index].to = e.target.value
-                              tempUpdate()
-                            }}>
-                            {!answer.to && (
-                              <option value="">선택하세요.</option>
-                            )}
-                            {otherChatbot.map(t => (
-                              <option key={t.id}
-                                      value={t.id}>{t.title}</option>
-                            ))}
-                          </select>
-                          <button
-                            className="edit-button"
-                            style={{
-                              marginLeft:'auto'
-                            }}
-                            onClick={() => {
-                              chatbot.answers[index].message = answersEditText.current.value.trim()
-                              update()
-                              setAnswersEditIndex(null)
-                            }}>저장
-                          </button>
-                        </div>
-                      </div>
-                    )}
-                </div>
-              ))}
-
+              <ReactSortable
+                draggable=".sort-target"
+                list={answers}
+                setList={newAnswers => update({ answers : newAnswers })}
+              >
+                {answers && answers?.map((answer, index) => (
+                  <div key={index}>
+                    <ChatbotAnswer
+                      key={index}
+                      chatbotId={id}
+                      to={answer.to}
+                      message={answer.message}
+                      chatbotList={chatbotList}
+                      onClickDelete={() => deleteAnswer(index)}
+                      onClickSave={(newAnswer) => updateAnswer(index, newAnswer)}
+                    />
+                  </div>
+                ))}
+              </ReactSortable>
               <div
                 className="chatbot-button add-answers"
                 onClick={() => {
-                  chatbot.answers.push({
+                  addAnswer({
                     message: '내용을 입력해주세요.', to: ''
                   })
-                  update()
                 }}>+ 버튼 추가
               </div>
             </div>

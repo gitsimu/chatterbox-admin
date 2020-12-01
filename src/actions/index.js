@@ -40,6 +40,12 @@ export const initMessages = messagesList => ({
   key: messagesList.key,
   value: messagesList.value
 })
+export const pagingMessages = messagesList => ({
+  type: 'PAGING_MESSAGES',
+  key: messagesList.key,
+  value: messagesList.value
+})
+
 export const addMessages = messages => ({
   type: 'ADD_MESSAGES',
   key: messages.key,

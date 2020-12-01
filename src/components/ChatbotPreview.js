@@ -1,34 +1,34 @@
 import React from 'react'
+import ChatMessageInner from './ChatMessageInner'
+import useScrollTo from '../hooks/useScrollTo'
 
 const ChatbotPreview = ({list, ...props}) => {
 
   const [temp, setTemp] = React.useState(true)
   const body = React.useRef(null)
   const [beforeList, setBeforeList] = React.useState([])
-  const [current, setCurrent] = React.useState(list[0])
+  const [current, setCurrent] = React.useState(null)
+
+  const [scrollTo] = useScrollTo(body.current, [beforeList, temp, current])
 
   React.useEffect(() => {
-    forceRefresh()
+    refresh()
 
     setBeforeList([])
     setCurrent(list[0])
   }, [list])
 
   React.useEffect(() => {
+    if(!current) return
+
     setBeforeList([...beforeList, ...current.questions])
   }, [current])
 
-  React.useEffect(() => {
-    if(!body.current) return
-    body.current.scrollTop = body.current.scrollHeight
-  }, [beforeList])
 
-  const forceRefresh = ()=> {
+  const refresh = ()=> {
     setTemp(true)
     setTimeout(()=> setTemp(false))
   }
-
-  if(temp) return <></>
 
   return (
     <div
@@ -36,18 +36,21 @@ const ChatbotPreview = ({list, ...props}) => {
       className="chat-window-body chatbot-preview"
       style={{
         overflow:'auto',
-        height: '100%'
+        height: '100%',
+        ...(temp ? {display: 'none'} : {})
       }}>
 
       {beforeList.map((before, index) => (
 
-        <div key={index}>
+        <div
+          key={index}>
           {before.my
             ? (
               <div className="message myself">
                 <div className="message-inner">{before.message}</div>
               </div>
-            ) : (
+            )
+            : (
               <div
                 className="message opponent">
                 <div className="message-profile">
@@ -70,9 +73,13 @@ const ChatbotPreview = ({list, ...props}) => {
                     )}
                   </div>
                   <div className="message-bottom">
-                    <div className="message-inner">
-                      {before.message}
-                    </div>
+                    <ChatMessageInner
+                      message={before.message}
+                      type={before.type}
+                      onLoadImage={scrollTo}
+                      onClickLink={url=> window.open(url)}
+                      onClickImage={props.showImageViewer}
+                    ></ChatMessageInner>
                   </div>
                 </div>
               </div>
@@ -89,7 +96,7 @@ const ChatbotPreview = ({list, ...props}) => {
             <button
               key={`${current.id}_${index}`}
               onClick={()=> {
-                setBeforeList([...beforeList, {my:true, message: answer.message}])
+                setBeforeList([...beforeList, {my:true, message: answer.message, type: 1}])
                 setCurrent(list.find(t=> t.id === answer.to))
               }}
               className="chatbot-message">{answer.message}

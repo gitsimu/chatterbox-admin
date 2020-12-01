@@ -512,9 +512,9 @@ const Setting = ({ settings, ...props }) => {
   const chatbotListOrigin = React.useRef([])
   const [chatbotList, setChatbotList] = React.useState(initConfig.chatbot.list)
   const [chatbotState, setChatbotState] = React.useState(initConfig.chatbot.state)
-  const [showTemplate, isShowTemplate] = React.useState(false)
+  const [showChatbotTemplate, setShowChatbotTemplate] = React.useState(false)
   const [seletedTemplate, setSeletedTemplate] = React.useState(null)
-  const [showTest, isShowTest] = React.useState(false)
+  const [showChatbotPreview, setShowChatbotPreview] = React.useState(false)
 
   const setChatbotConfig = (chatbotConfig) => {
     if(!chatbotConfig) return
@@ -566,48 +566,24 @@ const Setting = ({ settings, ...props }) => {
 
     isLoading(true)
 
-    database.ref(`/${settings.key}/config/chatbot`)
+    const updateDB = smlog.API({
+      method: 'update_chatbot_config',
+      svid: props.svid,
+      state : chatbotState
+    })
+    const updateFirebase = database.ref(`/${settings.key}/config/chatbot`)
       .update({
+        state: chatbotState,
         list: chatbotList
       })
+
+    Promise.all([updateDB, updateFirebase])
       .then(()=> {
         chatbotListOrigin.current = chatbotList
         resetChatbotList()
         isLoading(false)
       })
   }
-
-  React.useEffect(() => {
-    if (showTemplate) {
-      setSeletedTemplate(null)
-      const close = ({ code }) => code === 'Escape' && isShowTemplate(false)
-      document.addEventListener('keydown', close)
-      return () => {
-        document.removeEventListener('keydown', close)
-      }
-    }
-
-    if(showTest) {
-      const close = ({ code }) => code === 'Escape' && isShowTest(false)
-      document.addEventListener('keydown', close)
-      return () => {
-        document.removeEventListener('keydown', close)
-      }
-    }
-  }, [showTemplate, showTest])
-
-  React.useEffect(() => {
-    smlog.API({
-      method: 'update_chatbot_config',
-      svid: props.svid,
-      state : chatbotState
-    })
-
-    database.ref(`/${settings.key}/config/chatbot`)
-      .update({
-        state: chatbotState,
-      })
-  }, [chatbotState])
 
   React.useEffect(() => {
     const getFirebase = database.ref(`/${settings.key}/config`).once('value')
@@ -1424,11 +1400,11 @@ const Setting = ({ settings, ...props }) => {
               >
                 <div
                   onClick={()=> {
-                    isShowTemplate(true)
+                    setShowChatbotTemplate(true)
                   }}>템플릿</div>
                 <div
                   onClick={()=> {
-                    isShowTest(true)
+                    setShowChatbotPreview(true)
                   }}
                 >미리보기</div>
               </div>
@@ -1439,21 +1415,29 @@ const Setting = ({ settings, ...props }) => {
               {chatbotList.map((chatbot, index) => (
                 <Chatbot
                   key={chatbot.id}
+                  {...chatbot}
+                  isLoading={isLoading}
                   index={index}
                   chatbotList={chatbotList}
-                  chatbot={chatbot}
-                  setChatbot={(newChatbot) => {
-                    chatbotList[index] = newChatbot
-                    setChatbotList([...chatbotList])
+                  updateChatbot={(newChatbot) => {
+                    setChatbotList([
+                      ...chatbotList.slice(0, index),
+                      newChatbot,
+                      ...chatbotList.slice(index + 1)
+                    ])
                   }}
                   deleteChatbot={() => {
-                    const deleted = chatbotList.splice(index, 1)[0]
+                    const deleted = chatbotList[index]
                     chatbotList.forEach(chatbot => {
                       chatbot.answers?.forEach(t => t.to = t.to === deleted.id
                         ? ''
                         : t.to)
                     })
-                    setChatbotList([...chatbotList])
+
+                    setChatbotList([
+                      ...chatbotList.slice(0, index),
+                      ...chatbotList.slice(index + 1)
+                    ])
                   }}
                   nickname={nickname}
                   profileImage={profileImage}
@@ -1477,7 +1461,7 @@ const Setting = ({ settings, ...props }) => {
                         type: 1
                       }
                     ],
-                    action: null
+                    action: ''
                   }
                   setChatbotList([...chatbotList, newChatbot])
                 }}>
@@ -1489,14 +1473,8 @@ const Setting = ({ settings, ...props }) => {
       </div>
 
 
-      {showTemplate && (
+      {showChatbotTemplate && (
         <div
-          onClick={(e)=> {
-            if(e.target.id === 'chatbot-template-modal'){
-              isShowTemplate(false)
-            }
-          }}
-          id="chatbot-template-modal"
           style={{
             position: 'fixed',
             left: '0',
@@ -1509,6 +1487,7 @@ const Setting = ({ settings, ...props }) => {
             backgroundColor: '#0000004d'
           }}>
           <div
+            className="chatbot-template-modal"
             style={{
               zIndex: '10000',
               border: '1px solid #b6b6b6',
@@ -1520,7 +1499,7 @@ const Setting = ({ settings, ...props }) => {
             }}>
             <div
               className="chatbot-close"
-              onClick={() => isShowTemplate(false)}>
+              onClick={() => setShowChatbotTemplate(false)}>
               <i className="chatbot-close-icon"></i>
             </div>
 
@@ -1596,7 +1575,7 @@ const Setting = ({ settings, ...props }) => {
                     <div
                       onClick={() => {
                         addChatbotFromTemplate(seletedTemplate.list)
-                        isShowTemplate(false)
+                        setShowChatbotTemplate(false)
                       }}
                       style={{
                         alignSelf : 'center',
@@ -1614,8 +1593,9 @@ const Setting = ({ settings, ...props }) => {
 
                     {seletedTemplate && (
                       <ChatbotPreview
-                      profileImage={profileImage}
-                      list={seletedTemplate.list}>
+                        showImageViewer={props.showImageViewer}
+                        profileImage={profileImage}
+                        list={seletedTemplate.list}>
                       </ChatbotPreview>
                     )}
                   </div>)}
@@ -1627,15 +1607,10 @@ const Setting = ({ settings, ...props }) => {
         </div>
       )}
 
-      {showTest && (
+      {showChatbotPreview && (
         <div
           onKeyDown={()=> console.log(1)}
-          onClick={(e)=> {
-            if(e.target.id === 'chatbot-test-modal'){
-              isShowTest(false)
-            }
-          }}
-          id="chatbot-test-modal"
+          className="chatbot-test-modal"
           style={{
             position: 'fixed',
             display : 'flex',
@@ -1647,13 +1622,15 @@ const Setting = ({ settings, ...props }) => {
             height: '100%',
             backgroundColor: '#0000004d'
           }}>
-          <div style={{
+          <div
+            className="chatbot-test-modal-contents"
+            style={{
             zIndex : '10000',
             border : '1px solid rgb(182, 182, 182)',
             backgroundColor : 'white',
             position : 'fixed',
             width : '400px',
-            height : '80%',
+            height : '640px',
             borderRadius: '10px',
           }}>
             <div style={{
@@ -1662,10 +1639,11 @@ const Setting = ({ settings, ...props }) => {
             }}>
               <div
                 className="chatbot-close"
-                onClick={() => isShowTest(false)}>
+                onClick={() => setShowChatbotPreview(false)}>
                 <i className="chatbot-close-icon"></i>
               </div>
               <ChatbotPreview
+                showImageViewer={props.showImageViewer}
                 profileImage={profileImage}
                 list={chatbotList}>
               </ChatbotPreview>
@@ -1678,7 +1656,6 @@ const Setting = ({ settings, ...props }) => {
 }
 
 const mapStateToProps = state => ({
-  users: state.users,
   settings: state.settings
 })
 

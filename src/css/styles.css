@@ -787,6 +787,19 @@ div, input, textarea {
 .message .message-body {
   width: 100%;
 }
+.message-link {
+  margin-right: 5px;
+  cursor: pointer;
+  width : 100%
+}
+.message-link > div {
+  border-radius: 7px;
+  text-align: center;
+  border: 1px solid #00000042;
+  background: white;
+  padding: 7px;
+  font-size: 13px;
+}
 
 /* .message.opponent {
 } */
@@ -903,6 +916,9 @@ div, input, textarea {
   /* border: 1px solid rgb(33, 36, 43); */
   min-height: 40px;
   background: #000;
+}
+.message-thumbnail.simple-thumbnail{
+  margin: 0;
 }
 .message-thumbnail img {
   max-width: 250px;
@@ -1777,17 +1793,14 @@ div:hover > .tooltip {
 
 }
 
-.chatbot input,
+/*.chatbot input[type=text],*/
 .chatbot textarea {
   border : none;
   outline: none;
-  font-size: 14px;
-  background: #fff;
+  background: none;
   color: #494949;
-  border-radius: 5px;
   resize: none;
   width: 100%;
-  /*padding: 10px 15px;*/
 }
 
 .chatbot .chat-window {
@@ -1880,6 +1893,7 @@ div:hover > .tooltip {
 .flex-row {
   display: flex;
   flex-flow: row nowrap;
+  align-items: center;
 }
 
 .chatbot-close {
@@ -1936,8 +1950,12 @@ div:hover > .tooltip {
   display: inline-block;
 }
 .chat-window-header input {
-  width: 50%;
+  flex: 1;
+  border : none;
+  outline: none;
+  background: none;
   font-size: 15px;
+  color: #494949;
   height: 29px;
   position: relative;
   top: 1px;
@@ -1999,6 +2017,10 @@ div:hover > .tooltip {
   left: 22px;
   border: 1px solid #f0f3fc;
 }
+.add-questions-list > .add-questions:hover {
+  background-color: #f0f3fc;
+}
+
 .chatbot-button.add-answers {
   color: blue;
   text-align: center;
@@ -2017,6 +2039,10 @@ div:hover > .tooltip {
   position: absolute;
   top: 7px;
   right: 0;
+}
+
+.chatbot .chat-window-body {
+  overflow: hidden !important;
 }
 
 .chatbot-message {
@@ -2050,3 +2076,54 @@ div:hover > .tooltip {
 .chatbot-preview {
   animation: fadein .3s ease-in-out;
 }
+
+.link-edit-item {
+  display: flex;
+  font-size: 14px;
+  align-items: center;
+  margin: 10px 0;
+}
+.link-edit-item input {
+  border : none;
+  outline: none;
+  background: none;
+  width: 100%;
+}
+
+.link-edit-title{
+  text-align: center;
+  display: inline-block;
+  width: 64px;
+}
+.link-edit-content {
+  flex: 3;
+  width: 60%;
+  margin: 0 10px 0 0;
+  border-bottom: 1px solid #0000001a;
+}
+
+.question-image-edit{
+  position: absolute;
+  display: flex;
+  bottom: 0;
+  right: 0;
+  background-color: white;
+  height: 29px;
+  width: 66px;
+  font-size: 16px;
+  align-items: center;
+  justify-content: space-evenly;
+  border-radius: 15px;
+}
+
+.question-image-edit > * {
+  cursor : pointer;
+}
+
+/*.sortable-ghost .sort-target {*/
+/*  !*border: 1px solid #9797ef;*!*/
+/*}*/
+
+/*.sortable-chosen .sort-target {*/
+/*  border: 1px solid #9797ef;*/
+/*}*/

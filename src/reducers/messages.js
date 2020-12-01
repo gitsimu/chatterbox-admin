@@ -6,6 +6,14 @@ const messages = (state = {}, action) => {
           [action.key] : action.value
         }
 
+      case 'PAGING_MESSAGES':
+        return {
+          ...state,
+          [action.key] : [
+            ...action.value,
+            ...(state[action.key] || [])
+          ]
+        }
       case 'ADD_MESSAGES':
         return {
           ...state,
