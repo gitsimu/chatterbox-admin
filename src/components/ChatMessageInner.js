@@ -30,7 +30,7 @@ const ChatMessageInner = ({type, onClickText, onClickLink, onClickImage, onLoadI
     return (
       <ChatMessageSimpleImage
         onClick={onClickImage}
-        nLoadImage={onLoadImage}
+        onLoadImage={onLoadImage}
         message={message}
         timestamp={timestamp}
       />

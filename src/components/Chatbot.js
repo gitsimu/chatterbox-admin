@@ -1,5 +1,4 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
 import useClickOustside from '../hooks/useClickOustside'
 import ChatbotAnswer from './ChatbotAnswer'
 import ChatbotTitleIcon from './ChatbotTitleIcon'
@@ -8,8 +7,6 @@ import useImageUpload from '../hooks/useImageUpload'
 import { ReactSortable } from 'react-sortablejs'
 
 const Chatbot = ({ id, title, answers, questions, action, isLoading, color, index, updateChatbot, deleteChatbot, chatbotList, ...props }) => {
-  const { key } = useSelector(state => state.settings)
-
   const [showAdd, setShowAdd] = React.useState(false)
   const titleRef = React.useRef()
 
@@ -82,7 +79,7 @@ const Chatbot = ({ id, title, answers, questions, action, isLoading, color, inde
     })
   }
 
-  const handleFileInput = React.useCallback((e, file) => {
+  const handleFileInput = (e, file) => {
     const target = file || e.target.files[0]
 
     Promise.resolve()
@@ -96,11 +93,13 @@ const Chatbot = ({ id, title, answers, questions, action, isLoading, color, inde
       })
       .catch(({ message }) => message && alert(message))
       .finally(()=> isLoading(false))
-  }, [key])
+  }
 
   return (
     <div className="chatbot">
-      <div className="chat-window">
+      <div className="chat-window" style={{
+        position: 'static'
+      }}>
         <div className="chat-window-header">
           <div
             className="chatbot-title-wrap">
@@ -123,9 +122,15 @@ const Chatbot = ({ id, title, answers, questions, action, isLoading, color, inde
           )}
         </div>
 
-        <div className="chat-window-body">
+        <div
+          className="chat-window-body"
+          style={{
+            position: 'static'
+          }}
+        >
           <ReactSortable
             handle=".sort-target"
+            filter=".question-image-edit"
             list={questions}
             setList={newQuestions => update({ questions : newQuestions })}
           >
@@ -171,13 +176,12 @@ const Chatbot = ({ id, title, answers, questions, action, isLoading, color, inde
           <div className="message opponent">
             <div className="message-body">
               <div
-                style={{
-                  ...(showAdd ? {background: '1px solid #0000ff66'} : undefined)
-                }}
                 className="chatbot-button add-questions"
                 onClick={() => {
                   setShowAdd(!showAdd)
-                }}>+ 메시지 추가
+                }}
+              >
+                + 메시지 추가
               </div>
 
               <div

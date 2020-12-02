@@ -29,7 +29,7 @@ const ChatbotAnswer = ({chatbotList, onClickSave, ...props }) => {
             justifyContent: 'flex-end'
           }}>
           <div
-            className="flex-row sort-target"
+            className="flex-row"
             onClick={() => {
               setEdit(true)
             }}
@@ -44,7 +44,7 @@ const ChatbotAnswer = ({chatbotList, onClickSave, ...props }) => {
               (chatbotList.findIndex(t => t.id === props.to))}
             </span>
             <div
-              className="chatbot-button">
+              className="chatbot-button sort-target">
               {props.message}
             </div>
           </div>

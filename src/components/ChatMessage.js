@@ -48,6 +48,7 @@ const ChatMessage = ({ settings, ...props }) => {
           )}
 
           <ChatMessageInner
+            onClickLink={url=> window.open(url)}
             onClickImage={showImageViewer}
             onLoadImage={props.onLoadImage}
             timestamp={props.timestamp}

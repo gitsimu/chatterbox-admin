@@ -799,6 +799,7 @@ div, input, textarea {
   background: white;
   padding: 7px;
   font-size: 13px;
+  color: black;
 }
 
 /* .message.opponent {
@@ -1943,6 +1944,7 @@ div:hover > .tooltip {
   display: flex;
   flex-flow: row nowrap;
   align-items: center;
+  position:relative;
 }
 .chatbot-title-wrap {
   font-size: 15px;
@@ -1986,6 +1988,7 @@ div:hover > .tooltip {
   justify-content: center;
 }
 .chatbot-list {
+  min-width: 840px;
   width: 100%;
   display: flex;
   flex-flow: row wrap;
@@ -2016,6 +2019,11 @@ div:hover > .tooltip {
   position: relative;
   left: 22px;
   border: 1px solid #f0f3fc;
+  background-color: white;
+}
+.add-questions-list > .add-questions{
+  border: 1px solid #0000ff26;
+  z-index: 99;
 }
 .add-questions-list > .add-questions:hover {
   background-color: #f0f3fc;
@@ -2120,10 +2128,10 @@ div:hover > .tooltip {
   cursor : pointer;
 }
 
-/*.sortable-ghost .sort-target {*/
-/*  !*border: 1px solid #9797ef;*!*/
-/*}*/
+.sortable-chosen .sort-target {
+  border: 1px solid #9797ef;
+}
 
-/*.sortable-chosen .sort-target {*/
-/*  border: 1px solid #9797ef;*/
-/*}*/
+.chatbot-config > label{
+  margin: 0 10px 0 0;
+}

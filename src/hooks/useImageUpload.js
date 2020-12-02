@@ -5,7 +5,7 @@ import axios from 'axios'
 const useImageUpload = () => {
   const { key } = useSelector(state => state.settings)
 
-  const uploadImage = React.useCallback(target => {
+  const uploadImage = React.useCallback((target, data) => {
 
     const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
     const ALLOW_FILE_EXTENSIONS = [
@@ -30,16 +30,18 @@ const useImageUpload = () => {
 
     formData.append('file', target)
     formData.append('key', key)
+    if(data) {
+      Object.keys(data).forEach(k=> formData.append(k, data[k]))
+    }
 
+    // return axios.post('https://chat.smlog.co.kr/api/upload', formData, config)
     return axios.post('/api/upload', formData, config)
       .then(res=> {
         if (res.data.result !== 'success') {
           throw new Error('이미지 업로드에 실패하였습니다.')
         }
-
         return res
       })
-
   }, [key])
 
 

@@ -8,6 +8,7 @@ import * as script from '../js/script'
 import Mockup from './Mockup'
 import Chatbot from './Chatbot'
 import ChatbotPreview from './ChatbotPreview'
+import useImageUpload from '../hooks/useImageUpload'
 
 const initWorkingDay = {
   isInit: true,
@@ -52,7 +53,6 @@ const initIconConfig = {
     size: 70
   }
 }
-
 const chatbotTemplate = [
   {
     name: '쇼핑몰',
@@ -480,7 +480,6 @@ const chatbotTemplate = [
   }
 ]
 
-
 const Setting = ({ settings, ...props }) => {
   const database = props.database
   const isLoading = props.isLoading
@@ -515,6 +514,8 @@ const Setting = ({ settings, ...props }) => {
   const [showChatbotTemplate, setShowChatbotTemplate] = React.useState(false)
   const [seletedTemplate, setSeletedTemplate] = React.useState(null)
   const [showChatbotPreview, setShowChatbotPreview] = React.useState(false)
+
+  let [uploadImage] = useImageUpload()
 
   const setChatbotConfig = (chatbotConfig) => {
     if(!chatbotConfig) return
@@ -659,45 +660,19 @@ const Setting = ({ settings, ...props }) => {
            })
   }, [database, settings.key])
 
-  /* file upload handler */
-  const handleFileInput = (e) => {
-    const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
-    const ALLOW_FILE_EXTENSIONS = ['jpg', 'jpeg', 'gif', 'bmp', 'png']
-
+  const handleFileInput = e => {
     const target = e.target.files[0]
-    const fileSize = target.size
-    const fileExtension = target.name.split('.').pop().toLowerCase()
 
-    if (MAX_FILE_SIZE < fileSize) {
-      alert('한 번에 업로드 할 수 있는 최대 파일 크기는 5MB 입니다.')
-      return
-    } else if (ALLOW_FILE_EXTENSIONS.indexOf(fileExtension) === -1) {
-      alert('지원하지 않는 파일 형식입니다.')
-      return
-    }
-
-    isLoading(true)
-    const config = { headers: { 'content-type': 'multipart/form-data' } }
-    const formData = new FormData()
-    formData.append('file', target)
-    formData.append('key', settings.key)
-    formData.append('tag', 'profile')
-
-    return axios.post('/api/upload', formData, config)
+    Promise.resolve()
+      .then(() => isLoading(true))
+      .then(() => uploadImage(target, {'tag' : 'profile'}))
       .then(res => {
-        // console.log('upload-success', res)
-        isLoading(false)
-
-        if (res.data.result === 'success') {
-          const path = JSON.stringify(res.data.file)
-          database.ref(`/${settings.key}/config`).update({ profileImage: path })
-          setProfileImage(path)
-        }
+        const path = JSON.stringify(res.data.file)
+        database.ref(`/${settings.key}/config`).update({ profileImage: path })
+        setProfileImage(path)
       })
-      .catch(err => {
-        // console.log('upload-failure', err)
-        isLoading(false)
-      })
+      .catch(({ message }) => message && alert(message))
+      .finally(() => isLoading(false))
   }
 
   /* file remove handler */
@@ -1345,7 +1320,9 @@ const Setting = ({ settings, ...props }) => {
                 </label>
 
                 {chatbotState !== '0' && (
-                  <div style={{
+                  <div
+                    className="chatbot-config"
+                    style={{
                     margin: '13px 0 0 25px'
                   }}>
                     <label>

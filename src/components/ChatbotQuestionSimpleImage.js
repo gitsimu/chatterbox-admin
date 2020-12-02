@@ -56,9 +56,6 @@ const ChatbotQuestionSimpleImage = ({isLoading, ...props}) => {
                 onLoad={props.onLoadImage}
                 alt="message-thumbnail"/>
               <div className="question-image-edit">
-                <i
-                  onClick={props.onClickDelete}
-                  className='icon-trash'/>
                 <label style={{
                   display: 'flex'
                 }}>
@@ -68,6 +65,9 @@ const ChatbotQuestionSimpleImage = ({isLoading, ...props}) => {
                          onClick={e => (e.target.value = '')}
                          onChange={e => handleFileInput(e)}/>
                 </label>
+                <i
+                  onClick={props.onClickDelete}
+                  className='icon-trash'/>
               </div>
             </div>
           )}
