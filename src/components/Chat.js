@@ -1,13 +1,15 @@
 import React from 'react'
 import ChatMessage from './ChatMessage'
 import EmojiContainer from './EmojiContainer'
-import * as firebase from "firebase/app"
+import * as firebase from 'firebase/app'
 import { connect } from 'react-redux'
-import { addMessages, initMessages, clearMessages, deleteMessages, selectedUser, pagingMessages } from '../actions'
+import { addMessages, clearMessages, deleteMessages, initMessages, pagingMessages, selectedUser } from '../actions'
 import useUserInput from '../hooks/useUserInput'
 import useScrollTo from '../hooks/useScrollTo'
 import useMessageGetter from '../hooks/useMessageGetter'
 import useImageUpload from '../hooks/useImageUpload'
+import useImageFile from '../hooks/useImageFile'
+import PreviewContainer from './PreviewContainer'
 
 const PAGE_SIZE = 50
 const Chat = ({ settings, messages, addMessages, pagingMessages, initMessages, deleteMessages, clearMessages, selectedUser, ...props }) => {
@@ -20,13 +22,13 @@ const Chat = ({ settings, messages, addMessages, pagingMessages, initMessages, d
   const [optionDialog, showOptionDialog] = React.useState(false)
   const [infoDialog, showInfoDialog] = React.useState(false)
   const [emojiContainer, showEmojiContainer] = React.useState(false)
-  const [selectedEmoji, selectEmoji] = React.useState(null)
   const [loading, isLoading] = React.useState(false)
   const [fileDropLayer, showFileDropLayer] = React.useState(false)
   const body = React.useRef(null)
   const [hasScrollToBottom, setHasScrollToBottom] = React.useState(false)
   const [scrollTo, setScrollToBottom, setScrollToFix] = useScrollTo(body.current, [messages, userid])
   const [getMessageByDB, onAddedMessage, hasBeforeMessage, listenerOff] = useMessageGetter(database, userid)
+  const [imageSrc, imageFile, setImageFile] = useImageFile()
   const input = useUserInput(userid)
   const [uploadImage] = useImageUpload()
   let form
@@ -60,7 +62,7 @@ const Chat = ({ settings, messages, addMessages, pagingMessages, initMessages, d
 
     const target = file || e.target.files[0]
 
-    Promise.resolve()
+    return Promise.resolve()
       .then(()=> isLoading(true))
       .then(()=> uploadImage(target))
       .then(res => {
@@ -94,11 +96,10 @@ const Chat = ({ settings, messages, addMessages, pagingMessages, initMessages, d
     })
   }, [userid])
 
-  React.useEffect(() => {
-    if (input.current && selectedEmoji) {
-      input.current.value = input.current.value + selectedEmoji.emoji
-    }
-  }, [input, selectedEmoji])
+  const handleEmojiInput = React.useCallback((emoji)=>{
+    input.current.value += emoji.emoji
+    input.current.focus()
+  }, [input])
 
   React.useEffect(() => {
     input.current.focus()
@@ -106,6 +107,7 @@ const Chat = ({ settings, messages, addMessages, pagingMessages, initMessages, d
     showOptionDialog(false)
     showEmojiContainer(false)
     setHasScrollToBottom(false)
+    setImageFile(null)
     setScrollToBottom()
 
     if (!messages || messages.length === 0) {
@@ -247,14 +249,24 @@ const Chat = ({ settings, messages, addMessages, pagingMessages, initMessages, d
         <EmojiContainer
             getState={emojiContainer}
             setState={showEmojiContainer}
-            selectEmoji={selectEmoji}/>
-        <form ref={node => form = node} onSubmit={e => {
-          e.preventDefault()
-          if (!input.current.value.trim()) return
+            selectEmoji={handleEmojiInput}/>
+        <PreviewContainer
+          image={imageSrc}/>
+        <form
+          ref={node => form = node}
+          onSubmit={e => {
+            e.preventDefault()
 
-          sendMessage(key, userid, input.current.value, 1, database)
-          input.current.value = ''
-        }}>
+            if (imageFile) {
+              handleFileInput(null, imageFile)
+                .then(()=> setImageFile(null))
+            }
+
+            if (input.current.value.trim()) {
+              sendMessage(key, userid, input.current.value, 1, database)
+              input.current.value = ''
+            }
+          }}>
           <div className='message-addon'>
             <label>
               <i className='icon-paper-clip'></i>
@@ -271,6 +283,23 @@ const Chat = ({ settings, messages, addMessages, pagingMessages, initMessages, d
             ref={input}
             className='message-input'
             placeholder='메세지를 입력해주세요.'
+            onBlur={() => setImageFile(null)}
+            onPaste={(e) => {
+              let item = e.clipboardData.items[0]
+              if (!item || !item.type || item.type.indexOf('image') !== 0) return
+
+              const imageFile = item.getAsFile()
+
+              console.log(imageFile)
+              // if (checkFile(imageFile)) {
+              setImageFile(imageFile)
+              // }
+            }}
+            onKeyDown={(e) => {
+              if (e.key === 'Escape' && imageFile) {
+                setImageFile(null)
+              }
+            }}
             onKeyPress={(e) => {
               if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault()

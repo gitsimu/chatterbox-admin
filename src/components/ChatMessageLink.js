@@ -5,14 +5,15 @@ const ChatMessageLink = ({message, ...props}) => {
 
   return (
     <div
-      className="message-inner message-link sort-target"
+      className="message-inner sort-target message-link"
       style={{
-        cursor : 'pointer'
+        cursor : 'pointer',
       }}
       onClick={()=> { props.onClick && props.onClick(url) }}>
-      <div>
+      <span className="message-link-text">
         {text}
-      </div>
+        <i className="icon-arrow-right-circle"/>
+      </span>
     </div>
   );
 }

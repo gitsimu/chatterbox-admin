@@ -35,8 +35,6 @@ const ChatbotPreview = ({list, ...props}) => {
       ref={body}
       className="chat-window-body chatbot-preview"
       style={{
-        overflow:'auto',
-        height: '100%',
         ...(temp ? {display: 'none'} : {})
       }}>
 
@@ -89,8 +87,8 @@ const ChatbotPreview = ({list, ...props}) => {
 
       {current && (
         <div style={{
+          marginTop: '15px',
           textAlign: 'right',
-          margin: '15px'
         }}>
           {current.answers?.map((answer,index)=> (
             <button
@@ -99,7 +97,7 @@ const ChatbotPreview = ({list, ...props}) => {
                 setBeforeList([...beforeList, {my:true, message: answer.message, type: 1}])
                 setCurrent(list.find(t=> t.id === answer.to))
               }}
-              className="chatbot-message">{answer.message}
+              className="chatbot-button">{answer.message}
             </button>
           ))}
         </div>

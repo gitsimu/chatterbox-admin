@@ -33,11 +33,10 @@ const ChatbotQuestionSimpleImage = ({isLoading, ...props}) => {
   return (
     <>
       {!edit && (
-        <div onMouseEnter={()=> setEdit(true)}>
-          <ChatMessageSimpleImage
-            message={props.message}
-          />
-        </div>
+        <ChatMessageSimpleImage
+          onMouseEnter={()=> setEdit(true)}
+          message={props.message}
+        />
       )}
 
       {edit && (
@@ -47,7 +46,6 @@ const ChatbotQuestionSimpleImage = ({isLoading, ...props}) => {
           {(extension && images.indexOf(extension) > -1) && (
             <div
               style={{
-                backgroundColor:'white',
                 cursor: 'pointer'
               }}
               className="message-thumbnail simple-thumbnail">

@@ -56,7 +56,7 @@ const initIconConfig = {
 const chatbotTemplate = [
   {
     name: '쇼핑몰',
-    description: '쇼핑몰입니다 쇼핑몰입니다 쇼핑몰입니다 쇼핑몰입니다 쇼핑몰입니다 쇼핑몰입니다 쇼핑몰입니다 쇼핑몰입니다 쇼핑몰입니다 쇼핑몰입니다 쇼핑몰입니다 쇼핑몰입니다 ',
+    description: '쇼핑몰을 운영중이신 경우',
     list: [
       {
         title: '쇼핑몰1',
@@ -130,7 +130,7 @@ const chatbotTemplate = [
   },
   {
     name: '프렌차이즈',
-    description: '프렌차이즈 입니다 프렌차이즈 입니다 프렌차이즈 입니다 ',
+    description: '프렌차이즈을 운영중이신 경우',
     list: [
       {
         title: '프렌차이즈1',
@@ -194,7 +194,7 @@ const chatbotTemplate = [
   },
   {
     name: '스타트업',
-    description: '스타트업입니다 스타트업입니다 스타트업입니다 스타트업입니다 스타트업입니다 스타트업입니다 스타트업입니다 스타트업입니다 스타트업입니다 스타트업입니다 스타트업입니다 스타트업입니다 ',
+    description: '스타트업을 운영중이신 경우',
     list: [
       {
         title: '스타트업1',
@@ -268,7 +268,7 @@ const chatbotTemplate = [
   },
   {
     name: '쇼핑몰',
-    description: '쇼핑몰입니다 쇼핑몰입니다 쇼핑몰입니다 쇼핑몰입니다 쇼핑몰입니다 쇼핑몰입니다 쇼핑몰입니다 쇼핑몰입니다 쇼핑몰입니다 쇼핑몰입니다 쇼핑몰입니다 쇼핑몰입니다 ',
+    description: '쇼핑몰을 운영중이신 경우',
     list: [
       {
         title: '쇼핑몰1',
@@ -342,7 +342,7 @@ const chatbotTemplate = [
   },
   {
     name: '프렌차이즈',
-    description: '프렌차이즈 입니다 프렌차이즈 입니다 프렌차이즈 입니다 ',
+    description: '프렌을 운영중이신 경우',
     list: [
       {
         title: '프렌차이즈1',
@@ -406,7 +406,7 @@ const chatbotTemplate = [
   },
   {
     name: '스타트업',
-    description: '스타트업입니다 스타트업입니다 스타트업입니다 스타트업입니다 스타트업입니다 스타트업입니다 스타트업입니다 스타트업입니다 스타트업입니다 스타트업입니다 스타트업입니다 스타트업입니다 ',
+    description: '스타트업을 운영중이신 경우',
     list: [
       {
         title: '스타트업1',
@@ -559,7 +559,7 @@ const Setting = ({ settings, ...props }) => {
     }
     const hasEmptyLink = chatbotList.some(chatbot=> chatbot.answers?.some(answer=> !answer.to) || false)
     if(hasEmptyLink){
-      alert('연결되지 않은 링크가 있습니다.')
+      alert('챗봇에 연결되지 않은 버튼이 있습니다.')
       return
     }
 
@@ -1451,169 +1451,65 @@ const Setting = ({ settings, ...props }) => {
 
 
       {showChatbotTemplate && (
-        <div
-          style={{
-            position: 'fixed',
-            left: '0',
-            top: '0',
-            width: '100%',
-            height: '100%',
-            display : 'flex',
-            alignItems : 'center',
-            justifyContent : 'center',
-            backgroundColor: '#0000004d'
-          }}>
-          <div
-            className="chatbot-template-modal"
-            style={{
-              zIndex: '10000',
-              border: '1px solid #b6b6b6',
-              backgroundColor: 'white',
-              position: 'fixed',
-              width : '900px',
-              height : '65%',
-              borderRadius: '10px'
-            }}>
+        <div className="chatbot-template-modal-layer">
+          <div className="chatbot-template-modal">
             <div
               className="chatbot-close"
               onClick={() => setShowChatbotTemplate(false)}>
               <i className="chatbot-close-icon"></i>
             </div>
-
-            <div style={{
-              display: 'flex',
-              height: '100%'
-            }}>
-              <div style={{
-                flex : '1',
-                borderRight : '1px solid rgba(0, 0, 0, 0.12)',
-                height : '100%',
-                display : 'flex',
-                flexFlow : 'column',
-              }}>
-                <div style={{
-                  textAlign : 'center',
-                  margin : '16px',
-                }}>
-                  템플릿
-                </div>
-                <div style={{overflow:'auto'}}>
-                  {chatbotTemplate.map((template, index) => (
-                    <div
-                      className="chatbot-template"
-                      key={index}
-                      style={{
-                        ...(seletedTemplate === template
-                          ? { backgroundColor: '#0075ff0d' }
-                          : undefined),
-                        margin: '15px',
-                        textAlign: 'center',
-                        cursor: 'pointer',
-                        transitionProperty: 'background',
-                        transitionDuration: '0.2s'
-                      }}
-                      onClick={() => {
-                        setSeletedTemplate(template)
-                      }}>
-                      <div
-                        className="chatbot-name"
-                        style={{
-                          textAlign: 'left',
-                          padding: '5px 0 0 20px',
-                          fontSize: '20px'
-                        }}>
-                        {template.name}
-                      </div>
-                      <div
-                        className="chatbot-description"
-                        style={{
-                          color: '#000000ba',
-                          fontSize: '13px',
-                          textAlign: 'left',
-                          padding: '10px'
-                        }}>
-                        {template.description}
-                      </div>
+            <div className="template-modal-header">
+              <p>챗봇 템플릿</p>
+              <span>챗봇이 처음이라면? 템플릿으로 시작해보세요.</span>
+            </div>
+            <div className="template-modal-body">
+              <div className="template-body-left">
+                {chatbotTemplate.map((template, index) => (
+                  <div
+                    className={`chatbot-template ${template === seletedTemplate ? 'active' : ''}`}
+                    key={index}
+                    onClick={() => {
+                      setSeletedTemplate(template)
+                    }}
+                  >
+                    <div className="chatbot-template-inner">
+                      <div className="chatbot-name">{template.name}</div>
+                      <div className="chatbot-description">{template.description}</div>
                     </div>
-                  ))}
-                </div>
+                    <i className="icon-arrow-right"/>
+                  </div>
+                ))}
               </div>
-
-              <div style={{
-                width:'420px'
-                // flex: '1'
-              }}>
-                {seletedTemplate && (<div style={{
-                    display: 'flex',
-                    flexFlow: 'column',
-                    height: '100%',
-                    width: '100%',
-                  }}>
-                    <div
-                      onClick={() => {
-                        addChatbotFromTemplate(seletedTemplate.list)
-                        setShowChatbotTemplate(false)
-                      }}
-                      style={{
-                        alignSelf : 'center',
-                        width : '122px',
-                        textAlign : 'center',
-                        borderRadius : '10px',
-                        backgroundColor : '#0080F7',
-                        color : 'white',
-                        fontSize : '16px',
-                        margin : '18px',
-                        cursor: 'pointer',
-                      }}>
-                      적용하기
-                    </div>
-
-                    {seletedTemplate && (
-                      <ChatbotPreview
-                        showImageViewer={props.showImageViewer}
-                        profileImage={profileImage}
-                        list={seletedTemplate.list}>
-                      </ChatbotPreview>
-                    )}
-                  </div>)}
+              <div className="template-body-right">
+                <div className="template-preview">
+                  {seletedTemplate && (
+                    <ChatbotPreview
+                      showImageViewer={props.showImageViewer}
+                      profileImage={profileImage}
+                      list={seletedTemplate.list}>
+                    </ChatbotPreview>
+                  )}
+                </div>
+                <div
+                  className="template-btn-area"
+                  onClick={() => {
+                    addChatbotFromTemplate(seletedTemplate.list)
+                    setShowChatbotTemplate(false)
+                  }}
+                >
+                  <i className="icon-magic-wand"/>
+                  선택한 템플릿으로 챗봇 만들기
+                </div>
               </div>
             </div>
-
-
           </div>
         </div>
       )}
 
       {showChatbotPreview && (
-        <div
-          onKeyDown={()=> console.log(1)}
-          className="chatbot-test-modal"
-          style={{
-            position: 'fixed',
-            display : 'flex',
-            alignItems : 'center',
-            justifyContent : 'center',
-            left: '0',
-            top: '0',
-            width: '100%',
-            height: '100%',
-            backgroundColor: '#0000004d'
-          }}>
-          <div
-            className="chatbot-test-modal-contents"
-            style={{
-            zIndex : '10000',
-            border : '1px solid rgb(182, 182, 182)',
-            backgroundColor : 'white',
-            position : 'fixed',
-            width : '400px',
-            height : '640px',
-            borderRadius: '10px',
-          }}>
-            <div style={{
-              padding: '10px 0 10px 10px',
-              height: '100%'
-            }}>
+        <div className="chatbot-test-modal">
+          <div className="chatbot-test-modal-contents">
+            <div>
               <div
                 className="chatbot-close"
                 onClick={() => setShowChatbotPreview(false)}>
