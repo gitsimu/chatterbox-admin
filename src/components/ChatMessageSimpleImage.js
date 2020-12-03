@@ -13,7 +13,6 @@ const ChatMessageSimpleImage = ({onLoadImage, onMouseEnter, message, ...props}) 
       {(extension && images.indexOf(extension) > -1) && (
         <div
           className="message-thumbnail simple-thumbnail"
-          style={{width: '100%'}}
           onClick={() => {
             props.onClick && props.onClick(location)
           }}

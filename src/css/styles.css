@@ -903,10 +903,7 @@ div, input, textarea {
   min-height: 40px;
   background: #000;
 }
-.message-thumbnail.simple-thumbnail{
-  width: 100%;
-  margin: 0;
-}
+
 .message-thumbnail img {
   max-width: 250px;
 }
@@ -2090,19 +2087,18 @@ div:hover > .tooltip {
   justify-content: space-evenly;
   border-radius: 15px;
 }
-
 .question-image-edit > * {
   cursor : pointer;
 }
-
-.sortable-chosen .sort-target {
+.chatbot .opponent .sort-target {
+  border: 1px solid transparent;
+}
+.chatbot .sortable-chosen .sort-target {
   border: 1px solid #9797ef;
 }
-
 .chatbot-config > label{
   margin: 0 10px 0 0;
 }
-
 .preview-container {
   position: absolute;
   max-width: 280px;
@@ -2143,10 +2139,14 @@ div:hover > .tooltip {
   user-select: none;
 }
 
-.chatbot .opponent .sort-target {
-  width: 70%;
-}
 
+.message-thumbnail.simple-thumbnail{
+  width: 250px;
+  margin: 0;
+}
+.chatbot .message-thumbnail.simple-thumbnail {
+  width: 245px;
+}
 .chatbot .simple-thumbnail img {
   max-width: 245px
 }
