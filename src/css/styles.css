@@ -2260,12 +2260,14 @@ div:hover > .tooltip {
   color: blue;
 }
 .chatbot-name {
-  color: #0000008c;
+  color: #00000099;
   font-size: 17px;
   font-weight: bold;
 }
 .chatbot-description {
   font-size: 14px;
+  color: #00000080;
+  font-weight: bold;
 }
 .template-body-right {
   display: flex;
@@ -2284,6 +2286,7 @@ div:hover > .tooltip {
   color: white;
   padding: 10px 30px;
   cursor: pointer;
+  text-align: center;
 }
 .template-btn-area i {
   margin-right: 10px;
