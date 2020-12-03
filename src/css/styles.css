@@ -2157,8 +2157,8 @@ div:hover > .tooltip {
 }
 
 .message-link-text {
-  margin: 9px 10px;
-  font-size: 15px;
+  margin: 5px 0;
+  font-size: 14px;
   display: flex;
   align-items: center;
   justify-content: space-between;
