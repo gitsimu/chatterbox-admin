@@ -1,9 +1,7 @@
 import React from 'react'
 
-const useClickOustside = (action, selector, flag) => {
-  React.useEffect(() => {
-    if(!flag) return
-
+const useEventListener = () => {
+  const onClickOutside = (selector, action) => {
     let clickInside = false
 
     const onMouseDown = e => {
@@ -31,8 +29,23 @@ const useClickOustside = (action, selector, flag) => {
       document.removeEventListener('mouseup', onMouseUp)
       document.removeEventListener('click', onClick)
     }
-  }, [flag])
+  }
+
+  const onKeyEscape = (action) => {
+    const onKeyEscape = (event) => {
+      if (event.code !== 'Escape') return
+      action()
+    }
+
+    document.addEventListener('keydown', onKeyEscape)
+
+    return () => {
+      document.removeEventListener('keydown', onKeyEscape)
+    }
+  }
+
+  return { onClickOutside, onKeyEscape }
 }
 
 
-export default useClickOustside
+export default useEventListener

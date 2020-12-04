@@ -1,6 +1,5 @@
 import React from 'react';
-import useEscapeKey from '../hooks/useEscapeKey'
-import useClickOustside from '../hooks/useClickOustside'
+import useEventListener from '../hooks/useEventListener'
 import ChatMessageLink from './ChatMessageLink'
 
 const ChatbotQuestionLink = ({...props}) => {
@@ -8,9 +7,19 @@ const ChatbotQuestionLink = ({...props}) => {
   const [edit, setEdit] = React.useState(false)
   const messageRef = React.useRef()
   const linkRef = React.useRef()
+  const { onClickOutside, onKeyEscape } = useEventListener()
 
-  useEscapeKey(() => setEdit(false), edit)
-  useClickOustside(() => setEdit(false),'.message-edit-link', edit)
+  React.useEffect(() => {
+    if(!edit) return
+
+    const offKey = onKeyEscape(()=> setEdit(false))
+    const offClick = onClickOutside('.message-edit-link', ()=> setEdit(false))
+
+    return ()=> {
+      offClick()
+      offKey()
+    }
+  }, [edit])
 
   const onClickSave = ()=> {
     const message = JSON.stringify({

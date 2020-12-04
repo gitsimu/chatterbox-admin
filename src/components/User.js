@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { selectedUser, addMessages, changeUserState } from '../actions'
 import * as script from '../js/script.js'
 
-const User = ({ settings, addMessages, selectedUser, changeUserState, ...props }) => {
+const User = ({ selectedUserKey, addMessages, selectedUser, changeUserState, ...props }) => {
   const userInfo = props.data.value
   const lastMessage = (userInfo && userInfo.lastMessage) ? userInfo.lastMessage : ''
   const dateTime = (userInfo && userInfo.timestamp) ? userInfo.timestamp : null
@@ -13,19 +13,19 @@ const User = ({ settings, addMessages, selectedUser, changeUserState, ...props }
   const state = props.data.state
   const mode = props.mode
 
-  const userClassName = () => {
+  const userClassName = (() => {
     let cn = ''
     if (mode === 1) {
       cn = state
-    } else if (settings.selectedUser.key === props.data.key) {
+    } else if (selectedUserKey === props.data.key) {
       cn = 'active'
     }
     return `chat-user ${cn}`
-  }
+  })()
   
   return (
     <div
-      className={userClassName()}
+      className={userClassName}
       onClick={() => {
         if (mode === 1) {
           const value = state === '' ? 'selected' : ''
@@ -47,7 +47,7 @@ const User = ({ settings, addMessages, selectedUser, changeUserState, ...props }
           <div className="chat-user-message">{ lastMessage }</div>
           { dateTime && (
             <>
-            <div className="chat-user-datetime">{ script.getNiceTime(dateTime, new Date(), 1, true) }</div>
+              <div className="chat-user-datetime">{ script.getNiceTime(dateTime, new Date(), 1, true) }</div>
             </>
           )}
         </div>
@@ -57,7 +57,7 @@ const User = ({ settings, addMessages, selectedUser, changeUserState, ...props }
 }
 
 const mapStateToProps = state => ({
-  settings: state.settings
+  selectedUserKey: state.settings.selectedUser.key
 })
 const mapDispatchToProps = dispatch => ({
   addMessages: m => dispatch(addMessages(m)),

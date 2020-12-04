@@ -16,7 +16,7 @@ import Setting from '../src/components/Setting'
 
 import * as script from '../src/js/script.js'
 import * as smlog from '../src/js/smlog'
-import useEscapeKey from '../src/hooks/useEscapeKey'
+import useEventListener from '../src/hooks/useEventListener'
 
 function Main({ settings, initUsers, clearUsers, selectedUser, signIn, signOut, ...props }) {
   const [screenState, setScreenState] = React.useState(0)
@@ -24,13 +24,20 @@ function Main({ settings, initUsers, clearUsers, selectedUser, signIn, signOut, 
   const [imageViewer, showImageViewer] = React.useState(null)
   const [loading, isLoading] = React.useState(false)
   const [svid, setSvid] = React.useState(null)
+  const { onKeyEscape } = useEventListener()
 
   if (!firebase.apps.length) {
     firebase.initializeApp(FirebaseConfig)
   }
   const database = firebase.database()
 
-  useEscapeKey(()=> showImageViewer(null), imageViewer)
+  React.useEffect(() => {
+    if(!imageViewer) return
+    const off = onKeyEscape(()=> showImageViewer(null))
+    return ()=> {
+      off()
+    }
+  }, [imageViewer])
 
   React.useEffect(() => {
     let chat
@@ -143,8 +150,6 @@ function Main({ settings, initUsers, clearUsers, selectedUser, signIn, signOut, 
         recent && recent.off()        
       })
   }, [settings.key])
-
-
 
   return (
     <div className="App chatterbox-theme-light">

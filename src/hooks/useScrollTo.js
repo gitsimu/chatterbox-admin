@@ -7,10 +7,11 @@ const useScrollTo = (element, deps) => {
     scrollTo()
   }, deps)
 
-  const scrollTo = ()=> {
+  const scrollTo = React.useCallback(()=> {
     if(!element) return
     element.scrollTop = element.scrollHeight - prevHeight.current
-  }
+  }, [element])
+
   const setScrollBottom = ()=> {
     prevHeight.current = 0
   }

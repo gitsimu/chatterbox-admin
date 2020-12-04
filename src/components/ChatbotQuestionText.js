@@ -1,14 +1,23 @@
 import React from 'react'
-import useEscapeKey from '../hooks/useEscapeKey'
-import useClickOustside from '../hooks/useClickOustside'
+import useEventListener from '../hooks/useEventListener'
 import ChatMessageText from './ChatMessageText'
 
 const ChatbotQuestionText = ({...props}) => {
   const [edit, setEdit] = React.useState(false)
   const messageRef = React.useRef()
+  const { onClickOutside, onKeyEscape } = useEventListener()
 
-  useEscapeKey(()=> setEdit(false), edit)
-  useClickOustside(()=> setEdit(false), '.message-edit', edit)
+  React.useEffect(() => {
+    if(!edit) return
+
+    const offKey = onKeyEscape(()=> setEdit(false))
+    const offClick = onClickOutside('.message-edit', ()=> setEdit(false))
+
+    return ()=> {
+      offClick()
+      offKey()
+    }
+  }, [edit])
 
   const onClickSave = ()=> {
     const message = messageRef.current.value
@@ -24,6 +33,7 @@ const ChatbotQuestionText = ({...props}) => {
 
   React.useEffect(() => {
     if(!edit) return
+
     messageRef.current.value = props.message
     messageRef.current.style.height = (messageRef.current.scrollHeight + 12) + 'px'
     messageRef.current.focus()

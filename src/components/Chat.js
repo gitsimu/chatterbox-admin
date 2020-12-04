@@ -118,7 +118,6 @@ const Chat = ({ settings, messages, addMessages, pagingMessages, initMessages, d
     }
   }, [userid, target])
 
-
   React.useEffect(() => {
     const handleDragOver = (e) => {
       e.preventDefault()
@@ -227,14 +226,15 @@ const Chat = ({ settings, messages, addMessages, pagingMessages, initMessages, d
         )}
         {messages && messages.map((m, i) => {
           return <ChatMessage
+            key={m.id}
             opponent={userid}
             target={target}
-            key={m.id}
             onLoadImage={scrollTo}
             prev={messages[i - 1]}
             next={messages[i + 1]}
+            showImageViewer={props.showImageViewer}
             {...m}
-            {...props}/>
+          />
           })
         }
         <div id='file-drop-layer' className={ fileDropLayer ? 'file-drop-layer active' : 'file-drop-layer' }>
@@ -288,12 +288,7 @@ const Chat = ({ settings, messages, addMessages, pagingMessages, initMessages, d
               let item = e.clipboardData.items[0]
               if (!item || !item.type || item.type.indexOf('image') !== 0) return
 
-              const imageFile = item.getAsFile()
-
-              console.log(imageFile)
-              // if (checkFile(imageFile)) {
-              setImageFile(imageFile)
-              // }
+              setImageFile(item.getAsFile())
             }}
             onKeyDown={(e) => {
               if (e.key === 'Escape' && imageFile) {

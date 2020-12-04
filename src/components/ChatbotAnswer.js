@@ -1,15 +1,24 @@
 import React from 'react'
-import useEscapeKey from '../hooks/useEscapeKey'
-import useClickOustside from '../hooks/useClickOustside'
+import useEventListener from '../hooks/useEventListener'
 import ChatbotTitleIcon from './ChatbotTitleIcon'
 
-const ChatbotAnswer = ({chatbotList, onClickSave, ...props }) => {
+const ChatbotAnswer = ({chatbotList, onClickDelete, onClickSave, index, ...props }) => {
   const messageRef = React.useRef()
   const [to, setTo] = React.useState(props.to)
   const [edit, setEdit] = React.useState(false)
+  const { onClickOutside, onKeyEscape } = useEventListener()
 
-  useEscapeKey(() => setEdit(false), edit)
-  useClickOustside(() => setEdit(false), '.message-edit', edit)
+  React.useEffect(() => {
+    if(!edit) return
+
+    const offClick = onClickOutside('.message-edit', ()=> setEdit(false))
+    const offEsc = onKeyEscape(()=> setEdit(false))
+
+    return () => {
+      offClick()
+      offEsc()
+    }
+  }, [edit])
 
   React.useEffect(() => {
     if(!edit) return
@@ -49,7 +58,7 @@ const ChatbotAnswer = ({chatbotList, onClickSave, ...props }) => {
             </div>
           </div>
           <i
-            onClick={props.onClickDelete}
+            onClick={() => onClickDelete(index)}
             className="close-icon"/>
         </div>
       )}
@@ -86,7 +95,7 @@ const ChatbotAnswer = ({chatbotList, onClickSave, ...props }) => {
                   message: messageRef.current.value,
                   to: to
                 }
-                onClickSave(newAnswer)
+                onClickSave(index, newAnswer)
                 setEdit(false)
               }}>저장
             </button>
@@ -97,4 +106,4 @@ const ChatbotAnswer = ({chatbotList, onClickSave, ...props }) => {
   )
 }
 
-export default ChatbotAnswer
+export default React.memo(ChatbotAnswer)

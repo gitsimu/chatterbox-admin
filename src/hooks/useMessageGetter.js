@@ -3,8 +3,7 @@ import { useSelector } from 'react-redux'
 
 const useMessageGetter = (database, userId) => {
 
-  const settings = useSelector(state => state.settings)
-  const key = settings.key
+  const key = useSelector(state => state.settings.key)
 
   const [hasBeforeMessage, setHasBeforeMessage] = React.useState(false)
 

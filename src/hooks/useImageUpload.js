@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 import axios from 'axios'
 
 const useImageUpload = () => {
-  const { key } = useSelector(state => state.settings)
+  const key = useSelector(state => state.settings.key)
 
   const uploadImage = React.useCallback((target, data) => {
 

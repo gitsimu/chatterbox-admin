@@ -6,16 +6,16 @@ import PrettoSlider from './PrettoSlider'
 import * as smlog from '../js/smlog'
 import * as script from '../js/script'
 import Mockup from './Mockup'
-import Chatbot from './Chatbot'
 import ChatbotPreview from './ChatbotPreview'
 import useImageUpload from '../hooks/useImageUpload'
+import SettingChatbot from './SettingChatbot'
 
 const initWorkingDay = {
   isInit: true,
   use: false,
   week: ['mo', 'tu', 'we', 'th', 'fr', 'sa', 'su'],
   allday: true,
-  startWork: '0000', 
+  startWork: '0000',
   endWork: '0000',
   breaktime: false,
   startBreak: '0000',
@@ -55,435 +55,540 @@ const initIconConfig = {
 }
 const chatbotTemplate = [
   {
-    name: '쇼핑몰',
-    description: '쇼핑몰을 운영중이신 경우',
+    name: '템플릿1',
+    description: '챗봇으로 업무량 줄이기',
     list: [
       {
-        title: '쇼핑몰1',
-        id: '1',
-        questions: [
+        "action": "",
+        "answers": [
           {
-            message: '안녕하세요 쇼핑몰 챗봇입니다.',
-            type: 1
-          }, {
-            message: '궁금한 사항을 선택해주세요.',
-            type: 1
+            "chosen": false,
+            "message": "요금 안내",
+            "to": "1606364736968"
+          },
+          {
+            "chosen": false,
+            "message": "서비스 안내",
+            "to": "1606364811544"
+          },
+          {
+            "message": "배송 안내",
+            "to": "1606364859716"
+          },
+          {
+            "chosen": false,
+            "message": "이벤트 안내",
+            "to": "1606364887556"
+          },
+          {
+            "message": "상담원 연결",
+            "to": "CHAT"
           }
         ],
-        answers: [
+        "id": "START",
+        "questions": [
           {
-            message: '2번으로',
-            to: '2'
-          },
-          {
-            message: '3번으로',
-            to: '3'
-          }
-        ]
-      },
-      {
-        title: '쇼핑몰2',
-        id: '2',
-        questions: [
-          {
-            message: '안녕하세요 챗봇입니다.',
-            type: 1
-          }, {
-            message: '궁금한 사항을 선택해주세요.',
-            type: 1
-          }],
-        answers: [
-          {
-            message: '1번으로',
-            to: '1'
-          },
-          {
-            message: '3번으로',
-            to: '3'
-          }
-        ]
-      },
-      {
-        title: '쇼핑몰3',
-        id: '3',
-        questions: [
-          {
-            message: '안녕하세요 챗봇입니다.',
-            type: 1
-          }, {
-            message: '궁금한 사항을 선택해주세요.',
-            type: 1
+            "message": "안녕하세요.\n[회사명] 챗봇입니다 :)\n궁금한 사항을 선택해주세요.\n\n상담원 연결 가능 시간\n평일 00시 ~ 00시\n점심 00시 ~ 00시",
+            "type": 1,
+            "_id": 0
           }
         ],
-        answers: [
+        "title": "처음으로"
+      },
+      {
+        "action": "CHAT",
+        "id": "CHAT",
+        "questions": [
           {
-            message: '1번으로',
-            to: '1'
+            "message": "상담원을 연결해드리겠습니다.",
+            "type": 1,
+            "_id": 0
+          }
+        ],
+        'answers': [],
+        "title": "상담원 연결"
+      },
+      {
+        "action": "",
+        "answers": [
+          {
+            "message": "처음으로",
+            "to": "START"
+          }
+        ],
+        "id": "1606364736968",
+        "questions": [
+          {
+            "message": "요금 안내입니다.\n\nA TYPE은 5만원\nB TYPE은 10만원입니다.\n\n* 멘트를 수정하세요",
+            "type": 1,
+            "_id": 0
+          }
+        ],
+        "title": "요금 안내"
+      },
+      {
+        "action": "",
+        "answers": [
+          {
+            "message": "A TYPE",
+            "to": "1606364910237"
           },
           {
-            message: '2번으로',
-            to: '2'
+            "message": "B TYPE",
+            "to": "1606364956481"
+          },
+          {
+            "message": "처음으로",
+            "to": "START"
           }
-        ]
+        ],
+        "id": "1606364811544",
+        "questions": [
+          {
+            "message": "서비스 종류를 선택해 주세요.",
+            "type": 1,
+            "_id": 0
+          }
+        ],
+        "title": "서비스 안내"
+      },
+      {
+        "action": "",
+        "answers": [
+          {
+            "message": "처음으로",
+            "to": "START"
+          }
+        ],
+        "id": "1606364859716",
+        "questions": [
+          {
+            "message": "배송 안내입니다.\n\n영업일 오전 00시 이전에 접수된 주문은 대략 00일에서 00일 사이에 배송되며, 주말과 국경일은 제외됩니다.",
+            "type": 1,
+            "_id": 0
+          },
+          {
+            "message": "영업일 오전 00시 이후 또는 공휴일에 접수된 주문, 도서, 산간 지역의 경우에는 1~2일이 추가로 소요될 수 있습니다.",
+            "type": 1,
+            "_id": 1
+          }
+        ],
+        "title": "배송 안내"
+      },
+      {
+        "action": "",
+        "answers": [
+          {
+            "message": "처음으로",
+            "to": "START"
+          }
+        ],
+        "id": "1606364887556",
+        "questions": [
+          {
+            "message": "이벤트 안내입니다.",
+            "type": 1,
+            "_id": 0
+          },
+          {
+            "message": "신규 가입자 분에게\n20% 할인쿠폰을 제공해 드리고 있습니다.\n\n자세한 내용은 아래\n[이벤트 보러 가기] 버튼을 눌러주세요.\n\n*아래 버튼 링크를 수정해주세요",
+            "type": 1,
+            "_id": 1
+          },
+          {
+            "message": "{\"text\":\"이벤트 보러 가기\",\"url\":\"/event\"}",
+            "type": 4,
+            "_id": 2
+          }
+        ],
+        "title": "이벤트 안내"
+      },
+      {
+        "action": "",
+        "answers": [
+          {
+            "message": "처음으로",
+            "to": "START"
+          },
+          {
+            "message": "서비스 안내",
+            "to": "1606364811544"
+          }
+        ],
+        "id": "1606364910237",
+        "questions": [
+          {
+            "message": "A TYPE에 대한 안내입니다.",
+            "type": 1,
+            "_id": 0
+          }
+        ],
+        "title": "A TYPE"
+      },
+      {
+        "id": "1606364956481",
+        "title": "B TYPE",
+        "answers": [
+          {
+            "chosen": false,
+            "message": "처음으로",
+            "selected": false,
+            "to": "START"
+          },
+          {
+            "chosen": false,
+            "message": "서비스 안내",
+            "selected": false,
+            "to": "1606364811544"
+          }
+        ],
+        "questions": [
+          {
+            "message": "B TYPE에 대한 안내입니다.",
+            "type": 1,
+            "_id": 0
+          }
+        ],
+        "action": "",
+        "j": 0
       }
-    ],
+    ]
   },
   {
-    name: '프렌차이즈',
-    description: '프렌차이즈을 운영중이신 경우',
-    list: [
+    name: '템플릿2',
+    description: '퇴근 후 챗봇으로 자동응대',
+    list : [
       {
-        title: '프렌차이즈1',
-        id: '1',
-        questions: [
+        "id": "START",
+        "title": "처음으로",
+        "answers": [
           {
-            message: '안녕하세요 프렌차이즈 챗봇입니다.',
-            type: 1
-          }, {
-            message: '궁금한 사항을 선택해주세요.',
-            type: 1
-          }],
-        answers: [
-          {
-            message: '2번으로',
-            to: '2'
-          }
-        ]
-      },
-      {
-        title: '프렌차이즈2',
-        id: '2',
-        questions: [
-          {
-            message: '안녕하세요 챗봇입니다.',
-            type: 1
-          }, {
-            message: '궁금한 사항을 선택해주세요.',
-            type: 1
-          }],
-        answers: [
-          {
-            message: '1번으로',
-            to: '1'
-          }
-        ]
-      },
-      {
-        title: '프렌차이즈3',
-        id: '3',
-        questions: [
-          {
-            message: '안녕하세요 챗봇입니다.',
-            type: 1
-          }, {
-            message: '궁금한 사항을 선택해주세요.',
-            type: 1
-          }],
-        answers: [
-          {
-            message: '1번으로',
-            to: '1'
+            "chosen": false,
+            "message": "요금 안내",
+            "to": "1606364736968"
           },
           {
-            message: '2번으로',
-            to: '2'
+            "chosen": false,
+            "message": "서비스 안내",
+            "to": "1606364811544"
+          },
+          {
+            "message": "배송 안내",
+            "to": "1606364859716"
+          },
+          {
+            "chosen": false,
+            "message": "이벤트 안내",
+            "to": "1606364887556"
+          },
+          {
+            "message": "1:1 문의",
+            "to": "6daj5ntbe"
           }
-        ]
+        ],
+        "questions": [
+          {
+            "message": "안녕하세요.\n[회사명] 챗봇입니다 :)\n\n지금은 상담원 연결이 불가능합니다.\n[상담원 연결 가능 시간]\n평일 00시 ~ 00시\n점심 00시 ~ 00시\n\n궁금한 사항을 선택하시면\n챗봇이 알려드리겠습니다.",
+            "type": 1
+          }
+        ],
+        "action": ""
+      },
+      {
+        "id": "CHAT",
+        "title": "상담원 연결",
+        "questions": [
+          {
+            "message": "상담원을 연결해드리겠습니다.",
+            "type": 1
+          }
+        ],
+        'answers': [],
+        "action": "CHAT"
+      },
+      {
+        "id": "1606364736968",
+        "title": "요금 안내",
+        "answers": [
+          {
+            "message": "처음으로",
+            "to": "START"
+          }
+        ],
+        "questions": [
+          {
+            "message": "요금 안내입니다.\n\nA TYPE은 5만원\nB TYPE은 10만원입니다.\n\n* 멘트를 수정하세요",
+            "type": 1
+          }
+        ],
+        "action": ""
+      },
+      {
+        "id": "1606364811544",
+        "title": "서비스 안내",
+        "answers": [
+          {
+            "message": "A TYPE",
+            "to": "1606364910237"
+          },
+          {
+            "message": "B TYPE",
+            "to": "1606364956481"
+          },
+          {
+            "message": "처음으로",
+            "to": "START"
+          }
+        ],
+        "questions": [
+          {
+            "message": "서비스 종류를 선택해 주세요.",
+            "type": 1
+          }
+        ],
+        "action": ""
+      },
+      {
+        "id": "1606364859716",
+        "title": "배송 안내",
+        "answers": [
+          {
+            "message": "처음으로",
+            "to": "START"
+          }
+        ],
+        "questions": [
+          {
+            "message": "배송 안내입니다.\n\n영업일 오전 00시 이전에 접수된 주문은 대략 00일에서 00일 사이에 배송되며, 주말과 국경일은 제외됩니다.",
+            "type": 1
+          },
+          {
+            "message": "영업일 오전 00시 이후 또는 공휴일에 접수된 주문, 도서, 산간 지역의 경우에는 1~2일이 추가로 소요될 수 있습니다.",
+            "type": 1
+          }
+        ],
+        "action": ""
+      },
+      {
+        "id": "1606364887556",
+        "title": "이벤트 안내",
+        "answers": [
+          {
+            "message": "처음으로",
+            "to": "START"
+          }
+        ],
+        "questions": [
+          {
+            "message": "이벤트 안내입니다.",
+            "type": 1
+          },
+          {
+            "message": "신규 가입자 분에게\n20% 할인쿠폰을 제공해 드리고 있습니다.\n\n자세한 내용은 아래\n[이벤트 보러 가기] 버튼을 눌러주세요.\n\n*아래 버튼 링크를 수정해주세요",
+            "type": 1
+          },
+          {
+            "message": "{\"text\":\"이벤트 보러 가기\",\"url\":\"/event\"}",
+            "type": 4
+          }
+        ],
+        "action": ""
+      },
+      {
+        "id": "1606364910237",
+        "title": "A TYPE",
+        "answers": [
+          {
+            "message": "처음으로",
+            "to": "START"
+          },
+          {
+            "message": "서비스 안내",
+            "to": "1606364811544"
+          }
+        ],
+        "questions": [
+          {
+            "message": "A TYPE에 대한 안내입니다.",
+            "type": 1
+          }
+        ],
+        "action": ""
+      },
+      {
+        "id": "1606364956481",
+        "title": "B TYPE",
+        "answers": [
+          {
+            "chosen": false,
+            "message": "처음으로",
+            "selected": false,
+            "to": "START"
+          },
+          {
+            "chosen": false,
+            "message": "서비스 안내",
+            "selected": false,
+            "to": "1606364811544"
+          }
+        ],
+        "questions": [
+          {
+            "message": "B TYPE에 대한 안내입니다.",
+            "type": 1
+          }
+        ],
+        "action": ""
+      },
+      {
+        "id": "6daj5ntbe",
+        "title": "1:1 문의",
+        "answers": [
+          {
+            "message": "처음으로",
+            "to": "START"
+          }
+        ],
+        "questions": [
+          {
+            "message": "아래 버튼을 클릭하시면\n1:1 문의 게시판으로 이동합니다.",
+            "type": 1
+          },
+          {
+            "message": "{\"text\":\"1:1 문의 게시판 바로가기\",\"url\":\"/customer\"}",
+            "type": 4
+          }
+        ],
+        "action": ""
       }
-    ],
+    ]
   },
   {
-    name: '스타트업',
-    description: '스타트업을 운영중이신 경우',
+    name: '템플릿3',
+    description: '이벤트 안내로 구매 유도',
     list: [
       {
-        title: '스타트업1',
-        id: '1',
-        questions: [
+        "id": "START",
+        "title": "처음으로",
+        "answers": [
           {
-            message: '안녕하세요 스타트업 챗봇입니다.',
-            type: 1
-          }, {
-            message: '궁금한 사항을 선택해주세요.',
-            type: 1
+            "message": "신규 회원 2000원 적립금 지급",
+            "to": "1606364887556"
+          },
+          {
+            "message": "아우터 카테고리 20% 할인 이벤트",
+            "to": "lmzsjooy0"
+          },
+          {
+            "message": "SNS 공유 이벤트",
+            "to": "vucljw5pn"
           }
         ],
-        answers: [
+        "questions": [
           {
-            message: '2번으로',
-            to: '2'
-          },
-          {
-            message: '3번으로',
-            to: '3'
-          }
-        ]
-      },
-      {
-        title: '스타트업2',
-        id: '2',
-        questions: [
-          {
-            message: '안녕하세요 챗봇입니다.',
-            type: 1
-          }, {
-            message: '궁금한 사항을 선택해주세요.',
-            type: 1
-          }],
-        answers: [
-          {
-            message: '1번으로',
-            to: '1'
-          },
-          {
-            message: '3번으로',
-            to: '3'
-          }
-        ]
-      },
-      {
-        title: '스타트업3',
-        id: '3',
-        questions: [
-          {
-            message: '안녕하세요 챗봇입니다.',
-            type: 1
-          }, {
-            message: '궁금한 사항을 선택해주세요.',
-            type: 1
+            "message": "안녕하세요.\nOO 쇼핑몰입니다 :)\n\n현재 OO 이벤트를 진행중에 있습니다.\n\n자세한 이벤트 내용은\n아래 버튼을 클릭해주세요.",
+            "type": 1
           }
         ],
-        answers: [
+        "action": ""
+      },
+      {
+        "id": "CHAT",
+        "title": "상담원 연결",
+        "answers": [],
+        "questions": [
           {
-            message: '1번으로',
-            to: '1'
+            "message": "상담원을 연결해드리겠습니다.",
+            "type": 1
+          }
+        ],
+        "action": "CHAT"
+      },
+      {
+        "id": "1606364887556",
+        "title": "신규 회원",
+        "answers": [
+          {
+            "message": "처음으로",
+            "to": "START"
+          }
+        ],
+        "questions": [
+          {
+            "message": "신규 회원 가입시\n2000원 적립금을 지급하고 있습니다.",
+            "type": 1
           },
           {
-            message: '2번으로',
-            to: '2'
+            "message": "자세한 내용은 아래\n[이벤트 보러 가기] 버튼을 눌러주세요.\n\n*아래 버튼 링크를 수정해주세요",
+            "type": 1
+          },
+          {
+            "message": "{\"text\":\"이벤트 보러 가기\",\"url\":\"/event\"}",
+            "type": 4
           }
-        ]
+        ],
+        "action": ""
+      },
+      {
+        "id": "lmzsjooy0",
+        "title": "20% 할인",
+        "answers": [
+          {
+            "message": "처음으로",
+            "to": "START"
+          }
+        ],
+        "questions": [
+          {
+            "message": "아우터 카테고리 20% 할인 이벤트",
+            "type": 1
+          },
+          {
+            "message": "이벤트 내용입니다.",
+            "type": 1
+          },
+          {
+            "message": "{\"text\":\"이벤트 보러 가기\",\"url\":\"/event\"}",
+            "type": 4
+          }
+        ],
+        "action": ""
+      },
+      {
+        "id": "vucljw5pn",
+        "title": "SNS 공유",
+        "answers": [
+          {
+            "message": "처음으로",
+            "to": "START"
+          }
+        ],
+        "questions": [
+          {
+            "message": "SNS 공유 이벤트",
+            "type": 1
+          },
+          {
+            "message": "블로그나 인스타그램에\n저희 쇼핑몰에서 구매한 상품을 착용 하신 후,\n후기를 남겨주시면\n적립금 2천원을 적립해 드립니다!",
+            "type": 1
+          },
+          {
+            "chosen": false,
+            "message": "SNS에 후기를 남겨 주신 후,\n아래 게시판에 URL을 남겨주세요",
+            "type": 1
+          },
+          {
+            "message": "{\"text\":\"후기 작성 후 적립금 요청하기\",\"url\":\"/board\"}",
+            "type": 4
+          }
+        ],
+        "action": ""
       }
-    ],
-  },
-  {
-    name: '쇼핑몰',
-    description: '쇼핑몰을 운영중이신 경우',
-    list: [
-      {
-        title: '쇼핑몰1',
-        id: '1',
-        questions: [
-          {
-            message: '안녕하세요 쇼핑몰 챗봇입니다.',
-            type: 1
-          }, {
-            message: '궁금한 사항을 선택해주세요.',
-            type: 1
-          }
-        ],
-        answers: [
-          {
-            message: '2번으로',
-            to: '2'
-          },
-          {
-            message: '3번으로',
-            to: '3'
-          }
-        ]
-      },
-      {
-        title: '쇼핑몰2',
-        id: '2',
-        questions: [
-          {
-            message: '안녕하세요 챗봇입니다.',
-            type: 1
-          }, {
-            message: '궁금한 사항을 선택해주세요.',
-            type: 1
-          }],
-        answers: [
-          {
-            message: '1번으로',
-            to: '1'
-          },
-          {
-            message: '3번으로',
-            to: '3'
-          }
-        ]
-      },
-      {
-        title: '쇼핑몰3',
-        id: '3',
-        questions: [
-          {
-            message: '안녕하세요 챗봇입니다.',
-            type: 1
-          }, {
-            message: '궁금한 사항을 선택해주세요.',
-            type: 1
-          }
-        ],
-        answers: [
-          {
-            message: '1번으로',
-            to: '1'
-          },
-          {
-            message: '2번으로',
-            to: '2'
-          }
-        ]
-      }
-    ],
-  },
-  {
-    name: '프렌차이즈',
-    description: '프렌을 운영중이신 경우',
-    list: [
-      {
-        title: '프렌차이즈1',
-        id: '1',
-        questions: [
-          {
-            message: '안녕하세요 프렌차이즈 챗봇입니다.',
-            type: 1
-          }, {
-            message: '궁금한 사항을 선택해주세요.',
-            type: 1
-          }],
-        answers: [
-          {
-            message: '2번으로',
-            to: '2'
-          }
-        ]
-      },
-      {
-        title: '프렌차이즈2',
-        id: '2',
-        questions: [
-          {
-            message: '안녕하세요 챗봇입니다.',
-            type: 1
-          }, {
-            message: '궁금한 사항을 선택해주세요.',
-            type: 1
-          }],
-        answers: [
-          {
-            message: '1번으로',
-            to: '1'
-          }
-        ]
-      },
-      {
-        title: '프렌차이즈3',
-        id: '3',
-        questions: [
-          {
-            message: '안녕하세요 챗봇입니다.',
-            type: 1
-          }, {
-            message: '궁금한 사항을 선택해주세요.',
-            type: 1
-          }],
-        answers: [
-          {
-            message: '1번으로',
-            to: '1'
-          },
-          {
-            message: '2번으로',
-            to: '2'
-          }
-        ]
-      }
-    ],
-  },
-  {
-    name: '스타트업',
-    description: '스타트업을 운영중이신 경우',
-    list: [
-      {
-        title: '스타트업1',
-        id: '1',
-        questions: [
-          {
-            message: '안녕하세요 스타트업 챗봇입니다.',
-            type: 1
-          }, {
-            message: '궁금한 사항을 선택해주세요.',
-            type: 1
-          }
-        ],
-        answers: [
-          {
-            message: '2번으로',
-            to: '2'
-          },
-          {
-            message: '3번으로',
-            to: '3'
-          }
-        ]
-      },
-      {
-        title: '스타트업2',
-        id: '2',
-        questions: [
-          {
-            message: '안녕하세요 챗봇입니다.',
-            type: 1
-          }, {
-            message: '궁금한 사항을 선택해주세요.',
-            type: 1
-          }],
-        answers: [
-          {
-            message: '1번으로',
-            to: '1'
-          },
-          {
-            message: '3번으로',
-            to: '3'
-          }
-        ]
-      },
-      {
-        title: '스타트업3',
-        id: '3',
-        questions: [
-          {
-            message: '안녕하세요 챗봇입니다.',
-            type: 1
-          }, {
-            message: '궁금한 사항을 선택해주세요.',
-            type: 1
-          }
-        ],
-        answers: [
-          {
-            message: '1번으로',
-            to: '1'
-          },
-          {
-            message: '2번으로',
-            to: '2'
-          }
-        ]
-      }
-    ],
+    ]
   }
 ]
 
-const Setting = ({ settings, ...props }) => {
-  const database = props.database
-  const isLoading = props.isLoading
-
+const Setting = ({ _key : key, database, isLoading, ...props }) => {
   const [title, setTitle] = React.useState('')
   const [subTitle, setSubTitle] = React.useState('')
   const [nickname, setNickname] = React.useState('')
@@ -509,156 +614,158 @@ const Setting = ({ settings, ...props }) => {
   const [iconTextAlign, setIconTextAlign] = React.useState()
 
   const chatbotListOrigin = React.useRef([])
-  const [chatbotList, setChatbotList] = React.useState(initConfig.chatbot.list)
-  const [chatbotState, setChatbotState] = React.useState(initConfig.chatbot.state)
+  const [chatbotList, setChatbotList] = React.useState(null)
+  const [chatbotState, setChatbotState] = React.useState(null)
   const [showChatbotTemplate, setShowChatbotTemplate] = React.useState(false)
   const [seletedTemplate, setSeletedTemplate] = React.useState(null)
-  const [showChatbotPreview, setShowChatbotPreview] = React.useState(false)
+  const [previewChatbot, setPreviewChatbot] = React.useState(null)
 
   let [uploadImage] = useImageUpload()
 
+  const [initAfter, setInitAfter] = React.useState(false)
+
   const setChatbotConfig = (chatbotConfig) => {
-    if(!chatbotConfig) return
+    if(!chatbotConfig) chatbotConfig = initConfig.chatbot
 
     setChatbotState(chatbotConfig.state)
     chatbotListOrigin.current = chatbotConfig.list
     resetChatbotList()
   }
 
-  const resetChatbotList= () => {
+  const resetChatbotList= React.useCallback(() => {
     setChatbotList(JSON.parse(JSON.stringify(chatbotListOrigin.current)))
-  }
+  }, [])
 
-  const addChatbotFromTemplate = (_list) => {
+  const applyChatbotTemplate = (_list) => {
     const list = JSON.parse(JSON.stringify(_list))
     const answersAll = list.reduce((a,b)=> [...a, ...b.answers], [])
 
     list.forEach(chatbot=> {
       const oldId = chatbot.id
-      chatbot.id = script.genId()
+      const newId = chatbot.id = script.genId()
 
       answersAll.forEach(answer => {
         if(answer.to !== oldId) return
-        answer.to = chatbot.id
+        answer.to = newId
       })
     })
 
-    setChatbotList([...chatbotList, ...list])
+    setChatbotList(list)
   }
 
-  const saveChatbotConfig = () => {
-    const hasEmptyQuestions = chatbotList.some(chatbot=> !chatbot.questions?.length)
+  const saveChatbot = React.useCallback((newChatbotState, newChatbotList) => {
+    const hasEmptyQuestions = newChatbotList.some(chatbot=> !chatbot.questions?.length)
     if(hasEmptyQuestions){
       alert("메시지가 없는 챗봇이 있습니다.")
       return
     }
-    const hasEmptyAnswers = chatbotList.some(chatbot=> chatbot.action !== "CHAT" && !chatbot.answers?.length)
+    const hasEmptyAnswers = newChatbotList.some(chatbot=> chatbot.action !== "CHAT" && !chatbot.answers?.length)
     if(hasEmptyAnswers){
       alert("버튼이 없는 챗봇이 있습니다.")
       return
     }
-    const hasEmptyLink = chatbotList.some(chatbot=> chatbot.answers?.some(answer=> !answer.to) || false)
+    const hasEmptyLink = newChatbotList.some(chatbot=> chatbot.answers?.some(answer=> !answer.to) || false)
     if(hasEmptyLink){
       alert('챗봇에 연결되지 않은 버튼이 있습니다.')
       return
     }
-
-    console.log(chatbotList)
 
     isLoading(true)
 
     const updateDB = smlog.API({
       method: 'update_chatbot_config',
       svid: props.svid,
-      state : chatbotState
+      state : newChatbotState
     })
-    const updateFirebase = database.ref(`/${settings.key}/config/chatbot`)
+    const updateFirebase = database.ref(`/${key}/config/chatbot`)
       .update({
-        state: chatbotState,
-        list: chatbotList
+        state: newChatbotState,
+        list: newChatbotList
       })
 
     Promise.all([updateDB, updateFirebase])
       .then(()=> {
-        chatbotListOrigin.current = chatbotList
-        resetChatbotList()
-        isLoading(false)
+        chatbotListOrigin.current = newChatbotList
       })
-  }
+      .finally(()=> isLoading(false))
+  }, [props.svid])
 
   React.useEffect(() => {
-    const getFirebase = database.ref(`/${settings.key}/config`).once('value')
+    const getFirebase = database.ref(`/${key}/config`).once('value')
     const getDb =  smlog.API({
       method: 'get_chat_config',
       svid: props.svid
     })
 
-    getFirebase.then((snapshot)=>{
-      const firebaseData = snapshot.val()
-
-      if (firebaseData) {
-        setTitle(firebaseData.title)
-        setSubTitle(firebaseData.subTitle)
-        setNickname(firebaseData.nickname)
-        setFirstMessage(firebaseData.firstMessage)
-        setThemeColor(firebaseData.themeColor)
-        setProfileImage(firebaseData.profileImage || null)
-        setMissedMessage(firebaseData.workingDay.message)
-        setChatbotConfig(firebaseData.chatbot)
-      } else {
-        setTitle(initConfig.title)
-        setSubTitle(initConfig.subTitle)
-        setNickname(initConfig.nickname)
-        setFirstMessage(initConfig.firstMessage)
-        setThemeColor(initConfig.themeColor)
-      }
-    })
-
     Promise.all([getFirebase, getDb])
-           .then(([snapshot, dbData])=> {
-             const firebaseData = snapshot.val()
-             if(dbData){
-               setWorkingDay({
-                 isInit: true,
-                 message: firebaseData ? firebaseData.workingDay.message : '',
-                 use: dbData.scm_time_state === '1',
-                 week: dbData.scm_weeks.split(','),
-                 allday: dbData.scm_all_day === '1',
-                 startWork: dbData.scm_view_time_s,
-                 endWork: dbData.scm_view_time_e,
-                 breaktime: dbData.scm_break_time === '1',
-                 startBreak: dbData.scm_break_time_s,
-                 endBreak: dbData.scm_break_time_e
-               })
-               setUseChat(dbData.scm_state === '1')
-               setIconConfig({
-                 isInit: true,
-                 themeColor: firebaseData ? firebaseData.themeColor : initConfig.themeColor,
-                 position: dbData.scm_position,
-                 pc: {
-                   hide: dbData.scm_pc_display === '0',
-                   axisX: +dbData.scm_pc_x,
-                   axisY: +dbData.scm_pc_y,
-                   size: +dbData.scm_pc_width
-                 },
-                 mobile: {
-                   hide: dbData.scm_mo_display === '0',
-                   axisX: +dbData.scm_mo_x,
-                   axisY: +dbData.scm_mo_y,
-                   size: +dbData.scm_mo_width
-                 }
-               })
-               setIconHide(dbData.scm_pc_display === '0')
-               setIconPosition(dbData.scm_position)
-               setIconAxisX(+dbData.scm_pc_x)
-               setIconAxisY(+dbData.scm_pc_y)
-               setIconSize(+dbData.scm_pc_width)
-               setIconText(dbData.scm_icon_text)
-               setIconTextAlign(dbData.scm_icon_text_align)
-               setSelectDevice(0)
-             }
-           })
-  }, [database, settings.key])
+      .then(([snapshot, dbData]) => {
+        const firebaseData = snapshot.val()
+
+        if (firebaseData) {
+          setTitle(firebaseData.title)
+          setSubTitle(firebaseData.subTitle)
+          setNickname(firebaseData.nickname)
+          setFirstMessage(firebaseData.firstMessage)
+          setThemeColor(firebaseData.themeColor)
+          setProfileImage(firebaseData.profileImage || null)
+          setMissedMessage(firebaseData.workingDay.message)
+          setChatbotConfig(firebaseData.chatbot)
+        } else {
+          setTitle(initConfig.title)
+          setSubTitle(initConfig.subTitle)
+          setNickname(initConfig.nickname)
+          setFirstMessage(initConfig.firstMessage)
+          setThemeColor(initConfig.themeColor)
+          setChatbotConfig(initConfig.chatbot)
+        }
+
+        if (dbData) {
+          setWorkingDay({
+            isInit: true,
+            message: firebaseData
+              ? firebaseData.workingDay.message
+              : '',
+            use: dbData.scm_time_state === '1',
+            week: dbData.scm_weeks.split(','),
+            allday: dbData.scm_all_day === '1',
+            startWork: dbData.scm_view_time_s,
+            endWork: dbData.scm_view_time_e,
+            breaktime: dbData.scm_break_time === '1',
+            startBreak: dbData.scm_break_time_s,
+            endBreak: dbData.scm_break_time_e
+          })
+          setUseChat(dbData.scm_state === '1')
+          setIconConfig({
+            isInit: true,
+            themeColor: firebaseData
+              ? firebaseData.themeColor
+              : initConfig.themeColor,
+            position: dbData.scm_position,
+            pc: {
+              hide: dbData.scm_pc_display === '0',
+              axisX: +dbData.scm_pc_x,
+              axisY: +dbData.scm_pc_y,
+              size: +dbData.scm_pc_width
+            },
+            mobile: {
+              hide: dbData.scm_mo_display === '0',
+              axisX: +dbData.scm_mo_x,
+              axisY: +dbData.scm_mo_y,
+              size: +dbData.scm_mo_width
+            }
+          })
+          setIconHide(dbData.scm_pc_display === '0')
+          setIconPosition(dbData.scm_position)
+          setIconAxisX(+dbData.scm_pc_x)
+          setIconAxisY(+dbData.scm_pc_y)
+          setIconSize(+dbData.scm_pc_width)
+          setIconText(dbData.scm_icon_text)
+          setIconTextAlign(dbData.scm_icon_text_align)
+          setSelectDevice(0)
+        }
+      })
+      .finally(() => setInitAfter(true))
+  }, [database, key])
 
   const handleFileInput = e => {
     const target = e.target.files[0]
@@ -668,7 +775,7 @@ const Setting = ({ settings, ...props }) => {
       .then(() => uploadImage(target, {'tag' : 'profile'}))
       .then(res => {
         const path = JSON.stringify(res.data.file)
-        database.ref(`/${settings.key}/config`).update({ profileImage: path })
+        database.ref(`/${key}/config`).update({ profileImage: path })
         setProfileImage(path)
       })
       .catch(({ message }) => message && alert(message))
@@ -679,14 +786,14 @@ const Setting = ({ settings, ...props }) => {
   const handleFileRemove = () => {
     if (profileImage === null) return
 
-    database.ref(`/${settings.key}/config`).update({ profileImage: null })
+    database.ref(`/${key}/config`).update({ profileImage: null })
     setProfileImage(null)
 
     // s3 file remove
     const config = { headers: { 'content-type': 'multipart/form-data' } }
     const formData = new FormData()
     formData.append('filename', JSON.parse(profileImage).name)
-    formData.append('key', settings.key)
+    formData.append('key', key)
 
     return axios.post('/api/remove', formData, config)
       .then(res => {
@@ -703,7 +810,7 @@ const Setting = ({ settings, ...props }) => {
   }
 
   const updateUserInfo = () => {
-    database.ref(`/${settings.key}/config`).update({
+    database.ref(`/${key}/config`).update({
       title: title || initConfig.title,
       subTitle: subTitle || initConfig.subTitle,
       nickname: nickname || initConfig.nickname,
@@ -742,7 +849,7 @@ const Setting = ({ settings, ...props }) => {
   React.useEffect(() => {
     if (workingDay.isInit) return
 
-    database.ref(`/${settings.key}/config`).update({
+    database.ref(`/${key}/config`).update({
       workingDay: workingDay
     })
 
@@ -761,7 +868,7 @@ const Setting = ({ settings, ...props }) => {
       week: workingDay.week.join(',')
     })
 
-  }, [database, settings.key, workingDay, useChat])
+  }, [database, key, workingDay, useChat])
 
   const onChangeIconConfig = (param) => {
 
@@ -1307,145 +1414,20 @@ const Setting = ({ settings, ...props }) => {
           <div className="setting-menu-header">
             챗봇 설정
           </div>
-          <div className="setting-menu-body" style={{flexDirection : "column"}}>
-            <div className="setting-checkbox-item">
-              <div className="setting-checkbox-item-title">
-                <label>
-                  <input type="checkbox"
-                         checked={chatbotState !== '0'}
-                         onChange={(e) => {
-                           setChatbotState(e.target.checked ? '1' : '0')
-                         }}/>
-                  <span>챗봇기능 사용</span>
-                </label>
 
-                {chatbotState !== '0' && (
-                  <div
-                    className="chatbot-config"
-                    style={{
-                    margin: '13px 0 0 25px'
-                  }}>
-                    <label>
-                      <input type="radio"
-                             name="chat_active_time"
-                             checked={chatbotState === '1'}
-                             onChange={(e) => {
-                               setChatbotState('1')
-                             }}/>
-                      <span>24시간</span>
-                    </label>
-                    <label>
-                      <input type="radio"
-                             name="chat_active_time"
-                             checked={chatbotState === '2'}
-                             onChange={(e) => {
-                               setChatbotState('2')
-                             }}/>
-                      <span>채팅 운영시간</span>
-                    </label>
-                    <label>
-                      <input type="radio"
-                             name="chat_active_time"
-                             checked={chatbotState === '3'}
-                             onChange={(e) => {
-                               setChatbotState('3')
-                             }}/>
-                      <span>채팅 비운영시간</span>
-                    </label>
-                  </div>
-                )}
-              </div>
-            </div>
-            <div
-              style={{
-                fontSize: '16px',
-                display: 'flex'
-              }}>
-              <div>
-                <span
-                className="init-chatbot-btn"
-                onClick={() => resetChatbotList()}>초기화</span>
-                <span
-                  className="save-chatbot-btn"
-                  onClick={() => saveChatbotConfig()}>저장</span>
-              </div>
-
-              <div
-                style={{
-                  marginLeft: '235px',
-                }}
-              >
-                <div
-                  onClick={()=> {
-                    setShowChatbotTemplate(true)
-                  }}>템플릿</div>
-                <div
-                  onClick={()=> {
-                    setShowChatbotPreview(true)
-                  }}
-                >미리보기</div>
-              </div>
-            </div>
-
-
-            <div className="chatbot-list">
-              {chatbotList.map((chatbot, index) => (
-                <Chatbot
-                  key={chatbot.id}
-                  {...chatbot}
-                  isLoading={isLoading}
-                  index={index}
-                  chatbotList={chatbotList}
-                  updateChatbot={(newChatbot) => {
-                    setChatbotList([
-                      ...chatbotList.slice(0, index),
-                      newChatbot,
-                      ...chatbotList.slice(index + 1)
-                    ])
-                  }}
-                  deleteChatbot={() => {
-                    const deleted = chatbotList[index]
-                    chatbotList.forEach(chatbot => {
-                      chatbot.answers?.forEach(t => t.to = t.to === deleted.id
-                        ? ''
-                        : t.to)
-                    })
-
-                    setChatbotList([
-                      ...chatbotList.slice(0, index),
-                      ...chatbotList.slice(index + 1)
-                    ])
-                  }}
-                  nickname={nickname}
-                  profileImage={profileImage}
-                />
-              ))}
-              <div
-                className="add-chatbot-btn"
-                onClick={() => {
-                  const newChatbot = {
-                    id: script.genId(),
-                    title: '제목',
-                    answers: [
-                      {
-                        message: '내용을 입력해주세요.',
-                        to: ''
-                      }
-                    ],
-                    questions: [
-                      {
-                        message: '내용을 입력해주세요.',
-                        type: 1
-                      }
-                    ],
-                    action: ''
-                  }
-                  setChatbotList([...chatbotList, newChatbot])
-                }}>
-                추가
-              </div>
-            </div>
-          </div>
+          {initAfter && (
+            <SettingChatbot
+              chatbotState={chatbotState}
+              chatbotList={chatbotList}
+              resetChatbotList={resetChatbotList}
+              saveChatbot={saveChatbot}
+              setShowChatbotTemplate={setShowChatbotTemplate}
+              setPreviewChatbot={setPreviewChatbot}
+              nickname={nickname}
+              profileImage={profileImage}
+              isLoading={isLoading}
+            />
+          )}
         </div>
       </div>
 
@@ -1493,7 +1475,7 @@ const Setting = ({ settings, ...props }) => {
                 <div
                   className="template-btn-area"
                   onClick={() => {
-                    addChatbotFromTemplate(seletedTemplate.list)
+                    applyChatbotTemplate(seletedTemplate.list)
                     setShowChatbotTemplate(false)
                   }}
                 >
@@ -1506,19 +1488,19 @@ const Setting = ({ settings, ...props }) => {
         </div>
       )}
 
-      {showChatbotPreview && (
+      {previewChatbot && (
         <div className="chatbot-test-modal">
           <div className="chatbot-test-modal-contents">
             <div>
               <div
                 className="chatbot-close"
-                onClick={() => setShowChatbotPreview(false)}>
+                onClick={() => setPreviewChatbot(null)}>
                 <i className="chatbot-close-icon"></i>
               </div>
               <ChatbotPreview
                 showImageViewer={props.showImageViewer}
                 profileImage={profileImage}
-                list={chatbotList}>
+                list={previewChatbot}>
               </ChatbotPreview>
             </div>
           </div>
@@ -1529,7 +1511,7 @@ const Setting = ({ settings, ...props }) => {
 }
 
 const mapStateToProps = state => ({
-  settings: state.settings
+  _key: state.settings.key
 })
 
 // export default Setting

@@ -10,8 +10,8 @@ const ChatbotQuestion = ({index, type, message, isLoading, onClickSave, onClickD
       {type === 1 && (
         <ChatbotQuestionText
           message={message}
-          onClickDelete={onClickDelete}
-          onClickSave={onClickSave}
+          onClickDelete={()=> onClickDelete(index)}
+          onClickSave={(newQuestion) => onClickSave(index, newQuestion)}
         />
       )}
 
@@ -19,20 +19,20 @@ const ChatbotQuestion = ({index, type, message, isLoading, onClickSave, onClickD
         <ChatbotQuestionSimpleImage
           message={message}
           isLoading={isLoading}
-          onClickDelete={onClickDelete}
-          onClickSave={onClickSave}
+          onClickDelete={()=> onClickDelete(index)}
+          onClickSave={(newQuestion) => onClickSave(index, newQuestion)}
         />
       )}
 
       {type === 4 && (
         <ChatbotQuestionLink
           message={message}
-          onClickDelete={onClickDelete}
-          onClickSave={onClickSave}
+          onClickDelete={()=> onClickDelete(index)}
+          onClickSave={(newQuestion) => onClickSave(index, newQuestion)}
         />
       )}
     </>
   );
 }
 
-export default ChatbotQuestion
+export default React.memo(ChatbotQuestion)

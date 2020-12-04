@@ -1,83 +1,92 @@
 import React from 'react'
-import useClickOustside from '../hooks/useClickOustside'
+import useEventListener from '../hooks/useEventListener'
 import ChatbotAnswer from './ChatbotAnswer'
 import ChatbotTitleIcon from './ChatbotTitleIcon'
 import ChatbotQuestion from './ChatbotQuestion'
 import useImageUpload from '../hooks/useImageUpload'
 import { ReactSortable } from 'react-sortablejs'
 
-const Chatbot = ({ id, title, answers, questions, action, isLoading, color, index, updateChatbot, deleteChatbot, chatbotList, ...props }) => {
-  const [showAdd, setShowAdd] = React.useState(false)
+const reducer = (state, action) => {
+  switch (action.type) {
+    case 'INIT':
+      return action.value
+    case 'ADD':
+      return [...state, action.value]
+    case 'DELETE':
+      return [
+        ...state.slice(0, action.index),
+        ...state.slice(action.index + 1)
+      ]
+    case 'UPDATE':
+      return [
+        ...state.slice(0, action.index),
+        action.value,
+        ...state.slice(action.index + 1)
+      ]
+    default:
+      throw new Error();
+  }
+}
+
+const Chatbot = ({ id, action, isLoading, color, index, updateChatbot, deleteChatbot, chatbotList, ...props }) => {
   const titleRef = React.useRef()
+  const [title, setTitle] = React.useState(props.title)
+  const [questions, questionsDispatch] = React.useReducer(reducer, props.questions)
+  const [answers, answersDispatch] = React.useReducer(reducer, props.answers)
+  const [showAdd, setShowAdd] = React.useState(false)
 
   const [uploadImage] = useImageUpload()
-  useClickOustside(()=> setShowAdd(false), '.add-questions-list', showAdd)
+  const { onClickOutside } = useEventListener()
 
   React.useEffect(() => {
-    titleRef.current.value = title
-  }, [title])
+    if(!showAdd) return
+    const off = onClickOutside('.add-questions-list', ()=> setShowAdd(false))
+    return ()=> {
+      off()
+    }
+  }, [showAdd])
 
-  const updateTitle = (newTitle) => {
-    update({
-      title: newTitle
-    })
-  }
+  React.useEffect(() => {
+    titleRef.current.value = props.title
+    setTitle(props.title)
+    answersDispatch({type: 'INIT', value: props.answers})
+    questionsDispatch({type : 'INIT', value: props.questions})
+  }, [props.title, props.answers, props.questions])
+
+  React.useEffect(() => {
+    const newChatbot = {
+      id : id,
+      title : title,
+      answers : answers || [],
+      questions : questions,
+      action : action || '',
+    }
+
+    updateChatbot(index, newChatbot)
+  }, [answers, questions, title])
+
   const addQuestion = (newQuestion) => {
-    update({
-      questions : [...questions, newQuestion]
-    })
+    questionsDispatch({type: 'ADD', value: newQuestion})
   }
-  const deleteQuestion = (index) => {
-    update({
-      questions : [
-        ...questions.slice(0, index),
-        ...questions.slice(index + 1)
-      ]
-    })
-  }
-  const updateQuestion = (index, newQuestion) => {
-    update({
-      questions : [
-        ...questions.slice(0, index),
-        newQuestion,
-        ...questions.slice(index + 1)
-      ]
-    })
-  }
+  const deleteQuestion = React.useCallback((index) => {
+    questionsDispatch({type: 'DELETE', index: index})
+  }, [])
+
+  const updateQuestion = React.useCallback((index, newQuestion) => {
+    questionsDispatch({type : 'UPDATE', index: index, value: newQuestion})
+  }, [])
 
   const addAnswer = (newAnswer) => {
-    update({
-      answers:[...answers, newAnswer]
-    })
-  }
-  const deleteAnswer = (index) => {
-    update({
-      answers: [
-        ...answers.slice(0, index),
-        ...answers.slice(index + 1)
-      ]
-    })
-  }
-  const updateAnswer = (index, newAnswer) => {
-    update({
-      answers:[
-        ...answers.slice(0, index),
-        newAnswer,
-        ...answers.slice(index + 1)
-      ]
-    })
+    answersDispatch({type : 'ADD', value: newAnswer})
   }
 
-  const update = (newVal) => {
-    updateChatbot({
-      id,
-      title : title || '',
-      answers : answers || [],
-      questions : questions || [],
-      action : action || '',
-      ...newVal
-    })
-  }
+  const deleteAnswer = React.useCallback((index) => {
+    answersDispatch({type : 'DELETE', index : index})
+  }, [])
+
+  const updateAnswer = React.useCallback((index, newAnswer) => {
+    answersDispatch({type : 'UPDATE', index: index, value: newAnswer})
+  }, [])
 
   const handleFileInput = (e, file) => {
     const target = file || e.target.files[0]
@@ -111,12 +120,12 @@ const Chatbot = ({ id, title, answers, questions, action, isLoading, color, inde
           <input
             type="text"
             ref={titleRef}
-            onBlur={()=> updateTitle(titleRef.current.value)}
+            onBlur={()=> setTitle(titleRef.current.value)}
             name="edit-title"/>
           {index >= 2 && (
             <div
               className="chatbot-close"
-              onClick={deleteChatbot}>
+              onClick={()=> deleteChatbot(index)}>
               <i className="chatbot-close-icon"/>
             </div>
           )}
@@ -132,7 +141,10 @@ const Chatbot = ({ id, title, answers, questions, action, isLoading, color, inde
             handle=".sort-target"
             filter=".question-image-edit"
             list={questions}
-            setList={newQuestions => update({ questions : newQuestions })}
+            setList={newQuestions=> {
+              if(newQuestions.every((q, i)=> q.message === questions[i].message)) return
+              questionsDispatch({type: 'INIT', value: newQuestions})
+            }}
           >
             {questions && questions.map((question, index) => (
               <div
@@ -164,8 +176,8 @@ const Chatbot = ({ id, title, answers, questions, action, isLoading, color, inde
                       type={question.type}
                       message={question.message}
                       isLoading={isLoading}
-                      onClickDelete={()=> deleteQuestion(index)}
-                      onClickSave={newQuestion => updateQuestion(index, newQuestion)}
+                      onClickDelete={deleteQuestion}
+                      onClickSave={updateQuestion}
                     />
                   </div>
                 </div>
@@ -234,18 +246,22 @@ const Chatbot = ({ id, title, answers, questions, action, isLoading, color, inde
               <ReactSortable
                 handle=".sort-target"
                 list={answers}
-                setList={newAnswers => update({ answers : newAnswers })}
+                setList={newAnswers => {
+                  if(newAnswers.every((a, i) => a.message === answers[i].message && a.to === answers[i].to)) return
+                  answersDispatch({type: 'INIT', value: newAnswers})
+                }}
               >
                 {answers && answers?.map((answer, index) => (
                   <div key={index}>
                     <ChatbotAnswer
                       key={index}
+                      index={index}
                       chatbotId={id}
                       to={answer.to}
                       message={answer.message}
                       chatbotList={chatbotList}
-                      onClickDelete={() => deleteAnswer(index)}
-                      onClickSave={(newAnswer) => updateAnswer(index, newAnswer)}
+                      onClickDelete={deleteAnswer}
+                      onClickSave={updateAnswer}
                     />
                   </div>
                 ))}
@@ -266,4 +282,4 @@ const Chatbot = ({ id, title, answers, questions, action, isLoading, color, inde
   )
 }
 
-export default Chatbot
+export default React.memo(Chatbot)

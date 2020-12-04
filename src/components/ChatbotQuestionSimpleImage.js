@@ -1,6 +1,6 @@
 import React from 'react';
 import ChatMessageSimpleImage from './ChatMessageSimpleImage'
-import useClickOustside from '../hooks/useClickOustside'
+import useEventListener from '../hooks/useEventListener'
 import useImageUpload from '../hooks/useImageUpload'
 
 const ChatbotQuestionSimpleImage = ({isLoading, ...props}) => {
@@ -12,7 +12,18 @@ const ChatbotQuestionSimpleImage = ({isLoading, ...props}) => {
   const images = ['jpg', 'png', 'gif', 'jpeg', 'bmp']
   const extension = location.split('.').pop()
 
-  useClickOustside(()=> setEdit(false), '.edit-image', edit)
+  const { onClickOutside } = useEventListener()
+
+  React.useEffect(() => {
+    if(!edit) return
+
+    const offClick = onClickOutside('.edit-image', ()=> setEdit(false))
+
+    return ()=> {
+      offClick()
+    }
+  }, [edit])
+
 
   const handleFileInput = (e, file) => {
     const target = file || e.target.files[0]

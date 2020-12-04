@@ -1948,12 +1948,17 @@ div:hover > .tooltip {
   margin-left: 5px;
   font-weight: bold;
 }
-.init-chatbot-btn {
+.chatbot-config-btn-area {
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+}
+
+.chatbot-config-btn-area > div {
   cursor: pointer;
-  padding: 10px;
+  margin: 10px;
 }
 .save-chatbot-btn {
-  cursor: pointer;
   border-radius: 10px;
   background-color: #0080F7;
   color: white;
@@ -2150,15 +2155,13 @@ div:hover > .tooltip {
 .chatbot .simple-thumbnail img {
   max-width: 245px
 }
-
 .message-link {
   width: 250px;
   font-weight: bold;
 }
-
 .message-link-text {
   margin: 5px 0;
-  font-size: 14px;
+  font-size: 13px;
   display: flex;
   align-items: center;
   justify-content: space-between;
