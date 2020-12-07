@@ -30,10 +30,13 @@ const initConfig = {
   themeColor: '#444c5d',
   chatbot: {
     state: '0',
-    list : [
-      {id: script.genId(), title: '처음으로', questions: [{message: '안녕하세요 챗봇입니다.', type: 1}, {message: '궁금한 사항을 선택해주세요.', type: 1}], answers: [{message:'상담원 연결', to:'CHAT'}]},
-      {id: script.genId(), title: '상담원 연결', questions: [{message: '상담원을 연결해드리겠습니다.', type: 1}], answers: [], action: 'CHAT'},
-    ]
+    list : (()=>{
+      const chatId = script.genId()
+      return [
+        {id: script.genId(), title: '처음으로', questions: [{message: '안녕하세요 챗봇입니다.', type: 1}, {message: '궁금한 사항을 선택해주세요.', type: 1}], answers: [{message:'상담원 연결', to: chatId}]},
+        {id: chatId, title: '상담원 연결', questions: [{message: '상담원을 연결해드리겠습니다.', type: 1}], answers: [], action: 'CHAT'},
+      ]
+    })()
   }
 }
 const initIconConfig = {

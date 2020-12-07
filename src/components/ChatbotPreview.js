@@ -4,6 +4,7 @@ import useScrollTo from '../hooks/useScrollTo'
 
 const ChatbotPreview = ({list, ...props}) => {
 
+  const nickname = props.nickname || 'Manager'
   const [temp, setTemp] = React.useState(true)
   const body = React.useRef(null)
   const [beforeList, setBeforeList] = React.useState([])
@@ -54,7 +55,7 @@ const ChatbotPreview = ({list, ...props}) => {
                 <div className="message-profile">
                   {(index === 0 || !beforeList[index-1].my) && props.profileImage === null && (
                     <div className="message-profile-icon">
-                      {props.nickname[0] || 'S'}
+                      {nickname[0]}
                     </div>
                   )}
                   {(index === 0 || beforeList[index-1].my) && props.profileImage !== null && (
@@ -67,7 +68,7 @@ const ChatbotPreview = ({list, ...props}) => {
                 <div className="message-body">
                   <div className="message-top">
                     {(index === 0 || beforeList[index-1].my) && (
-                      <div className="message-name">Manager3</div>
+                      <div className="message-name">{nickname}</div>
                     )}
                   </div>
                   <div className="message-bottom">
