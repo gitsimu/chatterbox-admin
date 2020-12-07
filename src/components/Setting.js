@@ -1492,14 +1492,17 @@ const Setting = ({ _key : key, database, isLoading, ...props }) => {
       )}
 
       {previewChatbot && (
-        <div className="chatbot-test-modal">
-          <div className="chatbot-test-modal-contents">
-            <div>
-              <div
-                className="chatbot-close"
-                onClick={() => setPreviewChatbot(null)}>
-                <i className="chatbot-close-icon"></i>
-              </div>
+        <div className="chatbot-test-modal">          
+          <div className="chatbot-test-modal-header">
+            미리보기
+            <div
+              className="chatbot-close"
+              onClick={() => setPreviewChatbot(null)}>
+              <i className="chatbot-close-icon"></i>
+            </div>
+          </div>
+          <div className="chatbot-test-modal-contents">          
+            <div>              
               <ChatbotPreview
                 showImageViewer={props.showImageViewer}
                 profileImage={profileImage}
