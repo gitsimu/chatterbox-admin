@@ -1,9 +1,13 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap');
+
 body {
   margin: 0;
+  font-family: 'Noto Sans KR', sans-serif;
 }
 div, input, textarea {
   box-sizing: border-box;
   font-family: "Avenir", "Noto Sans Japanese", "Hiragino Kaku Gothic ProN", "YuGothic", "Yu Gothic", "メイリオ", "Apple SD Gothic Neo", "Nanum Barun Gothic", "Helvetica", "Arial", "Malgun Gothic", "맑은 고딕", "돋움", "Dotum", "sans-serif";
+  font-family: 'Noto Sans KR', sans-serif;
   /* font-family: 'Nanum Gothic', cursive; */
 }
 
@@ -891,9 +895,9 @@ div, input, textarea {
 }
 .message-thumbnail {
   max-width: 250px;
-  border-radius: 8px;
+  /* border-radius: 8px; */
   position: relative;
-  overflow: hidden;
+  /* overflow: hidden; */
   margin-top: 10px;
   margin-bottom: 3px;
   cursor: zoom-in;
@@ -2136,13 +2140,13 @@ div:hover > .tooltip {
   background-color: #006cff; */
 }
 .add-questions-list > .add-questions{
-  border: 1px solid #0000ff26;
+  border: 1px solid rgb(228, 228, 229);
   z-index: 99;
   min-width: 100px;
   display: block;
 }
 .add-questions-list > .add-questions:hover {
-  background-color: #f0f3fc;
+  border-color: rgba(0, 108, 255, );
 }
 
 .chatbot-button.add-answers {
@@ -2173,6 +2177,9 @@ div:hover > .tooltip {
 .chatbot .chat-window-body {
   border-radius: 20px;
   /* border: 1px solid #f1f1f1; */
+}
+.chatbot .message {
+  font-size: 0;
 }
 
 .chatbot-preview .chatbot-button:hover {
@@ -2211,21 +2218,27 @@ div:hover > .tooltip {
   border-bottom: 1px solid #0000001a;
 }
 
-.question-image-edit{
+.question-image-edit {
   position: absolute;
   display: flex;
-  bottom: 0;
-  right: 0;
+  bottom: -10px;
+  right: -10px;
   background-color: white;
   height: 29px;
   width: 66px;
   font-size: 16px;
   align-items: center;
-  justify-content: space-evenly;
+  justify-content: center;
   border-radius: 15px;
+  border: 1px solid #eee;
 }
 .question-image-edit > * {
   cursor : pointer;
+  padding: 5px;
+}
+.question-image-edit > *:hover {
+  color: #006cff;
+  
 }
 .chatbot .opponent .sort-target {
   border: 1px solid transparent;
@@ -2287,7 +2300,8 @@ div:hover > .tooltip {
   width: 245px;
 }
 .chatbot .simple-thumbnail img {
-  max-width: 245px
+  max-width: 245px;
+  border-radius: 10px;
 }
 .message-link {
   width: 250px;

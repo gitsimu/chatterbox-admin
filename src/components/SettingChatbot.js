@@ -63,13 +63,13 @@ const SettingChatbot = ({...props}) => {
       title: '제목을 입력해주세요.',
       answers: [
         {
-          message: '내용을 입력해주세요.',
+          message: '답변을 연결해주세요.',
           to: ''
         }
       ],
       questions: [
         {
-          message: '내용을 입력해주세요.',
+          message: '답변을 연결해주세요.',
           type: 1
         }
       ],
