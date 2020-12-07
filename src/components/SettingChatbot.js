@@ -60,7 +60,7 @@ const SettingChatbot = ({...props}) => {
   const genNewChatbot = () => (
     {
       id: script.genId(),
-      title: '제목',
+      title: '제목을 입력해주세요.',
       answers: [
         {
           message: '내용을 입력해주세요.',
@@ -87,14 +87,21 @@ const SettingChatbot = ({...props}) => {
                    onChange={(e) => {
                      setChatbotState(e.target.checked ? '1' : '0')
                    }}/>
-            <span>챗봇기능 사용</span>
-          </label>
-
-          {chatbotState !== '0' && (
+            <span>챗봇기능 사용</span>            
+          </label>          
+        </div>
+        {chatbotState !== '0' && (
+          <>
+            <div className="setting-checkbox-item-description">챗봇기능을 사용할 시간대를 선택해주세요.</div>
+            <div className="setting-checkbox-item-description">해당 시간대에는 챗봇이 첫 응대를 하고, 그 외의 시간대엔 상담원에게 바로 연결됩니다.</div>
+          </>
+        )}
+        
+        {chatbotState !== '0' && (
             <div
               className="chatbot-config"
               style={{
-                margin: '13px 0 0 25px'
+                margin: '0 0 0 25px'
               }}>
               <label>
                 <input type="radio"
@@ -125,23 +132,19 @@ const SettingChatbot = ({...props}) => {
               </label>
             </div>
           )}
-        </div>
       </div>
       <div className="chatbot-config-btn-area">
+        <div style={{color: '#009fff'}}
+          onClick={()=>props.setShowChatbotTemplate(true)}>챗봇 템플릿</div>
         <div
           className="init-chatbot-btn"
-          onClick={props.resetChatbotList}>초기화</div>
-        <div
-          className="save-chatbot-btn"
-          onClick={saveChatbot}>저장</div>
-        <div
-          style={{
-            marginLeft: '127px'
-          }}
-          onClick={()=>props.setShowChatbotTemplate(true)}>템플릿</div>
+          onClick={props.resetChatbotList}>챗봇 초기화</div>        
         <div
           onClick={()=>props.setPreviewChatbot(chatbotList)}
         >미리보기</div>
+        <div
+          className="save-chatbot-btn"
+          onClick={saveChatbot}>저장하기</div>
       </div>
 
 
@@ -162,7 +165,7 @@ const SettingChatbot = ({...props}) => {
         <div
           className="add-chatbot-btn"
           onClick={addChatbot}>
-          추가
+          +
         </div>
       </div>
     </div>
