@@ -87,10 +87,7 @@ const ChatbotPreview = ({list, ...props}) => {
       ))}
 
       {current && (
-        <div style={{
-          marginTop: '15px',
-          textAlign: 'right',
-        }}>
+        <div className="chatbot-buttons">
           {current.answers?.map((answer,index)=> (
             <button
               key={`${current.id}_${index}`}

@@ -2182,6 +2182,18 @@ div:hover > .tooltip {
   font-size: 0;
 }
 
+.chatbot-preview .chatbot-buttons {
+  width: 80%;
+  margin-top: 15px;
+  margin-left: auto;
+  margin-right: 0;
+  font-size: 0;
+  text-align: right;
+}
+.chatbot-preview .chatbot-button {
+  display: inline-flex;
+  margin: 3px;
+}
 .chatbot-preview .chatbot-button:hover {
   background-color: #a4bad440;
 }
@@ -2210,6 +2222,7 @@ div:hover > .tooltip {
   text-align: center;
   display: inline-block;
   width: 64px;
+  color: #888;
 }
 .link-edit-content {
   flex: 3;
@@ -2383,9 +2396,12 @@ div:hover > .tooltip {
 
 .chatbot-template-inner {
   border-bottom: 1px solid #00000017;
-  margin: 20px 55px 0 30px;
-  padding-bottom: 15px;
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 80px;
+  padding-left: 30px;
 }
 .chatbot-template > i {
   display: none;
