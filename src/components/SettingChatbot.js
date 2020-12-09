@@ -165,7 +165,7 @@ const SettingChatbot = ({...props}) => {
         <div
           className="add-chatbot-btn"
           onClick={addChatbot}>
-          +
+          <span>+</span>
         </div>
       </div>
     </div>

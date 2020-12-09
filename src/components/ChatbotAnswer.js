@@ -87,9 +87,20 @@ const ChatbotAnswer = ({chatbotList, onClickDelete, onClickSave, index, ...props
             </select>
             <button
               className="edit-button"
-              style={{
-                marginLeft: 'auto'
+              onClick={() => {
+                onClickDelete(index)
+                setEdit(false)
               }}
+              style={{
+                color : 'red',
+                marginLeft : 'auto',
+              }}>삭제
+            </button>
+            <button
+              className="edit-button"
+              // style={{
+              //   marginLeft: 'auto'
+              // }}
               onClick={() => {
                 const newAnswer = {
                   message: messageRef.current.value,

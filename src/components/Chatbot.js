@@ -244,6 +244,7 @@ const Chatbot = ({ id, action, isLoading, color, index, updateChatbot, deleteCha
             <div className="message myself"
                  style={{ flexDirection: 'column' }}>
               <ReactSortable
+                className="chatbot-answer-container"
                 handle=".sort-target"
                 list={answers}
                 setList={newAnswers => {
@@ -252,7 +253,7 @@ const Chatbot = ({ id, action, isLoading, color, index, updateChatbot, deleteCha
                 }}
               >
                 {answers && answers?.map((answer, index) => (
-                  <div key={index}>
+                  <div key={index} className="chatbot-answer">
                     <ChatbotAnswer
                       key={index}
                       index={index}

@@ -1304,6 +1304,7 @@ div, input, textarea {
   padding: 20px 0;
   overflow: auto;
   background: #fff;
+  border: 1px solid #eee;
 }
 .setting .message {
   display: flex;
@@ -1858,6 +1859,9 @@ div:hover > .tooltip {
   border: none;
   outline: none;
 }
+.chatbot .edit-button:hover{
+  text-decoration: underline;
+}
 .chatbot .chatbot-option {
   background: #fff;
   color: #494949;
@@ -1904,7 +1908,7 @@ div:hover > .tooltip {
   content: '';
   height: 2px;
   width: 20px;
-  background: #333;
+  background: #888;
   position: absolute;
   top: 10px;
 }
@@ -1913,6 +1917,10 @@ div:hover > .tooltip {
 }
 .chatbot-close-icon::after{
   transform: rotate(-45deg);
+}
+.chatbot-close:hover .chatbot-close-icon::before,
+.chatbot-close:hover .chatbot-close-icon::after {
+  background: #333;
 }
 
 .close-icon {
@@ -1956,10 +1964,11 @@ div:hover > .tooltip {
   height: 36px;
   position: relative;
   top: 1px;
-  margin-left: 3px;
+  margin-left: 5px;
+  margin-right: 40px;
   font-weight: bold;
   border-radius: 5px;
-  padding: 10px;
+  padding: 5px 10px;
   border: 1px solid transparent;
   transition: 0.2s ease all;
 }
@@ -2028,7 +2037,7 @@ div:hover > .tooltip {
   align-items: center;
   justify-content: center;
   font-size: 48px;
-  /* border: 1px solid #eee; */
+  border: 1px solid #fff;
 }
 .add-chatbot-btn:after {
   content: '새 대화 추가하기';
@@ -2044,6 +2053,13 @@ div:hover > .tooltip {
   opacity: 1;
   transform: translate(-50%, 0);
 }
+.add-chatbot-btn span {
+  transition: 0.3s ease all;
+}
+.add-chatbot-btn:hover span {
+  transform: rotate(180deg);
+}
+
 .chatbot-list {
   min-width: 840px;
   width: 100%;
@@ -2072,12 +2088,12 @@ div:hover > .tooltip {
   outline: none;
 }
 
-.chatbot .message.opponent .message-inner,
-.chatbot-button.sort-target {
+/* .chatbot-button.sort-target, */
+.chatbot .message.opponent .message-inner {
   position: relative;
 }
-.chatbot .message.opponent .message-inner:after,
-.chatbot-button.sort-target:after {
+/* .chatbot-button.sort-target:after, */
+.chatbot .message.opponent .message-inner:after {
   content: "\e05f";
   font-family: 'simple-line-icons';
   speak: none;
@@ -2103,9 +2119,10 @@ div:hover > .tooltip {
   z-index: 1;  
   opacity: 0;
   pointer-events: none;
+  border-radius: 3px;
 }
-.chatbot .message.opponent .message-inner:hover:after,
-.chatbot-button.sort-target:hover:after {
+/* .chatbot-button.sort-target:hover:after, */
+.chatbot .message.opponent .message-inner:hover:after {
   opacity: 1;  
   right: -25px;
 }
@@ -2130,7 +2147,7 @@ div:hover > .tooltip {
   /* width: 130px; */  
   text-align: center;
   position: relative;
-  left: 22px;
+  left: 25px;
   /* color: blue;
   border: 1px solid #f0f3fc;
   background-color: white; */
@@ -2167,6 +2184,11 @@ div:hover > .tooltip {
   position: absolute;
   top: 7px;
   right: 0;
+}
+
+.close-icon:hover::before,
+.close-icon:hover::after {
+  background: #333;
 }
 
 .chatbot .chat-window-body {
@@ -2387,6 +2409,7 @@ div:hover > .tooltip {
 .chatbot-template {
   border-radius: 10px;
   cursor: pointer;
+  background: #f9f9f9;
   transition-property: background, border;
   transition-duration: 0.2s;
   margin: 0 10px 10px 15px;
@@ -2395,7 +2418,7 @@ div:hover > .tooltip {
 }
 
 .chatbot-template-inner {
-  border-bottom: 1px solid #00000017;
+  /* border-bottom: 1px solid #00000017; */
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -2497,7 +2520,63 @@ div:hover > .tooltip {
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
 }
+.chatbot-test-modal-header .chatbot-close {
+  right: 20px;
+  opacity: 1;
+}
 .chatbot-test-modal-header .chatbot-close-icon::before, 
 .chatbot-test-modal-header .chatbot-close-icon::after {
+  background: #fff !important;
+}
+
+
+
+/**/
+.chatbot-answer-container {
+  width: 90%;
+  text-align: right;
+  margin-top: 20px;
+}
+.chatbot-answer {
+  position: relative;
+  display: inline-block;
+}
+.chatbot-answer .close-icon {
+  display: none;
+}
+.chatbot-to-title {
+  position: absolute;  
+  opacity: 0;
+  left: -10px;
+  top: -8px;
+  z-index: 1;
+  transition: 0.2s ease opacity;
+}
+.chatbot-to-title > span {
+  padding: 3px 6px !important;
+  font-size: 10px !important;
+}
+.chatbot-to-title > img {
+  padding: 3px 8px;
   background: #fff;
+  border: 1px solid #f1f1f1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 25px;
+}
+.chatbot-close {
+  opacity: 0;
+  transition: 0.2s ease opacity;
+}
+.chatbot:hover .chatbot-to-title,
+.chatbot:hover .chatbot-close {  
+  opacity: 1;
+}
+.chatbot-button {
+  margin: 3px;
+  transition: 0.2s ease border;
+}
+.chatbot-button:hover {
+  border-color: #006cff;
 }
