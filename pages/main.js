@@ -24,12 +24,29 @@ function Main({ settings, initUsers, clearUsers, selectedUser, signIn, signOut, 
   const [imageViewer, showImageViewer] = React.useState(null)
   const [loading, isLoading] = React.useState(false)
   const [svid, setSvid] = React.useState(null)
+  const usersRef = React.useRef([])
   const { onKeyEscape } = useEventListener()
 
   if (!firebase.apps.length) {
     firebase.initializeApp(FirebaseConfig)
   }
   const database = firebase.database()
+
+  React.useEffect(() => {
+    const onMessage = e => {
+      const target = usersRef.current.find(u=> u.key === e.data.key)
+      if(!target) return
+
+      setScreenState(0)
+      setTabState(target.value.state || 0)
+      selectedUser(target)
+    }
+    window.addEventListener('message', onMessage)
+
+    return ()=>{
+      window.removeEventListener('message', onMessage)
+    }
+  }, [])
 
   React.useEffect(() => {
     if(!imageViewer) return
@@ -116,6 +133,7 @@ function Main({ settings, initUsers, clearUsers, selectedUser, signIn, signOut, 
             }
           })
 
+          usersRef.current = users
           initUsers(users)
           setSvid(params.svid)
           isLoading(false)
@@ -139,7 +157,7 @@ function Main({ settings, initUsers, clearUsers, selectedUser, signIn, signOut, 
                 body: message,
                 silent: false
               }
-              window.parent.postMessage({ method: 'chat_notification', body: body }, '*')
+              window.parent.postMessage({ method: 'chat_notification', key: recentsData.userId, body: body }, '*')
             }
           })
       })

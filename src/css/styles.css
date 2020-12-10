@@ -2566,7 +2566,7 @@ div:hover > .tooltip {
   border-radius: 25px;
 }
 .chatbot-close {
-  opacity: 0;
+  /*opacity: 0;*/
   transition: 0.2s ease opacity;
 }
 .chatbot:hover .chatbot-to-title,

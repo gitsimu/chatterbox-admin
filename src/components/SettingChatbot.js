@@ -38,24 +38,19 @@ const SettingChatbot = ({...props}) => {
   React.useEffect(() => {
     dispatch({type : 'INIT', value: props.chatbotList})
   }, [props.chatbotList])
-
-  const saveChatbot = ()=> {
-    console.log(chatbotState, chatbotList)
-    props.saveChatbot(chatbotState, chatbotList)
-  }
-
   const addChatbot = () => {
     const newChatbot = genNewChatbot()
     dispatch({type : 'ADD', value : newChatbot})
   }
-
   const updateChatbot = React.useCallback((index, newChatbot) => {
     dispatch({type: 'UPDATE', index: index, value: newChatbot})
   }, [])
-
   const deleteChatbot = React.useCallback((index) => {
     dispatch({type: 'DELETE', index: index })
   }, [])
+  const saveChatbot = ()=> {
+    props.saveChatbot(chatbotState, chatbotList)
+  }
 
   const genNewChatbot = () => (
     {
