@@ -34,6 +34,8 @@ function Main({ settings, initUsers, clearUsers, selectedUser, signIn, signOut, 
 
   React.useEffect(() => {
     const onMessage = e => {
+      if (!e.data.method || e.data.method !== 'notifiaction_click') return
+
       const target = usersRef.current.find(u=> u.key === e.data.key)
       if(!target) return
 
