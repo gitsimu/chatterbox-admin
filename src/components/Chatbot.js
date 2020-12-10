@@ -93,7 +93,7 @@ const Chatbot = ({ id, action, isLoading, color, index, updateChatbot, deleteCha
 
     Promise.resolve()
       .then(()=> isLoading(true))
-      .then(()=> uploadImage(target))
+      .then(()=> uploadImage(target, {'tag' : 'chatbot'}))
       .then(res => {
         addQuestion({
           message: JSON.stringify(res.data.file),
