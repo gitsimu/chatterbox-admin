@@ -46,6 +46,7 @@ const SettingChatbot = ({...props}) => {
     dispatch({type: 'UPDATE', index: index, value: newChatbot})
   }, [])
   const deleteChatbot = React.useCallback((index) => {
+    if(!confirm('삭제하시겠습니까?')) return
     dispatch({type: 'DELETE', index: index })
   }, [])
   const saveChatbot = ()=> {

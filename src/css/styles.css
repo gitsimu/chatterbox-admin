@@ -2006,7 +2006,6 @@ div:hover > .tooltip {
   color: #006cff !important;
 }
 .save-chatbot-btn {
-  border-radius: 10px;    
   padding: 8px;
   min-width: 120px;
   text-align: center;
@@ -2014,13 +2013,11 @@ div:hover > .tooltip {
   margin-left: 30px;  
   cursor: pointer;
   transition: 0.2s ease all;
-  color: #aaa;
   border: 1px solid #eee;
-  background-color: #fff;
-}
-.save-chatbot-btn:hover {
   color: white;
   background-color: #006cff;
+}
+.save-chatbot-btn:hover {
   border-color: #006cff;
 }
 .add-chatbot-btn {
@@ -2359,6 +2356,7 @@ div:hover > .tooltip {
   top: 0;
   width: 100%;
   height: 100%;
+  z-index: 9999;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2371,7 +2369,8 @@ div:hover > .tooltip {
   border: 1px solid #b6b6b6;
   background-color: white;
   position: fixed;
-  width: 900px;
+  width: 1040px;
+  min-width: 1040px;
   height: 65%;
   border-radius: 10px;
 }
@@ -2455,7 +2454,7 @@ div:hover > .tooltip {
   font-weight: bold;
 }
 .chatbot-description {
-  font-size: 14px;
+  font-size: 13px;
   color: #00000080;
   font-weight: bold;
 }

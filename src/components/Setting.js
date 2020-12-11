@@ -58,8 +58,8 @@ const initIconConfig = {
 }
 const chatbotTemplate = [
   {
-    name: '템플릿1',
-    description: '챗봇으로 업무량 줄이기',
+    name: '챗봇으로 업무량 줄이기',
+    description: '자주 묻는 문의가 많은 경우, 자동으로 답변하여 업무량을 줄이세요.',
     list: [
       {
         "action": "",
@@ -93,7 +93,6 @@ const chatbotTemplate = [
           {
             "message": "안녕하세요.\n[회사명] 챗봇입니다 :)\n궁금한 사항을 선택해주세요.\n\n상담원 연결 가능 시간\n평일 00시 ~ 00시\n점심 00시 ~ 00시",
             "type": 1,
-            "_id": 0
           }
         ],
         "title": "처음으로"
@@ -105,7 +104,6 @@ const chatbotTemplate = [
           {
             "message": "상담원을 연결해드리겠습니다.",
             "type": 1,
-            "_id": 0
           }
         ],
         'answers': [],
@@ -124,7 +122,6 @@ const chatbotTemplate = [
           {
             "message": "요금 안내입니다.\n\nA TYPE은 5만원\nB TYPE은 10만원입니다.\n\n* 멘트를 수정하세요",
             "type": 1,
-            "_id": 0
           }
         ],
         "title": "요금 안내"
@@ -150,7 +147,6 @@ const chatbotTemplate = [
           {
             "message": "서비스 종류를 선택해 주세요.",
             "type": 1,
-            "_id": 0
           }
         ],
         "title": "서비스 안내"
@@ -168,12 +164,10 @@ const chatbotTemplate = [
           {
             "message": "배송 안내입니다.\n\n영업일 오전 00시 이전에 접수된 주문은 대략 00일에서 00일 사이에 배송되며, 주말과 국경일은 제외됩니다.",
             "type": 1,
-            "_id": 0
           },
           {
             "message": "영업일 오전 00시 이후 또는 공휴일에 접수된 주문, 도서, 산간 지역의 경우에는 1~2일이 추가로 소요될 수 있습니다.",
             "type": 1,
-            "_id": 1
           }
         ],
         "title": "배송 안내"
@@ -191,17 +185,14 @@ const chatbotTemplate = [
           {
             "message": "이벤트 안내입니다.",
             "type": 1,
-            "_id": 0
           },
           {
             "message": "신규 가입자 분에게\n20% 할인쿠폰을 제공해 드리고 있습니다.\n\n자세한 내용은 아래\n[이벤트 보러 가기] 버튼을 눌러주세요.\n\n*아래 버튼 링크를 수정해주세요",
             "type": 1,
-            "_id": 1
           },
           {
-            "message": "{\"text\":\"이벤트 보러 가기\",\"url\":\"/event\"}",
+            "message": "{\"text\":\"이벤트 보러 가기\",\"url\":\"https://smlog.co.kr\"}",
             "type": 4,
-            "_id": 2
           }
         ],
         "title": "이벤트 안내"
@@ -223,7 +214,6 @@ const chatbotTemplate = [
           {
             "message": "A TYPE에 대한 안내입니다.",
             "type": 1,
-            "_id": 0
           }
         ],
         "title": "A TYPE"
@@ -249,7 +239,6 @@ const chatbotTemplate = [
           {
             "message": "B TYPE에 대한 안내입니다.",
             "type": 1,
-            "_id": 0
           }
         ],
         "action": "",
@@ -258,8 +247,8 @@ const chatbotTemplate = [
     ]
   },
   {
-    name: '템플릿2',
-    description: '퇴근 후 챗봇으로 자동응대',
+    name: '퇴근 후 챗봇으로 자동응대',
+    description: '업무시간이 종료되어도, 자동으로 답변하여 고객 만족도를 향상 시켜보세요.',
     list : [
       {
         "id": "START",
@@ -391,7 +380,7 @@ const chatbotTemplate = [
             "type": 1
           },
           {
-            "message": "{\"text\":\"이벤트 보러 가기\",\"url\":\"/event\"}",
+            "message": "{\"text\":\"이벤트 보러 가기\",\"url\":\"https://smlog.co.kr\"}",
             "type": 4
           }
         ],
@@ -458,7 +447,7 @@ const chatbotTemplate = [
             "type": 1
           },
           {
-            "message": "{\"text\":\"1:1 문의 게시판 바로가기\",\"url\":\"/customer\"}",
+            "message": "{\"text\":\"1:1 문의 게시판 바로가기\",\"url\":\"https://smlog.co.kr\"}",
             "type": 4
           }
         ],
@@ -467,8 +456,8 @@ const chatbotTemplate = [
     ]
   },
   {
-    name: '템플릿3',
-    description: '이벤트 안내로 구매 유도',
+    name: '이벤트 안내로 구매 유도',
+    description: '진행중인 이벤트를 홍보하여, 구매 전환률을 상승 시킵니다.',
     list: [
       {
         "id": "START",
