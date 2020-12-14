@@ -205,7 +205,7 @@ const Chatbot = ({ id, action, isLoading, color, index, updateChatbot, deleteCha
                 <div
                   onClick={()=> {
                     addQuestion({
-                      message: '답변을 연결해주세요.',
+                      message: '메시지를 입력해주세요.',
                       type: 1
                     })
                     setShowAdd(false)

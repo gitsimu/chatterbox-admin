@@ -65,7 +65,7 @@ const SettingChatbot = ({...props}) => {
       ],
       questions: [
         {
-          message: '답변을 연결해주세요.',
+          message: '메시지를 입력해주세요.',
           type: 1
         }
       ],

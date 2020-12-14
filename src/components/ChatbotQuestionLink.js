@@ -2,6 +2,7 @@ import React from 'react';
 import useEventListener from '../hooks/useEventListener'
 import ChatMessageLink from './ChatMessageLink'
 
+const PROTOCOL_REGEX = /^((http:)|(https:))?\/\//
 const ChatbotQuestionLink = ({...props}) => {
 
   const [edit, setEdit] = React.useState(false)
@@ -24,7 +25,9 @@ const ChatbotQuestionLink = ({...props}) => {
   const onClickSave = ()=> {
     const message = JSON.stringify({
       text: messageRef.current.value,
-      url: linkRef.current.value
+      url: PROTOCOL_REGEX.test(linkRef.current.value)
+        ? linkRef.current.value
+        : `//${linkRef.current.value}`
     })
 
     const newQuestion = {
@@ -41,7 +44,7 @@ const ChatbotQuestionLink = ({...props}) => {
 
     const { text, url } = JSON.parse(props.message)
     messageRef.current.value = text
-    linkRef.current.value = url
+    linkRef.current.value = url.startsWith('//') ? url.slice(2) : url
 
     messageRef.current.style.height = (messageRef.current.scrollHeight + 12) + 'px'
     messageRef.current.focus()
