@@ -153,9 +153,7 @@ const Chatbot = ({ id, action, isLoading, color, index, updateChatbot, deleteCha
 
                 <div className="message-profile">
                   {index === 0 && props.profileImage === null && (
-                    <div className="message-profile-icon">
-                      {props.nickname[0] || 'S'}
-                    </div>
+                    <div className="message-profile-icon">{(props.nickname && props.nickname.length > 0) ? props.nickname.substring(0, 1) : 'S'}</div>
                   )}
                   {index === 0 && props.profileImage !== null && (
                     <div className="message-profile-image">

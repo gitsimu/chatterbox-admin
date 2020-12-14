@@ -2214,7 +2214,10 @@ div:hover > .tooltip {
   margin: 3px;
 }
 .chatbot-preview .chatbot-button:hover {
-  background-color: #a4bad440;
+  /* background-color: #a4bad440; */
+  border-color: #0080f7;
+  background-color: #0080f7;
+  color: #fff;
 }
 
 .chatbot-preview {
@@ -2347,8 +2350,10 @@ div:hover > .tooltip {
   justify-content: space-between;
 }
 .message-link-text i {
-  font-size: 20px;
-  color: blue;
+  font-size: 12px;
+  font-weight: bold;
+  color: #222;
+  margin-left: 5px;
 }
 .chatbot-template-modal-layer {
   position: fixed;
