@@ -12,7 +12,7 @@ const ChatMessageLink = ({message, ...props}) => {
       onClick={()=> { props.onClick && props.onClick(url) }}>
       <span className="message-link-text">
         {text}
-        <i className="icon-arrow-right-circle"/>
+        <i className="icon-arrow-right"/>
       </span>
     </div>
   );
