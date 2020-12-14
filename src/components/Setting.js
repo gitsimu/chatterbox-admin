@@ -609,7 +609,7 @@ const Setting = ({ _key : key, database, isLoading, ...props }) => {
   const [chatbotList, setChatbotList] = React.useState(null)
   const [chatbotState, setChatbotState] = React.useState(null)
   const [showChatbotTemplate, setShowChatbotTemplate] = React.useState(false)
-  const [seletedTemplate, setSeletedTemplate] = React.useState(null)
+  const [seletedTemplate, setSeletedTemplate] = React.useState(chatbotTemplate[0])
   const [previewChatbot, setPreviewChatbot] = React.useState(null)
 
   let [uploadImage] = useImageUpload()
@@ -700,7 +700,7 @@ const Setting = ({ _key : key, database, isLoading, ...props }) => {
           setFirstMessage(firebaseData.firstMessage || initConfig.firstMessage)
           setThemeColor(firebaseData.themeColor || initConfig.themeColor)
           setProfileImage(firebaseData.profileImage || null)
-          setMissedMessage(firebaseData.workingDay.message)
+          setMissedMessage((firebaseData.workingDay || initWorkingDay).message)
           setChatbotConfig(firebaseData.chatbot || initConfig.chatbot)
         } else {
           setTitle(initConfig.title)

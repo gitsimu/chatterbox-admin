@@ -148,7 +148,7 @@ const SettingChatbot = ({...props}) => {
 
 
       <div className="chatbot-list">
-        {chatbotList.map((chatbot, index) => (
+        {(chatbotList || []).map((chatbot, index) => (
           <Chatbot
             key={chatbot.id}
             {...chatbot}
