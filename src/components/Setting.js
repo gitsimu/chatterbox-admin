@@ -515,7 +515,7 @@ const chatbotTemplate = [
             "type": 1
           },
           {
-            "message": "{\"text\":\"이벤트 보러 가기\",\"url\":\"/event\"}",
+            "message": "{\"text\":\"이벤트 보러 가기\",\"url\":\"https://smlog.co.kr\"}",
             "type": 4
           }
         ],
@@ -540,7 +540,7 @@ const chatbotTemplate = [
             "type": 1
           },
           {
-            "message": "{\"text\":\"이벤트 보러 가기\",\"url\":\"/event\"}",
+            "message": "{\"text\":\"이벤트 보러 가기\",\"url\":\"https://smlog.co.kr\"}",
             "type": 4
           }
         ],
@@ -570,7 +570,7 @@ const chatbotTemplate = [
             "type": 1
           },
           {
-            "message": "{\"text\":\"후기 작성 후 적립금 요청하기\",\"url\":\"/board\"}",
+            "message": "{\"text\":\"후기 작성 후 적립금 요청하기\",\"url\":\"https://smlog.co.kr\"}",
             "type": 4
           }
         ],
