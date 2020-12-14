@@ -271,6 +271,7 @@ const Chat = ({ settings, messages, addMessages, pagingMessages, initMessages, d
             <label>
               <i className='icon-paper-clip'></i>
               <input type='file'
+                accept="image/*"
                 onClick={e => handleFileInputClear(e)}
                 onChange={e => handleFileInput(e)}/>
             </label>

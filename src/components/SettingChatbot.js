@@ -134,7 +134,10 @@ const SettingChatbot = ({...props}) => {
           onClick={()=>props.setShowChatbotTemplate(true)}>챗봇 템플릿</div>
         <div
           className="init-chatbot-btn"
-          onClick={props.resetChatbotList}>챗봇 초기화</div>        
+          onClick={()=> {
+            if(!confirm("초기화 하시겠습니까?")) return
+            props.resetChatbotList()
+          }}>챗봇 초기화</div>
         <div
           onClick={()=>props.setPreviewChatbot(chatbotList)}
         >미리보기</div>

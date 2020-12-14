@@ -609,7 +609,7 @@ const Setting = ({ _key : key, database, isLoading, ...props }) => {
   const [chatbotList, setChatbotList] = React.useState(null)
   const [chatbotState, setChatbotState] = React.useState(null)
   const [showChatbotTemplate, setShowChatbotTemplate] = React.useState(false)
-  const [seletedTemplate, setSeletedTemplate] = React.useState(null)
+  const [seletedTemplate, setSeletedTemplate] = React.useState(chatbotTemplate[0])
   const [previewChatbot, setPreviewChatbot] = React.useState(null)
 
   let [uploadImage] = useImageUpload()
@@ -1237,7 +1237,10 @@ const Setting = ({ _key : key, database, isLoading, ...props }) => {
                 <div style={{ display: "flex" }}>
                   <label className="setting-profile-image-upload">
                     <div>새 이미지 업로드</div>
-                    <input type="file" onChange={e => handleFileInput(e)}/>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={e => handleFileInput(e)}/>
                   </label>
                   { profileImage !== null && (
                     <div className="setting-profile-image-remove"

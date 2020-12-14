@@ -219,6 +219,7 @@ const Chatbot = ({ id, action, isLoading, color, index, updateChatbot, deleteCha
                   className="chatbot-button add-questions">
                   이미지
                   <input type="file"
+                         accept="image/*"
                          name={`add-image_${index}`}
                          onClick={e => (e.target.value = '')}
                          onChange={e => {
