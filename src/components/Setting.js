@@ -606,10 +606,10 @@ const Setting = ({ _key : key, database, isLoading, ...props }) => {
   const [iconTextAlign, setIconTextAlign] = React.useState()
 
   const chatbotListOrigin = React.useRef([])
-  const [chatbotList, setChatbotList] = React.useState([])
+  const [chatbotList, setChatbotList] = React.useState(null)
   const [chatbotState, setChatbotState] = React.useState(null)
   const [showChatbotTemplate, setShowChatbotTemplate] = React.useState(false)
-  const [seletedTemplate, setSeletedTemplate] = React.useState(chatbotTemplate[0])
+  const [seletedTemplate, setSeletedTemplate] = React.useState(null)
   const [previewChatbot, setPreviewChatbot] = React.useState(null)
 
   let [uploadImage] = useImageUpload()
@@ -691,26 +691,30 @@ const Setting = ({ _key : key, database, isLoading, ...props }) => {
 
     Promise.all([getFirebase, getDb])
       .then(([snapshot, dbData]) => {
-        const firebaseData = snapshot.val() || {}
-
-        setTitle(firebaseData.title || initConfig.title)
-        setSubTitle(firebaseData.subTitle || initConfig.subTitle)
-        setNickname(firebaseData.nickname || initConfig.nickname)
-        setFirstMessage(firebaseData.firstMessage || initConfig.firstMessage)
-        setThemeColor(firebaseData.themeColor || initConfig.themeColor)        
-        setChatbotConfig(firebaseData.chatbot || initConfig.chatbot)
+        const firebaseData = snapshot.val()
 
         if (firebaseData) {
+          setTitle(firebaseData.title || initConfig.title)
+          setSubTitle(firebaseData.subTitle || initConfig.subTitle)
+          setNickname(firebaseData.nickname || initConfig.nickname)
+          setFirstMessage(firebaseData.firstMessage || initConfig.firstMessage)
+          setThemeColor(firebaseData.themeColor || initConfig.themeColor)
           setProfileImage(firebaseData.profileImage || null)
+          setMissedMessage(firebaseData.workingDay.message)
+          setChatbotConfig(firebaseData.chatbot || initConfig.chatbot)
+        } else {
+          setTitle(initConfig.title)
+          setSubTitle(initConfig.subTitle)
+          setNickname(initConfig.nickname)
+          setFirstMessage(initConfig.firstMessage)
+          setThemeColor(initConfig.themeColor)
+          setChatbotConfig(initConfig.chatbot)
         }
-        if (firebaseData && firebaseData.workingDay) {
-          setMissedMessage(firebaseData.workingDay.message || '')
-        }
-        
+
         if (dbData) {
           setWorkingDay({
             isInit: true,
-            message: firebaseData.workingDay
+            message: firebaseData
               ? firebaseData.workingDay.message
               : '',
             use: dbData.scm_time_state === '1',
@@ -1233,10 +1237,7 @@ const Setting = ({ _key : key, database, isLoading, ...props }) => {
                 <div style={{ display: "flex" }}>
                   <label className="setting-profile-image-upload">
                     <div>새 이미지 업로드</div>
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={e => handleFileInput(e)}/>
+                    <input type="file" onChange={e => handleFileInput(e)}/>
                   </label>
                   { profileImage !== null && (
                     <div className="setting-profile-image-remove"
