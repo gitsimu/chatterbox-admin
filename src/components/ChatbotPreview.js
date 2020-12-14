@@ -54,9 +54,7 @@ const ChatbotPreview = ({list, ...props}) => {
                 className="message opponent">
                 <div className="message-profile">
                   {(index === 0 || !beforeList[index-1].my) && props.profileImage === null && (
-                    <div className="message-profile-icon">
-                      {nickname[0]}
-                    </div>
+                    <div className="message-profile-icon">{(props.nickname && props.nickname.length > 0) ? props.nickname.substring(0, 1) : 'S'}</div>
                   )}
                   {(index === 0 || beforeList[index-1].my) && props.profileImage !== null && (
                     <div className="message-profile-image">

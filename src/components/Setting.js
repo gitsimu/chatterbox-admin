@@ -693,24 +693,20 @@ const Setting = ({ _key : key, database, isLoading, ...props }) => {
       .then(([snapshot, dbData]) => {
         const firebaseData = snapshot.val()
 
-        if (firebaseData) {
-          setTitle(firebaseData.title)
-          setSubTitle(firebaseData.subTitle)
-          setNickname(firebaseData.nickname)
-          setFirstMessage(firebaseData.firstMessage)
-          setThemeColor(firebaseData.themeColor)
-          setProfileImage(firebaseData.profileImage || null)
-          setMissedMessage(firebaseData.workingDay.message)
-          setChatbotConfig(firebaseData.chatbot)
-        } else {
-          setTitle(initConfig.title)
-          setSubTitle(initConfig.subTitle)
-          setNickname(initConfig.nickname)
-          setFirstMessage(initConfig.firstMessage)
-          setThemeColor(initConfig.themeColor)
-          setChatbotConfig(initConfig.chatbot)
-        }
+        setTitle(firebaseData.title || initConfig.title)
+        setSubTitle(firebaseData.subTitle || initConfig.subTitle)
+        setNickname(firebaseData.nickname || initConfig.nickname)
+        setFirstMessage(firebaseData.firstMessage || initConfig.firstMessage)
+        setThemeColor(firebaseData.themeColor || initConfig.themeColor)        
+        setChatbotConfig(firebaseData.chatbot || initConfig.chatbot)
 
+        if (firebaseData) {
+          setProfileImage(firebaseData.profileImage || null)
+        }
+        if (firebaseData && firebaseData.workingDay) {
+          setMissedMessage(firebaseData.workingDay.message || '')
+        }
+        
         if (dbData) {
           setWorkingDay({
             isInit: true,
