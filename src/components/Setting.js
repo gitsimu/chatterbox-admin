@@ -606,7 +606,7 @@ const Setting = ({ _key : key, database, isLoading, ...props }) => {
   const [iconTextAlign, setIconTextAlign] = React.useState()
 
   const chatbotListOrigin = React.useRef([])
-  const [chatbotList, setChatbotList] = React.useState(null)
+  const [chatbotList, setChatbotList] = React.useState([])
   const [chatbotState, setChatbotState] = React.useState(null)
   const [showChatbotTemplate, setShowChatbotTemplate] = React.useState(false)
   const [seletedTemplate, setSeletedTemplate] = React.useState(chatbotTemplate[0])
@@ -691,7 +691,7 @@ const Setting = ({ _key : key, database, isLoading, ...props }) => {
 
     Promise.all([getFirebase, getDb])
       .then(([snapshot, dbData]) => {
-        const firebaseData = snapshot.val()
+        const firebaseData = snapshot.val() || {}
 
         setTitle(firebaseData.title || initConfig.title)
         setSubTitle(firebaseData.subTitle || initConfig.subTitle)
@@ -710,7 +710,7 @@ const Setting = ({ _key : key, database, isLoading, ...props }) => {
         if (dbData) {
           setWorkingDay({
             isInit: true,
-            message: firebaseData
+            message: firebaseData.workingDay
               ? firebaseData.workingDay.message
               : '',
             use: dbData.scm_time_state === '1',
