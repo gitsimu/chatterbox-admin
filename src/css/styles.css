@@ -2402,7 +2402,7 @@ div:hover > .tooltip {
   z-index: 10000;
   border: 1px solid #b6b6b6;
   background-color: white;
-  position: fixed;
+  position: relative;
   width: 1040px;
   min-width: 1040px;
   height: 65%;
