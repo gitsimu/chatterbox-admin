@@ -2516,6 +2516,7 @@ div:hover > .tooltip {
 }
 
 .chatbot-test-modal {
+  z-index: 9999;
   position: fixed;
   display: flex;
   flex-direction: column;
