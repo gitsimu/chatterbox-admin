@@ -1,21 +1,33 @@
 import React from 'react'
 
 const useEventListener = () => {
+  const closest = function(_selector) {
+    let start = this;
+    while (parent) {
+      const cond1 = start.parentElement ? start.parentElement.querySelector(_selector) : null;
+      const cond2  = start.matches ? start.matches(_selector) : start.msMatchesSelector(_selector);
+      if (cond1 && cond2) return start;
+      else if (!start.parentElement) return null;
+      start = start.parentElement;
+    }
+    return null;
+  };
+
   const onClickOutside = (selector, action) => {
     let clickInside = false
 
     const onMouseDown = e => {
-      clickInside = e.target.closest(selector)
+      clickInside = !!closest.call(e.target, selector)
     }
 
     const onMouseUp = e => {
       if(clickInside) return
-      clickInside = e.target.closest(selector)
+      clickInside = !!closest.call(e.target, selector)
     }
 
     const onClick = e=> {
       if(clickInside) return
-      clickInside = e.target.closest(selector)
+      clickInside = !!closest.call(e.target, selector)
 
       if (!clickInside) action()
     }
