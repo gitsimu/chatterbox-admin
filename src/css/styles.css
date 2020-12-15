@@ -1012,6 +1012,10 @@ div, input, textarea {
   background: rgba(0, 0, 0, 0.3);
   color: #ddd;
 }
+.setting-list-tab > div {
+  display: flex;
+  align-items: center;
+}
 .setting-list-tab .new {      
   font-size: 10px;      
   border-radius: 3px;

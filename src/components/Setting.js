@@ -934,7 +934,7 @@ const Setting = ({ _key : key, database, isLoading, ...props }) => {
           onClick={() => { setSettingMenuState(3) }}>
           <div>
             챗봇 설정
-            <span className="new">new</span>
+            <span className="new">NEW</span>
           </div>
         </div>
         {/* <div className="setting-list-title">Etc</div>
