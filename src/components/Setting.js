@@ -609,7 +609,7 @@ const Setting = ({ _key : key, database, isLoading, ...props }) => {
   const [chatbotList, setChatbotList] = React.useState(null)
   const [chatbotState, setChatbotState] = React.useState(null)
   const [showChatbotTemplate, setShowChatbotTemplate] = React.useState(false)
-  const [seletedTemplate, setSeletedTemplate] = React.useState(chatbotTemplate[0])
+  const [seletedTemplate, setSeletedTemplate] = React.useState(null)
   const [previewChatbot, setPreviewChatbot] = React.useState(null)
 
   let [uploadImage] = useImageUpload()
@@ -700,7 +700,7 @@ const Setting = ({ _key : key, database, isLoading, ...props }) => {
           setFirstMessage(firebaseData.firstMessage || initConfig.firstMessage)
           setThemeColor(firebaseData.themeColor || initConfig.themeColor)
           setProfileImage(firebaseData.profileImage || null)
-          setMissedMessage((firebaseData.workingDay || initWorkingDay).message)
+          setMissedMessage(firebaseData.workingDay.message)
           setChatbotConfig(firebaseData.chatbot || initConfig.chatbot)
         } else {
           setTitle(initConfig.title)
@@ -932,7 +932,10 @@ const Setting = ({ _key : key, database, isLoading, ...props }) => {
         <div
           className={ settingMenuState === 3 ? "setting-list-tab active" : "setting-list-tab"}
           onClick={() => { setSettingMenuState(3) }}>
-          <div>챗봇 설정</div>
+          <div>
+            챗봇 설정
+            <span className="new">new</span>
+          </div>
         </div>
         {/* <div className="setting-list-title">Etc</div>
         <div className="setting-list-tab"
@@ -1404,7 +1407,7 @@ const Setting = ({ _key : key, database, isLoading, ...props }) => {
 
         <div className={ settingMenuState === 3 ? "setting-menu-3" : "setting-menu-3 hide" }>
           <div className="setting-menu-header">
-            챗봇 설정
+            챗봇 설정            
           </div>
 
           {initAfter && (

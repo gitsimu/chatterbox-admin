@@ -195,6 +195,7 @@ function Main({ settings, initUsers, clearUsers, selectedUser, signIn, signOut, 
             onClick={() => { setScreenState(2) }}>
             <i className="icon-settings"></i>
             <div className="tooltip">설정</div>
+            <div className="badge">N</div>
           </div>
           {/* <div className="chat-lnb-item sign-out"
             onClick={() => {
