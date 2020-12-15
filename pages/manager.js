@@ -2,12 +2,26 @@ import React from 'react'
 import { connect } from 'react-redux'
 import axios from 'axios'
 import FirebaseConfig from '../firebase.config'
+import * as firebase from 'firebase'
+import ChatbotPreview from '../src/components/ChatbotPreview'
 
 const publicIp = require('public-ip')
 const Manager = ({ settings, ...props }) => {
+
+  if (!firebase.apps.length) {
+    firebase.initializeApp(FirebaseConfig)
+  }
+
   const [managers, setManagers] = React.useState([])
   const [detail, setDetail] = React.useState({})
   const [focusUser, setFocusUser] = React.useState(null)
+
+  const [chatbotManager, setChatbotManager] = React.useState([])
+  const [focusChatbotUser, setFocusChatbotUser] = React.useState(null)
+  const { current : chatbotListDic } = React.useRef({})
+  const [focusChatbotList, setFocusChatbotList] = React.useState([])
+
+  const previewRef = React.useRef(null)
 
   React.useEffect(() => {
     // simpleline icons
@@ -17,14 +31,37 @@ const Manager = ({ settings, ...props }) => {
     simplelineLink.type = "text/css"
     document.querySelector('body').appendChild(simplelineLink)
 
+    init()
+
+  }, [])
+
+  const init = async ()=> {
+
+    const ip = await publicIp.v4()
+    if (ip !== '14.39.40.147') return console.log('허용된 IP가 아닙니다.')
+
+    loadChatbot()
+    loadManager()
+  }
+
+  const loadChatbot = async ()=>{
+    const config = { headers: { 'content-type': 'application/x-www-form-urlencoded' } }
+    const formData = new FormData()
+    formData.append('method', 'get_chatbot_list')
+    const { data : managerList } = await axios.post('https://smlog.co.kr/api/manage.php', formData, config)
+
+    const allP = managerList.map(m=>
+      axios.get(`${FirebaseConfig.databaseURL}/${m.chat_id}/config/chatbot/list.json?shallow=true&print=pretty&timeout=5s'`)
+        .then(({data})=> (m.count = Object.keys(data).length))
+    )
+
+    await Promise.all(allP)
+    setChatbotManager(managerList)
+  }
+
+  const loadManager = () => {
     Promise.resolve()
       .then(() => {
-        return publicIp.v4()
-      })
-      .then((ip) => {
-        if (ip !== '14.39.40.147') {
-          throw new Error('허용된 아이피 값이 아닙니다.')
-        }
         const config = { headers: { 'content-type': 'application/x-www-form-urlencoded' } }
         const formData = new FormData()
         formData.append('method', 'get_chat_list')
@@ -52,7 +89,6 @@ const Manager = ({ settings, ...props }) => {
         await axios.get(`${FirebaseConfig.databaseURL}/${m.chat_id}/messages.json?shallow=true&print=pretty&timeout=5s'`)
           .then(({data}) => {
             if (data) {
-              console.log('data', data)
               setManagerData({id: m.chat_id, svid: m.svid, messages: data})
             }
           })
@@ -61,7 +97,7 @@ const Manager = ({ settings, ...props }) => {
           })
       }
     }
-  }, [])
+  }
 
   const setManagerData = (newData) => {
     setManagers(m => [...m, newData])
@@ -89,6 +125,26 @@ const Manager = ({ settings, ...props }) => {
     }
   }
 
+  const getChatbotList = async (id) => {
+    if(!chatbotListDic[id]){
+      chatbotListDic[id] = (await firebase.database().ref(`/${id}/config/chatbot/list`).once('value')).val()
+    }
+
+    return chatbotListDic[id]
+  }
+
+  const selectChatbotUser = async chatId => {
+    if(focusChatbotUser === chatId) {
+      setFocusChatbotUser(null)
+      return
+    }
+
+    const chatbotList = await getChatbotList(chatId)
+    setFocusChatbotUser(chatId)
+    previewRef.current?.reset()
+    setFocusChatbotList([...chatbotList])
+  }
+
   return (
     <div className="managers-container">
       <div>
@@ -100,58 +156,98 @@ const Manager = ({ settings, ...props }) => {
         </div>
         {managers && managers.map((m, i) => {
           return (
-            <>
-            <div className={m.id === focusUser ? "item active" : "item"} key={i}>
-              <div className="managers" onClick={() => {
-                const focus = focusUser === m.id ? null : m.id
-                setFocusUser(focus)
-                fetchDetailData(m.id, Object.keys(m.messages))
-              }}>
-                <div className="managers-no">{i+1}</div>
-                <div className="managers-id">{m.id}</div>
-                <div className="managers-svid">{m.svid}</div>
-                <div className="managers-connection-count">{Object.keys(m.messages).length}</div>
-              </div>
-              
-              {focusUser === m.id && detail[m.id] && (
-                <div className="user-list">
-                  {/* <div className="user thead">
+            <React.Fragment key={i}>
+              <div className={m.id === focusUser ? "item active" : "item"}>
+                <div className="managers" onClick={() => {
+                  const focus = focusUser === m.id ? null : m.id
+                  setFocusUser(focus)
+                  fetchDetailData(m.id, Object.keys(m.messages))
+                }}>
+                  <div className="managers-no">{i+1}</div>
+                  <div className="managers-id">{m.id}</div>
+                  <div className="managers-svid">{m.svid}</div>
+                  <div className="managers-connection-count">{Object.keys(m.messages).length}</div>
+                </div>
+
+                {focusUser === m.id && detail[m.id] && (
+                  <div className="user-list">
+                    {/* <div className="user thead">
                     <div className="user-no">no.</div>
                     <div className="user-id">대상</div>
                     <div className="user-message-count">메세지 수</div>
                   </div> */}
-                  {Object.keys(detail[m.id]).map((d, i) => {
-                    const value = detail[m.id][d]
-                    return (
-                      <div className="user" key={d}>
-                        <div className="user-no">-</div>
-                        <div className="user-id">{d}</div>
-                        <div className="user-message-count">
-                          <i className="icon-envelope"></i>
-                          <span>{Object.keys(value).length}</span>
+                    {Object.keys(detail[m.id]).map((d, i) => {
+                      const value = detail[m.id][d]
+                      return (
+                        <div className="user" key={d}>
+                          <div className="user-no">-</div>
+                          <div className="user-id">{d}</div>
+                          <div className="user-message-count">
+                            <i className="icon-envelope"></i>
+                            <span>{Object.keys(value).length}</span>
+                          </div>
                         </div>
-                      </div>
-                    )
-                  })}
-                </div>
-              )}
-              </div>
-
-            {/* <div class="user-list">
-              {detail && detail.map((d, i) => {
-                if (d.id !== m.id) return
-                return (
-                  <div className="user" key={d.user}>
-                    <div className="user-no">{i+1}</div>
-                    <div className="user-id">{d.user}</div>
-                    <div className="user-message-count">{Object.keys(d.messages).length}</div>
+                      )
+                    })}
                   </div>
-                )
-              })}
-            </div> */}
-            </>
+                )}
+                </div>
+            </React.Fragment>
           )
         })}
+      </div>
+
+      <div>
+        <div className="managers thead">
+          <div className="managers-no">No.</div>
+          <div className="managers-id">채팅 ID</div>
+          <div className="managers-svid">SVID</div>
+          <div className="managers-message-count">챗봇 개수</div>
+          <div className="managers-message-count">챗봇 운영시간</div>
+        </div>
+        {chatbotManager.map((m, i) => (
+          <React.Fragment key={i}>
+            <div className={m.chat_id === focusChatbotUser ? "item active" : "item"}>
+              <div className="managers" onClick={() => {
+                selectChatbotUser(m.chat_id)
+              }}>
+                <div className="managers-no">{i+1}</div>
+                <div className="managers-id">{m.chat_id}</div>
+                <div className="managers-svid">{m.sid}</div>
+                <div className="managers-svid">{m.count}</div>
+                <div className="managers-connection-count">
+                  {m.bot_state === '1' && '24시간'}
+                  {m.bot_state === '2' && '운영시간'}
+                  {m.bot_state === '3' && '비운영시간'}
+                </div>
+              </div>
+
+              {focusChatbotUser === m.chat_id && (
+                <div
+                  style={{
+                    backgroundColor: '#00000005'
+                  }}
+                  className="chatterbox-theme-light">
+
+                  <div
+                    onClick={()=> previewRef.current.reset()}
+                    style={{
+                    textAlign : 'center',
+                    background : 'white',
+                    padding : '7px',
+                    cursor : 'pointer',
+                  }}>RESET</div>
+                  <ChatbotPreview
+                    ref={previewRef}
+                    profileImage={null}
+                    list={focusChatbotList}
+                  />
+                </div>
+              )}
+            </div>
+          </React.Fragment>
+          )
+        )}
       </div>
     </div>
   )

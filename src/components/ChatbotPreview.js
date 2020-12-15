@@ -2,7 +2,14 @@ import React from 'react'
 import ChatMessageInner from './ChatMessageInner'
 import useScrollTo from '../hooks/useScrollTo'
 
-const ChatbotPreview = ({list, ...props}) => {
+const ChatbotPreview = React.forwardRef(({list, ...props}, ref) => {
+
+  React.useImperativeHandle(ref, () => ({
+    reset: ()=> {
+      setBeforeList([])
+      setCurrent(list && list[0] ? { ...list[0] } : null)
+    }
+  }));
 
   const nickname = props.nickname || 'Manager'
   const [temp, setTemp] = React.useState(true)
@@ -100,7 +107,7 @@ const ChatbotPreview = ({list, ...props}) => {
       )}
     </div>
   );
-}
+})
 
 
 export default ChatbotPreview
