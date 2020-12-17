@@ -45,8 +45,26 @@ const useImageUpload = () => {
   }, [key])
 
 
+  const removeImage = React.useCallback((filename)=> {
+    // s3 file remove
+    const config = { headers: { 'content-type': 'multipart/form-data' } }
+    const formData = new FormData()
+    formData.append('filename', filename)
+    formData.append('key', key)
 
-  return [uploadImage]
+    return axios.post('/api/remove', formData, config)
+      .then(res => {
+        if (res.data.result !== 'success') {
+
+        }
+      })
+      .catch(err => {
+        // console.log('upload-failure', err)
+      })
+
+  }, [key])
+
+  return [uploadImage, removeImage]
 }
 
 

@@ -3,35 +3,35 @@ import ChatMessageInner from './ChatMessageInner'
 import useScrollTo from '../hooks/useScrollTo'
 
 const ChatbotPreview = React.forwardRef(({list, ...props}, ref) => {
-
-  React.useImperativeHandle(ref, () => ({
-    reset: ()=> {
-      setBeforeList([])
-      setCurrent(list && list[0] ? { ...list[0] } : null)
-    }
-  }));
-
   const nickname = props.nickname || 'Manager'
   const [temp, setTemp] = React.useState(true)
   const body = React.useRef(null)
   const [beforeList, setBeforeList] = React.useState([])
   const [current, setCurrent] = React.useState(null)
-
   const [scrollTo] = useScrollTo(body.current, [beforeList, temp, current])
 
+  React.useImperativeHandle(ref, () => ({ reset }));
   React.useEffect(() => {
-    refresh()
-
-    setBeforeList([])
-    setCurrent(list[0])
+    reset()
   }, [list])
 
-  React.useEffect(() => {
-    if(!current) return
+  const reset = () => {
+    if(!list || !list[0]) return
+    refresh()
+    setBeforeList([...list[0].questions])
+    setCurrent(list[0])
+  }
 
-    setBeforeList([...beforeList, ...current.questions])
-  }, [current])
+  const onClickBtn = (answer) => {
+    const nextChatbot = list.find(t=> t.id === answer.to)
 
+    setBeforeList([
+      ...beforeList,
+      {my:true, message: answer.message, type: 1},
+      ...nextChatbot.questions
+    ])
+    setCurrent(nextChatbot)
+  }
 
   const refresh = ()=> {
     setTemp(true)
@@ -97,8 +97,9 @@ const ChatbotPreview = React.forwardRef(({list, ...props}, ref) => {
             <button
               key={`${current.id}_${index}`}
               onClick={()=> {
-                setBeforeList([...beforeList, {my:true, message: answer.message, type: 1}])
-                setCurrent(list.find(t=> t.id === answer.to))
+                onClickBtn(answer)
+                // setBeforeList([...beforeList, {my:true, message: answer.message, type: 1}])
+                // setCurrent(list.find(t=> t.id === answer.to))
               }}
               className="chatbot-button">{answer.message}
             </button>
