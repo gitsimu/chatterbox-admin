@@ -2603,8 +2603,15 @@ div:hover > .tooltip {
   /*opacity: 0;*/
   transition: 0.2s ease opacity;
 }
+.chatbot-chat-message{
+  opacity: 0;
+  margin: 40px;
+  font-size: 14px;
+  transition: 0.2s ease opacity;
+}
 .chatbot:hover .chatbot-to-title,
-.chatbot:hover .chatbot-close {  
+.chatbot:hover .chatbot-close,
+.chatbot:hover .chatbot-chat-message{
   opacity: 1;
 }
 .chatbot-button {

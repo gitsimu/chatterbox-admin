@@ -121,7 +121,13 @@ const Chatbot = ({ id, action, isLoading, color, index, updateChatbot, deleteCha
             type="text"
             ref={titleRef}
             onBlur={()=> setTitle(titleRef.current.value)}
-            name="edit-title"/>
+            name="edit-title"
+            {...(action === 'CHAT' && {
+              value: '상담원 연결',
+              disabled: true,
+              style:{background:'none'}
+            })}
+          />
           {index >= 2 && (
             <div
               className="chatbot-close"
@@ -238,6 +244,12 @@ const Chatbot = ({ id, action, isLoading, color, index, updateChatbot, deleteCha
               </div>
             </div>
           </div>
+
+          {(action === 'CHAT') && (
+            <div className="chatbot-chat-message">
+              * 이 카드가 동작하면, 챗봇 종료와 동시에 채팅이 시작됩니다.
+            </div>
+          )}
 
           {(action !== 'CHAT') && (
             <div className="message myself"
