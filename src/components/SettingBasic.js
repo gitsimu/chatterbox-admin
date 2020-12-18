@@ -21,8 +21,9 @@ const SettingBasic = ({ basicConfig, updateBasicConfig }) => {
   }
 
   React.useEffect(() => {
+    if(!messageRef.current) return
     messageRef.current.value = basicConfig.message
-  }, [basicConfig])
+  }, [basicConfig, newConfig.use])
 
   React.useEffect(() => {
     if(newConfig === basicConfig) return
