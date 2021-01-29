@@ -28,6 +28,8 @@ const ChatbotAnswer = ({chatbotList, onClickDelete, onClickSave, index, ...props
     messageRef.current.focus()
   }, [edit])
 
+  const toIndex = chatbotList.findIndex(t => t.id === props.to)
+
   return (
     <>
       {!edit && (
@@ -45,15 +47,23 @@ const ChatbotAnswer = ({chatbotList, onClickDelete, onClickSave, index, ...props
             style={{
               cursor: 'pointer'
             }}>
-            <span className="chatbot-to-title">
-              {(i => i !== -1
-                ? <ChatbotTitleIcon index={i}/>
-                : <img src="/resources/link_off.png"
-                       alt=""/>)
-              (chatbotList.findIndex(t => t.id === props.to))}
-            </span>
+
+            {toIndex !== -1
+              ? (
+                <span className="chatbot-to-title">
+                  <ChatbotTitleIcon index={toIndex}/>
+                </span>
+                )
+              : (
+                <span className="chatbot-to-title link-off">
+                  <img src="/resources/link_off.png"
+                       alt=""/>
+                </span>
+                )
+            }
+
             <div
-              className="chatbot-button sort-target">
+              className={`chatbot-button sort-target ${toIndex === -1 ? 'invalid' : ''}`}>
               {props.message}
             </div>
           </div>

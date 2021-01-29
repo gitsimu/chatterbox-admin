@@ -559,7 +559,6 @@ function reducer(state, action) {
 const SettingChatbot = ({chatbotConfig, updateChatbotConfig, showImageViewer, isLoading, nickname, profileImage}) => {
   const [chatbotState, setChatbotState] = React.useState(chatbotConfig.state)
   const [chatbotList, dispatch] = React.useReducer(reducer, chatbotConfig.list);
-
   const [previewChatbot, setPreviewChatbot] = React.useState(false)
   const [showChatbotTemplate, setShowChatbotTemplate] = React.useState(false)
   const [seletedTemplate, setSeletedTemplate] = React.useState(chatbotTemplate[0])
@@ -585,21 +584,34 @@ const SettingChatbot = ({chatbotConfig, updateChatbotConfig, showImageViewer, is
     dispatch({type: 'DELETE', index: index })
   }, [])
 
+  const handlerInvalid = (index) => {
+    const invalidChatbot = chatbotList[index]
+    const chatbotEl = document.getElementById(`chatbot_${invalidChatbot.id}`)
+    chatbotEl.scrollIntoView({ block: 'center', inline: 'center', behavior : 'smooth'})
+
+    updateChatbot(index, {
+      ...invalidChatbot,
+      invalid : true
+    })
+  }
+
   const saveChatbot = ()=> {
-    const hasEmptyQuestions = chatbotList.some(chatbot=> !chatbot.questions?.length)
-    if(hasEmptyQuestions){
+    let invalidChatbotIndex = -1
+
+    invalidChatbotIndex = chatbotList.findIndex(chatbot=> !chatbot.questions?.length)
+    if(invalidChatbotIndex > -1){
       alert("메시지가 없는 챗봇이 있습니다.")
-      return
+      return handlerInvalid(invalidChatbotIndex)
     }
-    const hasEmptyAnswers = chatbotList.some(chatbot=> chatbot.action !== "CHAT" && !chatbot.answers?.length)
-    if(hasEmptyAnswers){
+    invalidChatbotIndex = chatbotList.findIndex(chatbot=> chatbot.action !== "CHAT" && !chatbot.answers?.length)
+    if(invalidChatbotIndex > -1){
       alert("버튼이 없는 챗봇이 있습니다.")
-      return
+      return handlerInvalid(invalidChatbotIndex)
     }
-    const hasEmptyLink = chatbotList.some(chatbot=> chatbot.answers?.some(answer=> !answer.to) || false)
-    if(hasEmptyLink){
+    invalidChatbotIndex = chatbotList.findIndex(chatbot=> chatbot.answers?.some(answer=> !answer.to) || false)
+    if(invalidChatbotIndex > -1){
       alert('챗봇에 연결되지 않은 버튼이 있습니다.')
-      return
+      return handlerInvalid(invalidChatbotIndex)
     }
 
     const newConfig = {

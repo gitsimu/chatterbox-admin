@@ -105,7 +105,7 @@ const Chatbot = ({ id, action, isLoading, color, index, updateChatbot, deleteCha
   }
 
   return (
-    <div className="chatbot">
+    <div className={`chatbot ${props.invalid ? 'invalid' : ''}`} id={`chatbot_${id}`}>
       <div className="chat-window" style={{
         position: 'static'
       }}>
@@ -192,7 +192,7 @@ const Chatbot = ({ id, action, isLoading, color, index, updateChatbot, deleteCha
           <div className="message opponent">
             <div className="message-body">
               <div
-                className="chatbot-button add-questions"
+                className={`chatbot-button add-questions ${(questions || []).length === 0 ? 'invalid' : ''}`}
                 onClick={() => {
                   setShowAdd(!showAdd)
                 }}
@@ -279,7 +279,7 @@ const Chatbot = ({ id, action, isLoading, color, index, updateChatbot, deleteCha
                 ))}
               </ReactSortable>
               <div
-                className="chatbot-button add-answers"
+                className={`chatbot-button add-answers ${answers && answers.length === 0 ? 'invalid' : ''}`}
                 onClick={() => {
                   addAnswer({
                     message: '답변을 연결해주세요.', to: ''

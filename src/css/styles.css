@@ -2609,6 +2609,12 @@ div:hover > .tooltip {
   font-size: 14px;
   transition: 0.2s ease opacity;
 }
+
+.chatbot.invalid .invalid {
+  border: 1px solid #ff00007a;
+}
+
+.chatbot-to-title.link-off,
 .chatbot:hover .chatbot-to-title,
 .chatbot:hover .chatbot-close,
 .chatbot:hover .chatbot-chat-message{
