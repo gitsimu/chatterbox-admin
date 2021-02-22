@@ -2,7 +2,8 @@ import React from 'react'
 import { connect } from 'react-redux'
 import axios from 'axios'
 import FirebaseConfig from '../firebase.config'
-import * as firebase from 'firebase'
+import * as firebase from 'firebase/app'
+import 'firebase/database'
 import ChatbotPreview from '../src/components/ChatbotPreview'
 
 const publicIp = require('public-ip')

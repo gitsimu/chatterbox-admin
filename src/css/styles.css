@@ -2627,3 +2627,54 @@ div:hover > .tooltip {
 .chatbot-button:hover {
   border-color: #006cff;
 }
+
+.typing-loading::before{
+  content: '';
+  position: absolute;
+  top: 0px;
+  left: -11px;
+  height: 6px;
+  width: 6px;
+  border-radius: 10px;
+  animation: typing-loading 1s ease-in-out infinite;
+  -webkit-animation: typing-loading 1s ease-in-out infinite;;
+}
+.typing-loading{
+  position: relative;
+  width: 6px;
+  height: 6px;
+  top: 46%;
+  left: 15px;
+  border-radius: 10px;
+  animation: typing-loading 1s ease-in-out infinite;
+  -webkit-animation: typing-loading 1s ease-in-out infinite;
+  animation-delay: 0.25s;
+  -webkit-animation-delay: 0.25s;
+}
+.typing-loading::after{
+  content: '';
+  position: absolute;
+  top: 0px;
+  left: 11px;
+  height: 6px;
+  width: 6px;
+  border-radius: 10px;
+  animation: typing-loading 1s ease-in-out infinite;
+  -webkit-animation: typing-loading 1s ease-in-out infinite;
+  animation-delay: 0.5s;
+  -webkit-animation-delay: 0.5s;
+}
+@-webkit-keyframes typing-loading {
+  0%{background-color: rgba(255, 255, 255, .2);}
+  25%{background-color: rgba(0, 0, 0, 0.35);}
+  50%{background-color: rgba(255, 255, 255, .2);}
+  75%{background-color: rgba(255, 255, 255, .2);}
+  100%{background-color: rgba(255, 255, 255, .2);}
+}
+@keyframes typing-loading{
+  0%{background-color: rgba(255, 255, 255, .2);}
+  25%{background-color: rgba(0, 0, 0, 0.35);}
+  50%{background-color: rgba(255, 255, 255, .2);}
+  75%{background-color: rgba(255, 255, 255, .2);}
+  100%{background-color: rgba(255, 255, 255, .2);}
+}

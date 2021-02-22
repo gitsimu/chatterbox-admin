@@ -3,8 +3,15 @@ import ChatMessageText from './ChatMessageText'
 import ChatMessageSimpleImage from './ChatMessageSimpleImage'
 import ChatMessageLink from './ChatMessageLink'
 import ChatMessageImage from './ChatMessageImage'
+import ChatMessageTyping from './ChatMessageTyping'
 
 const ChatMessageInner = ({type, onClickText, onClickLink, onClickImage, onLoadImage, message, timestamp, ...props}) => {
+
+  if(type === -1) {
+    return (
+      <ChatMessageTyping/>
+    )
+  }
 
   if(type === 1){
     return (

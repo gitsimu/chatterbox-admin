@@ -270,3 +270,10 @@ export const initConfig = {
 }
 
 export const genId = () => Math.random().toString(36).substr(2, 9)
+
+export const getTempId = () => {
+  if(!localStorage.getItem("CHAT_ADMIN_ID")) {
+    localStorage.setItem("CHAT_ADMIN_ID", genId())
+  }
+  return localStorage.getItem("CHAT_ADMIN_ID")
+}

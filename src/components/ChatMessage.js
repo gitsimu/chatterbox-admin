@@ -9,9 +9,9 @@ const ChatMessage = ({ settings, ...props }) => {
   const showImageViewer = props.showImageViewer
 
   const skipDate = () => {
-    if (!props.prev) {
-      return false
-    }
+    if(props.skipDate) return true
+    if (!props.prev) return false
+
 
     const prevDate = script.timestampToDay(props.prev.timestamp)
     const curDate = script.timestampToDay(props.timestamp)
@@ -19,6 +19,7 @@ const ChatMessage = ({ settings, ...props }) => {
     return (prevDate === curDate)
   }
   const skipTime = () => {
+    if(props.skipTime) return true
     if (!props.next || props.next.userId !== props.userId) {
       return false
     }
