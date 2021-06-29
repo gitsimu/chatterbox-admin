@@ -2,7 +2,6 @@ import React from 'react'
 import { connect } from 'react-redux'
 import * as smlog from '../js/smlog'
 import * as script from '../js/script'
-import SettingChatbot from './SettingChatbot'
 import SettingBasic from './SettingBasic'
 import SettingChat from './SettingChat'
 
@@ -43,24 +42,12 @@ const initialChat = {
   }
 }
 
-const initialChatbot = {
-  state: '0',
-  list : (()=>{
-    const chatId = script.genId()
-    return [
-      {id: script.genId(), title: '처음으로', questions: [{message: '안녕하세요 챗봇입니다.', type: 1}, {message: '궁금한 사항을 선택해주세요.', type: 1}], answers: [{message:'상담원 연결', to: chatId}]},
-      {id: chatId, title: '상담원 연결', questions: [{message: '상담원을 연결해드리겠습니다.', type: 1}], answers: [], action: 'CHAT'},
-    ]
-  })()
-}
-
 const Setting = ({ _key : key, database, isLoading, ...props }) => {
 
   const [settingMenuState, setSettingMenuState] = React.useState(0)
   const [initAfter, setInitAfter] = React.useState(false)
   const [basicConfig, setBasicConfig] = React.useState(null)
   const [chatConfig, setChatConfig] = React.useState(null)
-  const [chatbotConfig, setChatbotConfig] = React.useState(null)
 
   React.useEffect(() => {
     const getFirebase = database.ref(`/${key}/config`).once('value')
@@ -77,9 +64,6 @@ const Setting = ({ _key : key, database, isLoading, ...props }) => {
 
         const chatConfigData = convertChatConfig(firebaseData, dbData)
         setChatConfig(chatConfigData)
-
-        const chatbotConfigData = convertChatbotConfig(firebaseData)
-        setChatbotConfig(chatbotConfigData)
       })
       .finally(()=> setInitAfter(true))
   }, [database, key])
@@ -145,27 +129,6 @@ const Setting = ({ _key : key, database, isLoading, ...props }) => {
     )
   }, [props.svid])
 
-  const updateChatbotConfig = React.useCallback((newChatbotConfig) => {
-    setChatbotConfig(newChatbotConfig)
-
-    isLoading(true)
-
-    const a = database.ref(`/${key}/config/chatbot`)
-      .update({
-        state: newChatbotConfig.state,
-        list: newChatbotConfig.list
-      })
-
-    const b = smlog.API({
-      method: 'update_chatbot_config',
-      svid: props.svid,
-      state : newChatbotConfig.state
-    })
-
-    Promise.all([a,b])
-      .finally(()=> isLoading(false))
-  }, [props.svid])
-
   const convertBasicConfig = (firebaseData, dbData) => {
     const byDb = dbData && {
       useChat: dbData.scm_state === '1',
@@ -216,10 +179,6 @@ const Setting = ({ _key : key, database, isLoading, ...props }) => {
     return { ...initialChat, ...byDb, ...byFirebase }
   }
 
-  const convertChatbotConfig = (firebaseData) => {
-    return (firebaseData && firebaseData.chatbot) || initialChatbot
-  }
-
 
   return (
     <div className="setting">
@@ -234,14 +193,6 @@ const Setting = ({ _key : key, database, isLoading, ...props }) => {
           className={ settingMenuState === 1 ? "setting-list-tab active" : "setting-list-tab"}
           onClick={() => { setSettingMenuState(1) }}>
           <div>채팅 설정</div>
-        </div>
-        <div
-          className={ settingMenuState === 3 ? "setting-list-tab active" : "setting-list-tab"}
-          onClick={() => { setSettingMenuState(3) }}>
-          <div>
-            챗봇 설정
-            <span className="new">NEW</span>
-          </div>
         </div>
         {/* <div className="setting-list-title">Etc</div>
         <div className="setting-list-tab"
@@ -296,24 +247,7 @@ const Setting = ({ _key : key, database, isLoading, ...props }) => {
           <div className="setting-menu-body">
           </div>
         </div>
-        <div className={ settingMenuState === 3 ? "setting-menu-3" : "setting-menu-3 hide" }>
-          <div className="setting-menu-header">
-            챗봇 설정            
-          </div>
-
-          {initAfter && (
-            <SettingChatbot
-              chatbotConfig={chatbotConfig}
-              updateChatbotConfig={updateChatbotConfig}
-              showImageViewer={props.showImageViewer}
-              nickname={chatConfig.nickname}
-              profileImage={chatConfig.profileImage}
-              isLoading={isLoading}
-            />
-          )}
-        </div>
       </div>
-
     </div>
   )
 }

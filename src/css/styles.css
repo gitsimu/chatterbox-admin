@@ -17,7 +17,8 @@ div, input, textarea {
 
 /* width */
 ::-webkit-scrollbar {
-  width: 7px;
+  width: 4px;
+  height: 4px;
 }
 
 /* Track */
@@ -123,6 +124,9 @@ div, input, textarea {
 .chat-lnb-item.active {
   background: rgba(0, 0, 0, 0.2);
   color: #FF9800;
+}
+.chat-lnb-item.active svg > g {
+  fill: #FF9800;
 }
 .chat-lnb-item.sign-out {
   position: absolute;
@@ -612,12 +616,30 @@ div, input, textarea {
 }
 .message-form > form {
   display: flex;
-  height: 42px;
+  flex-direction: column;
+  height: 100px;
   margin: 0;
   border: 1px solid rgba(24, 26, 31, 1);
   border-radius: 5px;
   overflow: hidden;
   margin-top: 5px;
+  background-color: transparent;
+}
+.message-form > form > div {
+  display: flex;
+  padding: 5px;
+  padding-top: 0;
+}
+.message-form > form > div > div {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+.message-form > form > div > div:first-of-type {
+  justify-content: flex-start;
+}
+.message-form > form > div > div:last-of-type {
+  justify-content: flex-end;
 }
 .message-addon {
   width: 120px;
@@ -659,7 +681,8 @@ div, input, textarea {
   display: none;
 }
 .message-button-send {
-  width: 80px;
+  width: 34px;
+  height: 30px;
   background: rgba(34, 37, 43, 1);
   color: rgb(141, 152, 177);
   border: none;
@@ -671,7 +694,8 @@ div, input, textarea {
   justify-content: center;
 }
 .message-button-more {
-  width: 80px;
+  width: 34px;
+  height: 30px;
   background: rgba(34, 37, 43, 1);
   color: rgb(141, 152, 177);
   border: none;
@@ -719,7 +743,7 @@ div, input, textarea {
   color: #ccc;
   font-size: 14px;
   position: absolute;
-  bottom: 52px;
+  bottom: 105px;
   left: 50%;
   border-radius: 5px;
   box-shadow: 0 0 15px 5px rgba(0, 0, 0, 0.1);
@@ -933,7 +957,7 @@ div, input, textarea {
   width: 350px;
   height: 200px;
   background: #ffffff;
-  bottom: 50px;
+  bottom: 100px;
   /* border-bottom: 1px solid #eee; */
   border-radius: 10px;
   overflow: auto;
@@ -2677,4 +2701,388 @@ div:hover > .tooltip {
   50%{background-color: rgba(255, 255, 255, .2);}
   75%{background-color: rgba(255, 255, 255, .2);}
   100%{background-color: rgba(255, 255, 255, .2);}
+}
+
+
+.shortcut-message-icon {
+  position: absolute;
+  bottom: 110px;
+  left: 5px;
+  /* left: 50%; */
+  /* transform: translateX(-50%); */
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* background-color: #006cff; */
+  background-color: rgba(0, 108, 255, 0.8);
+  border-radius: 50%;
+  color: #fff;
+  font-size: 22px;
+  padding-top: 3px;
+  box-shadow: 0 0 5px rgba(0,0,0,0.15);
+  transition: 0.2s ease background;
+  cursor: pointer;
+  z-index: 2;
+}
+.shortcut-message-icon:hover {
+  background-color: rgba(0, 108, 255, 0.9);
+}
+.shortcut-message {
+  /* position: absolute;
+  left: 50%;
+  bottom: 50px;
+  z-index: 5;
+  transform: translateX(-50%);
+  font-size: 12px;
+  width: 500px;
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 10px;
+  padding: 5px;
+  box-shadow: 0 0 5px rgba(0,0,0,0.05); */
+  animation: fadein 0.4s;
+
+  position: relative;
+  z-index: 5;
+  font-size: 12px;
+  width: 100%;
+  background-color: #282c34;
+  border-radius: 10px;
+  padding: 5px;
+  margin-top: 3px;
+  box-shadow: 0 0 5px rgba(0,0,0,0.05);
+  border: 1px solid rgb(27, 33, 41);
+  color: #fff;
+}
+.shortcut-message-container {
+  min-height: 42px;
+  max-height: 125px;
+  overflow-y: auto;
+}
+.shortcut-message-container > div {
+  display: inline-flex;
+  margin: 5px;
+  padding: 6px 12px;
+  align-items: center;
+  cursor: pointer;
+  transition: 0.3s ease all;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  vertical-align: middle;
+}
+.shortcut-message-container > div:hover {
+  background-color: #006cff;
+  border-color: #006cff;
+  color: #fff;
+}
+.shortcut-message-container > div .dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: tomato;
+  margin-right: 6px;
+}
+.shortcut-message-option {
+  position: absolute;
+  top: 12px;
+  right: 5px;
+  color: #999;
+  display: flex;
+  align-items: center;
+}
+.shortcut-message-option > div {
+  padding: 0 8px;
+  cursor: pointer;
+}
+.shortcut-message-option > div:hover {
+  text-decoration: underline;
+}
+.shortcut-message-top {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid rgb(27, 33, 41);
+  margin-bottom: 5px;
+}
+.shortcut-message-category {
+  flex: 1 1;
+  overflow-x: auto;
+  width: 200px;
+  display: flex;
+  /* flex: 1 1;
+  overflow-x: auto;
+  width: calc(100% - 300px); */
+}
+.shortcut-message-category > div {
+  display: inline-flex;
+  padding: 8px 10px;
+  border-bottom: 2px solid transparent;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.shortcut-message-category > div.active {
+  color: #006cff;
+  border-color: #006cff;
+  font-weight: bold;
+}
+.shortcut-message-search {
+  display: flex;
+  align-items: center;
+  width: 250px;
+  margin-bottom: 5px;
+}
+.shortcut-message-search input {
+  flex: 1;
+  background-color: rgba(0,0,0,0.2);
+  outline: none;
+  border: none;
+  height: 30px;
+  width: 180px;
+  border-radius: 30px;
+  padding: 0 20px;
+  margin-right: 5px;
+  color: #fff;
+}
+.shortcut-message-search > div {
+  /* background-color: #eee; */
+  position: relative;
+  height: 30px;
+  width: 32px;
+  border-radius: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #777;
+  cursor: pointer;
+}
+.shortcut-message-search > div:hover {
+  color: #006cff;
+}
+.shortcut-message-search > div i {
+  font-size: 18px;
+}
+.shortcut-message-search > div .close:before,
+.shortcut-message-search > div .close:after {
+  content: '';
+  width: 20px;
+  height: 1px;
+  background: rgb(119, 119, 119);
+  position: absolute;
+  top: 15px;
+  right: 6px;
+  border-radius: 2px;
+}
+.shortcut-message-search > div .close:before {
+  transform: rotate(45deg);
+}
+.shortcut-message-search > div .close:after {
+  transform: rotate(-45deg);
+}
+.shortcut-message-search > div:hover .close:before,
+.shortcut-message-search > div:hover .close:after {
+  background: #006cff;
+}
+
+.shortcut-modify {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  z-index: 10;
+}
+.shortcut-modify-container {
+  display: flex;
+  align-items: flex-start;
+  width: 900px;
+  height: 500px;
+  padding: 15px 20px;
+  background-color: #f1f1f1;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+.shortcut-modify-container > div {
+  flex: 1;
+  padding: 5px;
+}
+.shortcut-modify-container > div:last-of-type {
+  flex: 2;
+  margin-left: 15px;
+  border-left: 1px solid #e1e1e1;
+  padding-left: 15px;
+  height: 100%;
+}
+.shortcut-modify-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  padding: 0 5px;
+}
+.shortcut-modify-title svg {
+  cursor: pointer;
+}
+.shortcut-modify-category {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #fff;
+  height: 80px;
+  margin-top: 5px;
+  border-radius: 5px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  opacity: 0.6;
+  transition: 0.2s ease all;
+}
+.shortcut-modify-category.active {
+  border-color: #006cff;
+  opacity: 1;
+}
+.shortcut-modify-category input {
+  flex: 1;
+  width: 100%;
+  padding: 5px 10px;
+  outline: none;
+  border: none;
+  border-bottom: 1px solid transparent;
+  background-color: transparent;
+}
+.shortcut-modify-category input:focus {
+  border-bottom: 1px solid #eee;
+}
+.shortcut-modify-category-option {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: flex-end;
+  font-size: 10px;
+  padding-top: 8px;
+}
+.shortcut-modify-category-option > div {
+  display: flex;
+  padding: 0 5px;
+  font-size: 14px;
+  cursor: pointer;
+}
+.shortcut-modify-category-option > div:hover {
+  color: #006cff;
+}
+
+.shortcut-modify-message {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 5px 5px 5px 10px;
+  margin-top: 5px;
+  background-color: #fff;
+  border-radius: 5px;
+}
+.shortcut-modify-message input,
+.shortcut-modify-message textarea {
+  outline: none;
+  border: none;
+  resize: none;
+  padding: 5px;
+}
+.shortcut-modify-message input {
+  border-bottom: 1px solid #eee;
+}
+.shortcut-modify-message textarea {
+  font-size: 12px;
+  height: 100px;
+}
+.shortcut-modify-message-option {
+  display: flex;
+  align-items: center;
+}
+.shortcut-modify-message-option > div {
+  flex: 1;
+}
+.shortcut-modify-message-option-color {
+  display: flex;
+  align-items: center;
+  padding: 0 5px;
+}
+.shortcut-modify-message-option-color > div {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 5px;
+  cursor: pointer;
+}
+.shortcut-modify-message-option-color > div.active {
+  width: 12px;
+  height: 12px;
+}
+.shortcut-modify-message-option-button {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+.shortcut-modify-message-option-button > div {
+  padding: 0 5px;
+  font-size: 14px;
+  cursor: pointer;
+}
+.shortcut-modify-message-option-button > div:hover {
+  color: #006cff;
+}
+.color-bar {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 4px;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+
+.shortcut-modify-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 900px;
+  height: 45px;
+  background-color: #f1f1f1;
+  padding: 0 10px;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+.shortcut-modify-bottom > div {
+  padding: 0 10px;
+  cursor: pointer;
+}
+.shortcut-modify-bottom > div:hover {
+  text-decoration: underline;
+}
+.shortcut-modify-list {
+  padding: 0 5px;
+  max-height: 450px;
+  overflow-y: auto;
+}
+.shortcut-message-tooltip {
+  position: fixed; 
+  background-color: #494949;
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 10px;
+  max-width: 300px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.shortcut-message-tooltip:empty {
+  display: none;
+}
+@keyframes fadein {
+  from { opacity: 0; transform: translateY(10px)}
+  to   { opacity: 1; transform: translateY(0)}
 }

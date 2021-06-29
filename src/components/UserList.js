@@ -2,6 +2,7 @@ import React from 'react'
 import User from './User'
 import { connect } from 'react-redux'
 import { changeUserState, initUserState } from '../actions'
+import useIntersectionObserver from './useIntersectionObserver'
 
 const KICKED = []
 
@@ -15,6 +16,12 @@ const UserList = ({ users, settings, changeUserState, initUserState, ...props })
   const [countWait, setCountWait] = React.useState(0)
   const [countProgress, setCountProgress] = React.useState(0)
   const [countComplete, setCountComplete] = React.useState(0)
+
+  const scrollRootRef = React.useRef(null)
+  const scrollTargetRef = React.useRef(null)
+  
+  const [page, setPage] = React.useState(1)
+  const [size, setSize] = React.useState(30)
 
   /* 0: 일반
    * 1: 모두 선택
@@ -107,6 +114,21 @@ const UserList = ({ users, settings, changeUserState, initUserState, ...props })
     })
   }, [database, initMode, isLoading, key])
 
+  useIntersectionObserver({
+    root: scrollRootRef.current,
+    target: scrollTargetRef.current,
+    onIntersect: ([{isIntersecting}]) => {
+      const userLength = users.filter((f) => {
+        const userState = f.value.state || 0
+        return (userState === tabState && f.value.lastMessage && f.value.lastMessage !== '')
+      }).length
+      
+      if (isIntersecting && userLength >= page * size) {
+        setPage(old => old + 1)
+      }
+    }
+  })
+
   return (
     <>
       <div className="chat-list-tab">
@@ -138,19 +160,23 @@ const UserList = ({ users, settings, changeUserState, initUserState, ...props })
           <span>({countComplete})</span>
         </div>
       </div>
-      <div
+      <div ref={scrollRootRef}
         className="chat-users"
         key="chat-list">
         { users.filter((f) => {
           const userState = f.value.state || 0
           return (userState === tabState && f.value.lastMessage && f.value.lastMessage !== '')
-        }).map((m, i) => (
-          <User
-            mode={mode}
-            key={m.key}
-            database={props.database}
-            data={m}/>
-        ))}
+        }).map((m, i) => {
+          if (i > page * size) return
+          return (
+            <User
+              mode={mode}
+              key={m.key}
+              database={props.database}
+              data={m}/>
+          )
+        })}
+        <div ref={scrollTargetRef} className="chat-user" style={{backgroundColor: 'transparent'}}></div>
       </div>
 
       {/* 모두 선택 */}

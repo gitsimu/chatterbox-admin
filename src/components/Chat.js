@@ -1,6 +1,7 @@
 import React from 'react'
 import ChatMessage from './ChatMessage'
 import EmojiContainer from './EmojiContainer'
+import ShortcutMessage from './ShortcutMessage'
 import * as firebase from 'firebase/app'
 import { connect } from 'react-redux'
 import { addMessages, clearMessages, deleteMessages, initMessages, pagingMessages, selectedUser } from '../actions'
@@ -272,6 +273,13 @@ const Chat = ({ settings, messages, addMessages, pagingMessages, initMessages, d
     }
   }, [])
 
+  const onChangeMessage = (text) => {
+    if (input && input.current) {
+      input.current.value = text
+      input.current.focus()
+    }
+  }
+
   return (
     <>
       <div className='messages card' ref={body}>
@@ -297,7 +305,7 @@ const Chat = ({ settings, messages, addMessages, pagingMessages, initMessages, d
               setScrollToBottom()
               scrollTo()
             }}
-            style={{bottom: infoDialog ? 100 : 55}}>
+            style={{bottom: infoDialog ? 160 : 110}}>
             <div>
               <i className="icon-arrow-down"></i>
             </div>
@@ -354,6 +362,7 @@ const Chat = ({ settings, messages, addMessages, pagingMessages, initMessages, d
           </div>
         </div>
       </div>
+      <ShortcutMessage database={database} onChangeMessage={onChangeMessage}/>
       <div className='message-form'>
         <EmojiContainer
             getState={emojiContainer}
@@ -376,20 +385,7 @@ const Chat = ({ settings, messages, addMessages, pagingMessages, initMessages, d
               input.current.value = ''
             }
           }}>
-          <div className='message-addon'>
-            <label>
-              <i className='icon-paper-clip'></i>
-              <input type='file'
-                accept="image/*"
-                onClick={e => handleFileInputClear(e)}
-                onChange={e => handleFileInput(e)}/>
-            </label>
-            <label>
-              <i className='icon-emotsmile'
-                 onClick={e => handleEmojiContainer(e)}></i>
-            </label>
-          </div>
-          <textarea
+            <textarea
             ref={input}
             className='message-input'
             placeholder='메세지를 입력해주세요.'
@@ -412,15 +408,32 @@ const Chat = ({ settings, messages, addMessages, pagingMessages, initMessages, d
                 form.dispatchEvent(new Event('submit'))
               }
             }}/>
-          <button className='message-button-send' type='submit'>
-            <i className='icon-paper-plane'></i>
-          </button>
-          <div className='message-button-more'
-            onClick={() => {
-              showOptionDialog(!optionDialog)
-            }}>
-            <i className='icon-options-vertical'></i>
-          </div>
+            <div>
+              <div className='message-addon'>
+                <label>
+                  <i className='icon-paper-clip'></i>
+                  <input type='file'
+                    accept="image/*"
+                    onClick={e => handleFileInputClear(e)}
+                    onChange={e => handleFileInput(e)}/>
+                </label>
+                <label>
+                  <i className='icon-emotsmile'
+                    onClick={e => handleEmojiContainer(e)}></i>
+                </label>
+              </div>
+              <div>
+                <button className='message-button-send' type='submit'>
+                  <i className='icon-paper-plane'></i>
+                </button>
+                <div className='message-button-more'
+                  onClick={() => {
+                    showOptionDialog(!optionDialog)
+                  }}>
+                  <i className='icon-options-vertical'></i>
+                </div>
+              </div>
+            </div>
         </form>
 
         <div className={optionDialog ? 'message-option-dialog' : 'message-option-dialog hide'}>

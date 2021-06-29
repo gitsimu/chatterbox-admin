@@ -13,10 +13,13 @@ import Chat from '../src/components/Chat'
 import Memo from '../src/components/Memo'
 import Info from '../src/components/Info'
 import Setting from '../src/components/Setting'
+import Setting2 from '../src/components/Setting2'
 
 import * as script from '../src/js/script.js'
 import * as smlog from '../src/js/smlog'
 import useEventListener from '../src/hooks/useEventListener'
+
+import Chatbot01 from '../src/icon/chatbot_icon01.svg'
 
 function Main({ settings, initUsers, clearUsers, selectedUser, signIn, signOut, ...props }) {
   const [screenState, setScreenState] = React.useState(0)
@@ -69,7 +72,7 @@ function Main({ settings, initUsers, clearUsers, selectedUser, signIn, signOut, 
     simplelineLink.type = "text/css"
     document.querySelector('body').appendChild(simplelineLink)
 
-    const params = getParams()    
+    const params = getParams()
     const svid = params.svid
 
     if (!svid || svid === '') {
@@ -82,12 +85,13 @@ function Main({ settings, initUsers, clearUsers, selectedUser, signIn, signOut, 
       .then(() => {
         return smlog.API({
           method: 'get_chat_id',
-          svid: svid
+          svid: svid,
         })
           .then(data => {
             if (data && data.code === '1') {
               return data.chat_id
             } else {
+              console.log('data', data)
               throw new Error('스마트로그 인증 중 오류가 발생했습니다.')
             }
           })
@@ -195,7 +199,12 @@ function Main({ settings, initUsers, clearUsers, selectedUser, signIn, signOut, 
             onClick={() => { setScreenState(2) }}>
             <i className="icon-settings"></i>
             <div className="tooltip">설정</div>
-            <div className="badge">N</div>
+          </div>
+          <div
+            className={screenState === 3 ? "chat-lnb-item active" : "chat-lnb-item"}
+            onClick={() => { setScreenState(3) }}>
+            <Chatbot01/>
+            <div className="tooltip">챗봇</div>
           </div>
           {/* <div className="chat-lnb-item sign-out"
             onClick={() => {
@@ -250,7 +259,16 @@ function Main({ settings, initUsers, clearUsers, selectedUser, signIn, signOut, 
               svid={svid}
               isLoading={isLoading}
               showImageViewer={showImageViewer}/>
-          )}  
+          )}
+        </div>
+        <div className={ screenState === 3 ? "container-screen-2" : "container-screen-2 hide" }>
+          {svid && (
+            <Setting2
+              database={database}
+              svid={svid}
+              isLoading={isLoading}
+              showImageViewer={showImageViewer}/>
+          )}
         </div>
       </div>
       )}

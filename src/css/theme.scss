@@ -162,6 +162,7 @@
   
   .message-form > form {
     border: 1px solid #f1f1f1;
+    background-color: #fff;
   }
   .message-addon,
   .message-input,
@@ -339,5 +340,23 @@
 
   .chat-history-list {
     border: 1px solid #f1f1f1;
+  }
+
+
+  .shortcut-message {
+    background-color: rgba(255, 255, 255, 0.9);
+    border: none;
+    margin: none;
+    color: #000;
+  }
+  .shortcut-message-container > div {
+    border-color: #f1f1f1;
+  }
+  .shortcut-message-top {
+    border-color: #f1f1f1;
+  }
+  .shortcut-message-search input {
+    background-color: #eee;
+    color: #000;
   }
 }
