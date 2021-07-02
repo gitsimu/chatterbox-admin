@@ -1,4 +1,5 @@
 import { useEffect } from "react"
+require('intersection-observer');
 
 export default ({ root, target, onIntersect, threshold = 1.0, rootMargin = "0px" }) => {
   useEffect(() => {
