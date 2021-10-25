@@ -207,11 +207,11 @@ const SettingBasic = ({ basicConfig, updateBasicConfig }) => {
         <div style={{padding: 15}}>
           <div style={{marginBottom: 10, display: 'flex', flexDirection: 'row'}}>
             <div style={{width: 180}}>* 크롬 브라우저(Chrome)</div>
-            <a href="http://smlog.co.kr/faq_view.htm?no=475" target="_blank">http://smlog.co.kr/faq_view.htm?no=475</a>
+            <a href="https://smlog.co.kr/2020/read_guide.html?no=475" target="_blank">https://smlog.co.kr/2020/read_guide.html?no=475</a>
           </div>
           <div style={{display: 'flex', flexDirection: 'row'}}>
             <div style={{width: 180}}>* 엣지 브라우저(Edge)</div>
-            <a href="http://smlog.co.kr/faq_view.htm?no=476" target="_blank">http://smlog.co.kr/faq_view.htm?no=476</a>
+            <a href="https://smlog.co.kr/2020/read_guide.html?no=476" target="_blank">https://smlog.co.kr/2020/read_guide.html?no=476</a>
           </div>
         </div>
       </div>
